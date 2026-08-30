@@ -70,20 +70,6 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
           </p>
         </div>
       </div>
-
-      {/* 3. Bottom Ragged Edge Effect (/images/banner/effect.webp) */}
-      <div className="absolute -bottom-1 left-0 right-0 w-full h-14 sm:h-20 lg:h-24 z-30 pointer-events-none select-none">
-        <div className="relative w-full h-full">
-          <Image
-            src="/images/banner/effect.webp"
-            alt="Torn edge effect"
-            fill
-            priority
-            sizes="100vw"
-            className="w-full object-cover object-top"
-          />
-        </div>
-      </div>
     </section>
   );
 };

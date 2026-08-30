@@ -1,16 +1,24 @@
-import { Metadata } from "next";
-import { ToursHeroBanner } from "@/components/features/tours/ToursHeroBanner";
+"use client";
+
+import React from "react";
+import { Compass } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { InnerPageBanner } from "@/components/ui/InnerPageBanner";
 import { ToursGuideListSection } from "@/components/features/tours/ToursGuideListSection";
 
-export const metadata: Metadata = {
-  title: "Экскурсии и Гиды | Aiym Path",
-  description: "Проверенные гиды, турагентства и экскурсионные программы по Кыргызстану для женщин.",
-};
-
 export default function ToursPage() {
+  const { dict } = useLanguage();
+
   return (
     <div className="w-full bg-white min-h-screen">
-      <ToursHeroBanner />
+      <InnerPageBanner
+        breadcrumbLabel={dict.nav.tours}
+        badge={dict.nav.tours}
+        badgeIcon={<Compass className="w-3.5 h-3.5" />}
+        titlePrefix={dict.guides.titlePrefix}
+        titleHighlight={dict.guides.titleHighlight}
+        subtitle={dict.guides.subtitle}
+      />
       <ToursGuideListSection />
     </div>
   );
