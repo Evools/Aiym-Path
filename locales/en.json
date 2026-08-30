@@ -19,19 +19,19 @@
   "about": {
     "badge": "About Us",
     "title": "WHY AIYM PATH WAS CREATED",
-    "description": "A pilot initiative financed through the Gender Equality and Social Inclusion (GESI) Competitive Fund of the Asian Development Bank (ADB). GESI is a key ADB priority, and this project was designed to empower women and foster a safe, equitable travel community in Kyrgyzstan.",
+    "description": "A pilot project funded through the internal Competitive Fund for Gender Equality and Social Inclusion (GESI) of the Aga Khan Foundation (AKF). GESI is one of AKF's key priorities, and this initiative was developed to empower women and build safe, equitable tourism communities in Kyrgyzstan.",
     "cards": {
       "genderBalance": {
         "title": "Industry Gender Balance",
-        "description": "Addressing tourism sector imbalances, ensuring equal conditions, comfort, and security for women travelers."
+        "description": "Educational events for the entire tourism sector, including men — ensuring comfort and safety for female travelers."
       },
       "womenEmpowerment": {
-        "title": "Women's Empowerment",
-        "description": "Training and encouraging female guides, expanding entrepreneurship opportunities in tourism."
+        "title": "Women Empowerment",
+        "description": "Training young women as guides and tour leaders, supporting self-employment and small business launches in tourism."
       },
       "routeMapping": {
-        "title": "Route Mapping & Safety",
-        "description": "Designing verified hiking trails, accessible services, certified stays with interactive digital mapping."
+        "title": "Route Mapping",
+        "description": "Trekking routes, guesthouses, and services around Bishkek are mapped digitally with female-friendly markers."
       }
     }
   },

@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Scale, Users, Map } from "lucide-react";
+import Image from "next/image";
+import { ShieldCheck, Users, Map } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const AboutMissionSection: React.FC = () => {
@@ -9,54 +10,84 @@ export const AboutMissionSection: React.FC = () => {
 
   const cards = [
     {
-      icon: <Scale className="w-5 h-5 text-teal-700" />,
+      id: "genderBalance",
+      image: "/images/about/1.webp",
+      icon: <ShieldCheck className="w-5 h-5 text-[#07626A]" strokeWidth={1.75} />,
       title: dict.about.cards.genderBalance.title,
       description: dict.about.cards.genderBalance.description,
     },
     {
-      icon: <Users className="w-5 h-5 text-teal-700" />,
+      id: "womenEmpowerment",
+      image: "/images/about/2.webp",
+      icon: <Users className="w-5 h-5 text-[#07626A]" strokeWidth={1.75} />,
       title: dict.about.cards.womenEmpowerment.title,
       description: dict.about.cards.womenEmpowerment.description,
     },
     {
-      icon: <Map className="w-5 h-5 text-teal-700" />,
+      id: "routeMapping",
+      image: "/images/about/3.webp",
+      icon: <Map className="w-5 h-5 text-[#07626A]" strokeWidth={1.75} />,
       title: dict.about.cards.routeMapping.title,
       description: dict.about.cards.routeMapping.description,
     },
   ];
 
   return (
-    <section id="about" className="relative z-10 pt-16 sm:pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-white">
+    <section id="about" className="relative z-10 pt-16 sm:pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="mb-10 max-w-4xl">
-          <span className="inline-block px-3 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[11px] font-medium mb-3">
+          {/* Badge: О нас */}
+          <span className="inline-block px-3.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-medium mb-4">
             {dict.about.badge}
           </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight uppercase mb-3">
+
+          {/* Title: Почему появился Aiym Path */}
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight uppercase mb-4 leading-tight">
             {dict.about.title}
           </h2>
-          <p className="text-xs sm:text-[13px] text-gray-500 leading-relaxed max-w-3xl">
+
+          {/* Description */}
+          <p className="text-sm text-gray-600 leading-relaxed max-w-3xl">
             {dict.about.description}
           </p>
         </div>
 
-        {/* 3 Value Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {cards.map((card, idx) => (
+        {/* 3 Value Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {cards.map((card) => (
             <div
-              key={idx}
-              className="p-6 rounded-2xl bg-white border border-gray-100 shadow-xs hover:border-teal-200 hover:shadow-md transition-all duration-200 flex flex-col justify-start"
+              key={card.id}
+              className="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-[#E5E7EB]"
             >
-              <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center mb-4">
-                {card.icon}
+              {/* Card Text Content */}
+              <div className="p-6 sm:p-7">
+                {/* Icon Container */}
+                <div className="w-11 h-11 rounded-xl bg-[#EAF4F4] flex items-center justify-center mb-5">
+                  {card.icon}
+                </div>
+
+                {/* Card Title */}
+                <h3 className="text-base sm:text-[17px] font-bold text-gray-900 mb-2 leading-snug">
+                  {card.title}
+                </h3>
+
+                {/* Card Description */}
+                <p className="text-[13px] text-[#6B7280] font-normal leading-relaxed">
+                  {card.description}
+                </p>
               </div>
-              <h3 className="text-sm font-bold text-gray-900 mb-2">
-                {card.title}
-              </h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
-                {card.description}
-              </p>
+
+              {/* Card Bottom Image */}
+              <div className="relative w-full aspect-[2.1/1] overflow-hidden mt-auto">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
+                  className="object-cover object-bottom"
+                />
+              </div>
             </div>
           ))}
         </div>
