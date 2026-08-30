@@ -156,19 +156,19 @@ export default function ContactsPage() {
             {/* Left Column: Direct Contacts & FAQ Accordion (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
               
-              {/* 1. Email Card with Quick Copy */}
-              <div className="p-4 sm:p-4.5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 hover:border-teal-200 transition-all flex items-center justify-between gap-3 group">
+              {/* 1. Email Card */}
+              <div className="p-4 rounded-2xl bg-white border border-gray-200/90 hover:border-teal-200 hover:shadow-xs transition-all flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Mail className="w-4.5 h-4.5" />
+                  <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100/80 text-[#07626A] flex items-center justify-center shrink-0">
+                    <Mail className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                    <p className="text-xs font-medium text-gray-500 mb-0.5">
                       {dict.contactsPage.emailDesc}
                     </p>
                     <a
                       href="mailto:hello@tumar-project.kg"
-                      className="text-sm sm:text-[15px] font-bold text-gray-900 hover:text-[#07626A] transition-colors truncate block"
+                      className="text-[15px] font-bold text-gray-900 hover:text-[#07626A] transition-colors truncate block"
                     >
                       {dict.contactsPage.emailTitle}
                     </a>
@@ -179,7 +179,7 @@ export default function ContactsPage() {
                   type="button"
                   onClick={() => handleCopy("hello@tumar-project.kg", "email")}
                   title="Скопировать email"
-                  className="p-2 rounded-lg text-gray-400 hover:text-[#07626A] hover:bg-white transition-colors shrink-0 cursor-pointer"
+                  className="p-2 rounded-xl text-gray-400 hover:text-[#07626A] hover:bg-gray-50 transition-colors shrink-0 cursor-pointer"
                 >
                   {copiedField === "email" ? (
                     <Check className="w-4 h-4 text-emerald-600" />
@@ -189,19 +189,19 @@ export default function ContactsPage() {
                 </button>
               </div>
 
-              {/* 2. Phone Card with Quick Call/Copy */}
-              <div className="p-4 sm:p-4.5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 hover:border-teal-200 transition-all flex items-center justify-between gap-3 group">
+              {/* 2. Phone Card */}
+              <div className="p-4 rounded-2xl bg-white border border-gray-200/90 hover:border-teal-200 hover:shadow-xs transition-all flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Phone className="w-4.5 h-4.5" />
+                  <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100/80 text-[#07626A] flex items-center justify-center shrink-0">
+                    <Phone className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                    <p className="text-xs font-medium text-gray-500 mb-0.5">
                       {dict.contactsPage.phoneDesc}
                     </p>
                     <a
                       href="tel:+996700000000"
-                      className="text-sm sm:text-[15px] font-bold text-gray-900 hover:text-[#07626A] transition-colors block"
+                      className="text-[15px] font-bold text-gray-900 hover:text-[#07626A] transition-colors block"
                     >
                       {dict.contactsPage.phoneTitle}
                     </a>
@@ -212,7 +212,7 @@ export default function ContactsPage() {
                   type="button"
                   onClick={() => handleCopy("+996 700 000 000", "phone")}
                   title="Скопировать телефон"
-                  className="p-2 rounded-lg text-gray-400 hover:text-[#07626A] hover:bg-white transition-colors shrink-0 cursor-pointer"
+                  className="p-2 rounded-xl text-gray-400 hover:text-[#07626A] hover:bg-gray-50 transition-colors shrink-0 cursor-pointer"
                 >
                   {copiedField === "phone" ? (
                     <Check className="w-4 h-4 text-emerald-600" />
@@ -223,15 +223,15 @@ export default function ContactsPage() {
               </div>
 
               {/* 3. Address Card */}
-              <div className="p-4 sm:p-4.5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <MapPin className="w-4.5 h-4.5" />
+              <div className="p-4 rounded-2xl bg-white border border-gray-200/90 flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100/80 text-[#07626A] flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  <p className="text-xs font-medium text-gray-500 mb-0.5">
                     {dict.contactsPage.addressDesc}
                   </p>
-                  <p className="text-sm sm:text-[15px] font-bold text-gray-900">
+                  <p className="text-[15px] font-bold text-gray-900">
                     {dict.contactsPage.addressTitle}
                   </p>
                 </div>
