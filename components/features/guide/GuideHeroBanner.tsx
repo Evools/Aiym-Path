@@ -54,19 +54,6 @@ export const GuideHeroBanner: React.FC = () => {
           </p>
         </div>
       </div>
-
-      {/* Bottom Ragged Edge Effect */}
-      <div className="absolute -bottom-1 left-0 right-0 w-full h-12 sm:h-16 lg:h-20 z-10 pointer-events-none select-none">
-        <div className="relative w-full h-full">
-          <Image
-            src="/images/banner/effect.webp"
-            alt="Edge effect"
-            fill
-            priority
-            className="object-cover object-bottom"
-          />
-        </div>
-      </div>
     </section>
   );
 };
