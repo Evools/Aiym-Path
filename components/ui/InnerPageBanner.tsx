@@ -7,7 +7,6 @@ import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface InnerPageBannerProps {
-  breadcrumbLabel: string;
   badge: string;
   badgeIcon?: React.ReactNode;
   titlePrefix: string;
@@ -16,7 +15,6 @@ interface InnerPageBannerProps {
 }
 
 export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
-  breadcrumbLabel,
   badge,
   badgeIcon,
   titlePrefix,
