@@ -67,22 +67,22 @@
     ]
   },
   "locations": {
-    "badge": "Project Territory",
+    "badge": "Pilot Phase",
     "title": "PROJECT TERRITORY",
-    "subtitle": "At launch, our focus is centered on verified trails and services across three premier destinations:",
-    "viewOnMap": "View on Map",
+    "subtitle": "At the start, the team focuses on routes and services within one to two hours from Bishkek.",
+    "viewOnMap": "View on map",
     "items": {
       "alaArcha": {
         "title": "Ala-Archa Gorge",
-        "desc": "Scenic hiking trails near Bishkek with established basic infrastructure and alpine vistas."
+        "desc": "National park 40 km from Bishkek, the gateway to the Kyrgyz ridge highlands."
       },
       "alamedin": {
         "title": "Alamedin Gorge",
-        "desc": "Picturesque nature paths leading to mountain waterfalls and geothermal hot springs."
+        "desc": "Hot springs, coniferous forests, and moderate difficulty trails."
       },
       "chunkurchak": {
-        "title": "Chunkurchak Valley",
-        "desc": "High alpine plateau offering panoramic Chui valley views and family-friendly eco-services."
+        "title": "Chunkurchak",
+        "desc": "Plateau and foothills near Bishkek, ideal for one-day walks."
       }
     }
   },
