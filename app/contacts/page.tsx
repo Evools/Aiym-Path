@@ -53,9 +53,29 @@ export default function ContactsPage() {
     setOpenFaqIndex((prev) => (prev === index ? null : index));
   };
 
+  const [phoneDigits, setPhoneDigits] = useState("");
+
+  const formatLocalDigits = (digitsOnly: string): string => {
+    const d = digitsOnly.slice(0, 9);
+    if (d.length <= 3) return d;
+    if (d.length <= 6) return `${d.slice(0, 3)} ${d.slice(3)}`;
+    return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, "");
+    // If user pasted with 996 or 0
+    if (raw.startsWith("996")) {
+      raw = raw.slice(3);
+    } else if (raw.startsWith("0")) {
+      raw = raw.slice(1);
+    }
+    setPhoneDigits(raw.slice(0, 9));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+    if (!formData.name.trim() || !phoneDigits.trim() || !formData.message.trim()) {
       return;
     }
     setIsSubmitting(true);
@@ -63,6 +83,7 @@ export default function ContactsPage() {
       setIsSubmitting(false);
       setSubmitted(true);
       setFormData({ name: "", email: "", phone: "", message: "" });
+      setPhoneDigits("");
     }, 600);
   };
 
@@ -334,7 +355,7 @@ export default function ContactsPage() {
                       </div>
                     </div>
 
-                    {/* Name & Phone Grid */}
+                    {/* Name & Phone Grid (Both Required) */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Name */}
                       <div>
@@ -360,49 +381,49 @@ export default function ContactsPage() {
                         </div>
                       </div>
 
-                      {/* Email */}
+                      {/* Phone (Required with fixed +996 prefix) */}
                       <div>
                         <label
-                          htmlFor="contact-email"
+                          htmlFor="contact-phone"
                           className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
                         >
-                          {dict.contactsPage.emailLabel} <span className="text-rose-500">*</span>
+                          Номер телефона <span className="text-rose-500">*</span>
                         </label>
-                        <div className="relative">
-                          <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <div className="relative flex items-center">
+                          <div className="absolute left-3.5 flex items-center text-xs sm:text-sm font-semibold text-gray-700 pointer-events-none select-none border-r border-gray-200 pr-2.5">
+                            <span>+996</span>
+                          </div>
                           <input
-                            type="email"
-                            id="contact-email"
+                            type="tel"
+                            id="contact-phone"
                             required
-                            value={formData.email}
-                            onChange={(e) =>
-                              setFormData({ ...formData, email: e.target.value })
-                            }
-                            placeholder={dict.contactsPage.emailPlaceholder}
-                            className="w-full h-11 pl-10 pr-4 rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-white focus:bg-white text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#07626A] focus:ring-1 focus:ring-[#07626A] transition-all"
+                            value={formatLocalDigits(phoneDigits)}
+                            onChange={handlePhoneChange}
+                            placeholder="700 000 000"
+                            className="w-full h-11 pl-18 pr-4 rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-white focus:bg-white text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#07626A] focus:ring-1 focus:ring-[#07626A] transition-all font-medium tracking-wide"
                           />
                         </div>
                       </div>
                     </div>
 
-                    {/* Optional Phone Field */}
+                    {/* Email Field (Optional) */}
                     <div>
                       <label
-                        htmlFor="contact-phone"
+                        htmlFor="contact-email"
                         className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
                       >
-                        Номер телефона <span className="text-gray-400 font-normal normal-case">(необязательно)</span>
+                        {dict.contactsPage.emailLabel} <span className="text-gray-400 font-normal normal-case">(необязательно)</span>
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
-                          type="tel"
-                          id="contact-phone"
-                          value={formData.phone}
+                          type="email"
+                          id="contact-email"
+                          value={formData.email}
                           onChange={(e) =>
-                            setFormData({ ...formData, phone: e.target.value })
+                            setFormData({ ...formData, email: e.target.value })
                           }
-                          placeholder="+996 (___) __-__-__"
+                          placeholder={dict.contactsPage.emailPlaceholder}
                           className="w-full h-11 pl-10 pr-4 rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-white focus:bg-white text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#07626A] focus:ring-1 focus:ring-[#07626A] transition-all"
                         />
                       </div>
