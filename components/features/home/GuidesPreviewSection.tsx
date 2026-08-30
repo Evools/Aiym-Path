@@ -98,9 +98,8 @@ const GuideCard: React.FC<{ guide: GuideData }> = ({ guide }) => {
                   type="button"
                   onClick={() => setActiveSkill(skill.id)}
                   title={skill.title}
-                  className={`h-8 rounded-lg bg-[#EAF4F4] text-[#07626A] inline-flex items-center cursor-pointer transition-colors duration-200 overflow-hidden select-none ${
-                    isActive ? "hover:bg-[#EAF4F4]" : "hover:bg-[#DCEDED]"
-                  }`}
+                  className={`h-8 rounded-lg bg-[#EAF4F4] text-[#07626A] inline-flex items-center cursor-pointer transition-colors duration-200 overflow-hidden select-none ${isActive ? "hover:bg-[#EAF4F4]" : "hover:bg-[#DCEDED]"
+                    }`}
                 >
                   {/* Icon is permanently locked to 32x32px and never moves */}
                   <span className="w-8 h-8 flex items-center justify-center shrink-0">
@@ -109,11 +108,10 @@ const GuideCard: React.FC<{ guide: GuideData }> = ({ guide }) => {
 
                   {/* Smooth horizontal label slide-out */}
                   <div
-                    className={`grid transition-[grid-template-columns,opacity,padding] duration-300 ease-out ${
-                      isActive
+                    className={`grid transition-[grid-template-columns,opacity,padding] duration-300 ease-out ${isActive
                         ? "grid-cols-[1fr] opacity-100 pr-3"
                         : "grid-cols-[0fr] opacity-0 pr-0"
-                    }`}
+                      }`}
                   >
                     <span className="overflow-hidden whitespace-nowrap text-xs font-medium">
                       {skill.title}
