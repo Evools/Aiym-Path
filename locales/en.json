@@ -49,7 +49,10 @@
     },
     "groupSize": "From 2 to 5 people",
     "languages": "Kyrgyz, Russian, English",
-    "viewAllList": "View Full List"
+    "viewAllList": "View Full List",
+    "allLocations": "All Locations",
+    "searchPlaceholder": "Search guide or destination...",
+    "foundCount": "Specialists found"
   },
   "concept": {
     "badge": "Concept",
