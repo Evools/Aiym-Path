@@ -53,16 +53,17 @@
   },
   "concept": {
     "badge": "Concept",
-    "title": "WHAT FEMALE-FRIENDLY MEANS",
-    "intro": "An approach to tourism development where women's safety, comfort, and preferences are factored in at every journey stage — from route planning to stays and guiding.",
-    "kyrgyzstanContext": "Crucial for Kyrgyzstan: while the country boasts tremendous natural and cultural tourism potential, safety assurances, quality stays, and clear logistics are vital for solo and group female travelers.",
-    "femaleFriendlyOffers": "Female-friendly elevates the tourism experience for everyone by providing:",
+    "titleLine1": "WHAT DOES",
+    "titleLine2": "FEMALE-FRIENDLY MEAN",
+    "intro": "This is an approach to tourism development where women's safety, comfort, and preferences are factored in at every stage of the journey — from route planning and stays to guiding and services.",
+    "kyrgyzstanContext": "For Kyrgyzstan, this is especially important: the country possesses immense potential for natural and cultural tourism, but female travelers need clear information regarding safety, accommodation standards, routes, and accessible services.",
+    "femaleFriendlyOffers": "Female-Friendly helps make the travel environment more welcoming and comfortable for women:",
     "points": [
-      "Safe, verified, and well-marked hiking trails;",
-      "Certified guest houses and tourist amenities;",
-      "Trained professional guides and companions;",
-      "Actionable travel safety recommendations;",
-      "Transparent information on terrain and risks."
+      "Safe and well-defined tourist routes;",
+      "Verified guest houses and travel services;",
+      "Trained guides and companions;",
+      "Travel safety recommendations;",
+      "Clear insights on route specifics and potential risks."
     ]
   },
   "locations": {
