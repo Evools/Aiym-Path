@@ -10,11 +10,11 @@ export const HeroSection: React.FC = () => {
   const { dict } = useLanguage();
 
   return (
-    <section className="relative w-full min-h-[580px] sm:min-h-[660px] lg:min-h-[740px] flex items-center pt-28 pb-20 bg-white">
-      {/* Background Banner Image (/banner.png) */}
+    <section className="relative w-full min-h-[540px] sm:min-h-[620px] lg:min-h-[680px] flex items-center pt-8 sm:pt-12 lg:pt-16 pb-20 bg-white">
+      {/* Background Banner Image (/images/banner/banner.webp) */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
-          src="/banner.png"
+          src="/images/banner/banner.webp"
           alt="Aiym Path Banner Background"
           fill
           priority
@@ -22,11 +22,11 @@ export const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Kyrgyz national ornament on the left (/uzor.png) */}
+      {/* Kyrgyz national ornament on the left (/images/banner/uzor.webp) */}
       <div className="absolute top-0 left-0 bottom-0 z-[5] w-full max-w-[380px] sm:max-w-[500px] lg:max-w-[620px] pointer-events-none select-none overflow-hidden flex items-center justify-start">
         <div className="relative w-full h-full">
           <Image
-            src="/uzor.png"
+            src="/images/banner/uzor.webp"
             alt="Кыргызский национальный узор"
             fill
             priority
@@ -35,11 +35,11 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Girl traveler in the right corner (/asia-girl.png) */}
-      <div className="absolute bottom-0 right-0 z-10 w-full max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[620px] xl:max-w-[700px] h-[75%] sm:h-[85%] lg:h-[92%] pointer-events-none select-none flex items-end justify-end">
+      {/* Girl traveler in the right corner (/images/banner/asia-girl.webp) - hidden on mobile, shown on md+ */}
+      <div className="hidden md:flex absolute bottom-0 right-0 z-10 w-full max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[620px] xl:max-w-[700px] h-[75%] sm:h-[85%] lg:h-[92%] pointer-events-none select-none items-end justify-end">
         <div className="relative w-full h-full">
           <Image
-            src="/asia-girl.png"
+            src="/images/banner/asia-girl.webp"
             alt="Кыргызская девушка-путешественница"
             fill
             priority
@@ -95,11 +95,11 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Ragged Edge Effect (/effect.png) - on top of banner and girl */}
+      {/* Bottom Ragged Edge Effect (/images/banner/effect.webp) - on top of banner and girl */}
       <div className="absolute -bottom-1 sm:bottom-0 left-0 right-0 w-full h-20 sm:h-28 lg:h-36 z-30 pointer-events-none select-none">
         <div className="relative w-full h-full">
           <Image
-            src="/effect.png"
+            src="/images/banner/effect.webp"
             alt="Torn edge effect"
             fill
             priority

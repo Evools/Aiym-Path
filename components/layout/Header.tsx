@@ -30,12 +30,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-xs py-3 border-b border-gray-100"
-          : "bg-white/90 backdrop-blur-xs py-4 border-b border-gray-100/50"
-        }`}
-    >
+    <header className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 py-3.5 transition-all duration-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand */}
         <Link href="/" className="flex flex-col group py-1">
