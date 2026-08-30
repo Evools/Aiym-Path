@@ -41,7 +41,11 @@
     "titleHighlight": "TOUR AGENTS",
     "subtitle": "Professional guides and tour agents who make your journey comfortable, safe, and unforgettable.",
     "certified": "Certified",
-    "firstAid": "First Aid Certified",
+    "skills": {
+      "firstAid": "First Aid Certified",
+      "mountaineer": "Mountain Mountaineer",
+      "mountainGuide": "Mountain Guide Certificate"
+    },
     "groupSize": "From 2 to 5 people",
     "languages": "Kyrgyz, Russian, English",
     "supportProject": "Support Project"
