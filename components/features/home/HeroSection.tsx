@@ -33,7 +33,7 @@ export const HeroSection: React.FC = () => {
   const effectLift = Math.min(scrollY * 0.1, 30); // Effect smoothly rises slightly upwards on scroll
 
   return (
-    <section className="relative w-full min-h-[540px] sm:min-h-[620px] lg:min-h-[680px] flex items-center pt-8 sm:pt-12 lg:pt-16 pb-20 bg-white">
+    <section className="relative w-full max-w-[100vw] min-h-[540px] sm:min-h-[620px] lg:min-h-[680px] flex items-center pt-8 sm:pt-12 lg:pt-16 pb-20 bg-white overflow-x-clip">
       {/* Background Banner Image (/images/banner/banner.webp) with subtle parallax */}
       <div
         className="absolute inset-0 z-0 overflow-hidden will-change-transform transition-transform duration-75 ease-out"

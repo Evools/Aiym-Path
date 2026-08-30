@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-white text-gray-900 selection:bg-teal-100 selection:text-teal-900">
         <LanguageProvider>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 w-full overflow-x-clip">{children}</main>
           <Footer />
         </LanguageProvider>
       </body>
