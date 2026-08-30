@@ -157,13 +157,16 @@ export default function ContactsPage() {
             <div className="lg:col-span-5 space-y-4">
               
               {/* 1. Email Card */}
-              <div className="p-4 rounded-2xl bg-white border border-gray-200/90 hover:border-teal-200 hover:shadow-xs transition-all flex items-center justify-between gap-3 group">
+              <div className="p-4 rounded-2xl bg-white border border-[#07626A]/15 hover:border-[#07626A]/40 hover:shadow-xs transition-all flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100/80 text-[#07626A] flex items-center justify-center shrink-0">
-                    <Mail className="w-5 h-5" />
+                  <div
+                    className="w-11 h-11 rounded-xl text-white flex items-center justify-center shrink-0 shadow-xs"
+                    style={{ backgroundColor: "#07626A" }}
+                  >
+                    <Mail className="w-5 h-5 text-white" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-medium text-gray-500 mb-0.5">
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">
                       {dict.contactsPage.emailDesc}
                     </p>
                     <a
@@ -190,13 +193,16 @@ export default function ContactsPage() {
               </div>
 
               {/* 2. Phone Card */}
-              <div className="p-4 rounded-2xl bg-white border border-gray-200/90 hover:border-teal-200 hover:shadow-xs transition-all flex items-center justify-between gap-3 group">
+              <div className="p-4 rounded-2xl bg-white border border-[#07626A]/15 hover:border-[#07626A]/40 hover:shadow-xs transition-all flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100/80 text-[#07626A] flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5" />
+                  <div
+                    className="w-11 h-11 rounded-xl text-white flex items-center justify-center shrink-0 shadow-xs"
+                    style={{ backgroundColor: "#07626A" }}
+                  >
+                    <Phone className="w-5 h-5 text-white" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-medium text-gray-500 mb-0.5">
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">
                       {dict.contactsPage.phoneDesc}
                     </p>
                     <a
@@ -223,12 +229,15 @@ export default function ContactsPage() {
               </div>
 
               {/* 3. Address Card */}
-              <div className="p-4 rounded-2xl bg-white border border-gray-200/90 flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100/80 text-[#07626A] flex items-center justify-center shrink-0">
-                  <MapPin className="w-5 h-5" />
+              <div className="p-4 rounded-2xl bg-white border border-[#07626A]/15 flex items-center gap-3.5">
+                <div
+                  className="w-11 h-11 rounded-xl text-white flex items-center justify-center shrink-0 shadow-xs"
+                  style={{ backgroundColor: "#07626A" }}
+                >
+                  <MapPin className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-0.5">
+                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">
                     {dict.contactsPage.addressDesc}
                   </p>
                   <p className="text-[15px] font-bold text-gray-900">
@@ -237,10 +246,10 @@ export default function ContactsPage() {
                 </div>
               </div>
 
-              {/* 4. Mini FAQ Accordion replacing Map */}
+              {/* 4. Mini FAQ Accordion */}
               <div className="pt-2">
                 <div className="flex items-center gap-2 mb-3 px-1">
-                  <HelpCircle className="w-4 h-4 text-[#07626A]" />
+                  <HelpCircle className="w-4 h-4" style={{ color: "#07626A" }} />
                   <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
                     {dict.contactsPage.faqTitle}
                   </h4>
@@ -253,7 +262,9 @@ export default function ContactsPage() {
                     return (
                       <div
                         key={idx}
-                        className="rounded-2xl border border-gray-200/80 bg-white overflow-hidden transition-all duration-200"
+                        className={`rounded-2xl border bg-white overflow-hidden transition-all duration-200 ${
+                          isOpen ? "border-[#07626A]/30 shadow-xs" : "border-gray-200/80"
+                        }`}
                       >
                         <button
                           type="button"
@@ -262,9 +273,10 @@ export default function ContactsPage() {
                         >
                           <span>{faq.q}</span>
                           <ChevronDown
-                            className={`w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200 ${
-                              isOpen ? "rotate-180 text-[#07626A]" : ""
+                            className={`w-4 h-4 shrink-0 transition-transform duration-200 ${
+                              isOpen ? "rotate-180" : "text-gray-400"
                             }`}
+                            style={isOpen ? { color: "#07626A" } : undefined}
                           />
                         </button>
 
@@ -282,9 +294,15 @@ export default function ContactsPage() {
               </div>
 
               {/* Response Time Notice */}
-              <div className="p-4 rounded-xl bg-teal-50/70 border border-teal-100/80 flex items-center gap-3">
-                <Clock className="w-4.5 h-4.5 text-[#07626A] shrink-0" />
-                <p className="text-xs text-gray-600 leading-snug">
+              <div
+                className="p-4 rounded-xl flex items-center gap-3 border"
+                style={{
+                  backgroundColor: "rgba(7, 98, 106, 0.05)",
+                  borderColor: "rgba(7, 98, 106, 0.15)",
+                }}
+              >
+                <Clock className="w-4.5 h-4.5 shrink-0" style={{ color: "#07626A" }} />
+                <p className="text-xs text-gray-700 leading-snug">
                   Время ответа: в течение 24 рабочих часов (Пн–Пт, 09:00–18:00).
                 </p>
               </div>
