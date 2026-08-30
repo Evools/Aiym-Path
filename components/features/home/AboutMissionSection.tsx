@@ -79,7 +79,7 @@ export const AboutMissionSection: React.FC = () => {
               </div>
 
               {/* Card Bottom Image */}
-              <div className="relative w-full aspect-[2.1/1] overflow-hidden mt-auto">
+              <div className="relative w-full h-[180px] overflow-hidden mt-auto">
                 <Image
                   src={card.image}
                   alt={card.title}
