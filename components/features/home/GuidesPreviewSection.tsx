@@ -1,146 +1,178 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, Globe, Phone, ChevronRight } from "lucide-react";
+import {
+  CheckCircle2,
+  FileText,
+  Mountain,
+  Footprints,
+  Languages,
+  Users,
+  Phone,
+  ArrowRight,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { INITIAL_GUIDES, GuideItem } from "@/data/guides.data";
 
 export const GuidesPreviewSection: React.FC = () => {
-  const { dict, language } = useLanguage();
-  const [activeTab, setActiveTab] = useState<"all" | "guide" | "agency">("all");
+  const { dict } = useLanguage();
 
-  const filteredGuides = INITIAL_GUIDES.filter((guide: GuideItem) => {
-    if (activeTab === "all") return true;
-    return guide.category === activeTab;
-  });
+  const guides = [
+    {
+      id: 1,
+      name: "Руслан Маматкулов",
+      image: "/images/guides/guide-1.webp",
+      locations: ["Бишкек", "Каракол", "Нарын"],
+      phone: "+996 700 000 002",
+    },
+    {
+      id: 2,
+      name: "Руслан Маматкулов",
+      image: "/images/guides/guide-1.webp",
+      locations: ["Бишкек", "Каракол", "Нарын"],
+      phone: "+996 700 000 002",
+    },
+    {
+      id: 3,
+      name: "Руслан Маматкулов",
+      image: "/images/guides/guide-1.webp",
+      locations: ["Бишкек", "Каракол", "Нарын"],
+      phone: "+996 700 000 002",
+    },
+  ];
 
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
+    <section id="guides" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="mb-8">
-          <span className="inline-block px-3 py-0.5 rounded-full bg-gray-200/80 text-gray-700 text-[11px] font-medium mb-3">
+        {/* Section Header (Centered) */}
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          {/* Label: Наши люди */}
+          <span
+            className="block text-[20px] font-normal mb-2"
+            style={{
+              color: "#07626A",
+              fontFamily: "Inter, var(--font-geist-sans), sans-serif",
+              lineHeight: "normal",
+            }}
+          >
             {dict.guides.badge}
           </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight uppercase mb-2">
-            {dict.guides.title}
+
+          {/* Main Title: ГИДЫ ТУРАГЕНТЫ */}
+          <h2 className="text-2xl sm:text-4xl font-extrabold uppercase tracking-tight mb-3">
+            <span className="text-gray-900">{dict.guides.titlePrefix} </span>
+            <span style={{ color: "#07626A" }}>{dict.guides.titleHighlight}</span>
           </h2>
-          <p className="text-xs sm:text-[13px] text-gray-500 max-w-2xl">
+
+          {/* Subtitle */}
+          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed max-w-2xl mx-auto font-normal">
             {dict.guides.subtitle}
           </p>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center gap-2 mb-8">
-          <button
-            type="button"
-            onClick={() => setActiveTab("all")}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
-              activeTab === "all"
-                ? "bg-teal-800 text-white shadow-xs"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-gray-300"
-            }`}
-          >
-            {dict.guides.tabs.all}
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("guide")}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
-              activeTab === "guide"
-                ? "bg-teal-800 text-white shadow-xs"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-gray-300"
-            }`}
-          >
-            {dict.guides.tabs.guide}
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("agency")}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
-              activeTab === "agency"
-                ? "bg-teal-800 text-white shadow-xs"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-gray-300"
-            }`}
-          >
-            {dict.guides.tabs.agency}
-          </button>
-        </div>
+        {/* 3 Guide Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {guides.map((guide) => (
+            <div
+              key={guide.id}
+              className="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-[#E5E7EB]"
+            >
+              {/* Guide Photo with Certified Badge */}
+              <div className="relative w-full aspect-[16/9.5] bg-amber-50/30 overflow-hidden">
+                <Image
+                  src={guide.image}
+                  alt={guide.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
+                  className="object-cover object-center"
+                />
 
-        {/* Guides Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-          {filteredGuides.map((guide) => {
-            const locTag = guide.locationTag[language] || guide.locationTag.ru;
-            const langs = guide.languages[language] || guide.languages.ru;
+                {/* Certified Badge Top Right */}
+                <div
+                  className="absolute top-3.5 right-3.5 inline-flex items-center gap-1 px-3 py-1 rounded-full text-white text-[11px] font-medium shadow-xs"
+                  style={{ backgroundColor: "#07626A" }}
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                  <span>{dict.guides.certified}</span>
+                </div>
+              </div>
 
-            return (
-              <div
-                key={guide.id}
-                className="p-5 rounded-2xl bg-white border border-gray-100 shadow-xs hover:shadow-md hover:border-teal-200 transition-all flex flex-col justify-between"
-              >
+              {/* Guide Content Body */}
+              <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  {/* Top row: Avatar + Verified Badge */}
-                  <div className="flex items-start justify-between gap-3 mb-3.5">
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-gray-100 shadow-xs">
-                      <Image
-                        src={guide.avatarUrl}
-                        alt={guide.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    {guide.isVerified && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-semibold">
-                        <Check className="w-3 h-3 text-emerald-600" />
-                        {dict.guides.verifiedBadge}
+                  {/* Location Pills */}
+                  <div className="flex flex-wrap gap-2 mb-3.5">
+                    {guide.locations.map((loc, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 rounded-full bg-[#F3F4F6] text-[11px] font-medium text-gray-700"
+                      >
+                        {loc}
                       </span>
-                    )}
+                    ))}
                   </div>
 
-                  {/* Name */}
-                  <h3 className="text-sm font-bold text-gray-900 mb-1.5">
+                  {/* Guide Name */}
+                  <h3 className="text-base sm:text-[17px] font-bold text-gray-900 mb-3.5 leading-snug">
                     {guide.name}
                   </h3>
 
-                  {/* Location Tag */}
-                  <div className="mb-3">
-                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[11px]">
-                      {locTag}
-                    </span>
+                  {/* Skills / Badges */}
+                  <div className="flex flex-wrap items-center gap-2 mb-3.5">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#EAF4F4] text-[#07626A] text-xs font-medium">
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>{dict.guides.firstAid}</span>
+                    </div>
+
+                    <div className="p-1.5 rounded-lg bg-[#EAF4F4] text-[#07626A] flex items-center justify-center">
+                      <Mountain className="w-3.5 h-3.5" />
+                    </div>
+
+                    <div className="p-1.5 rounded-lg bg-[#EAF4F4] text-[#07626A] flex items-center justify-center">
+                      <Footprints className="w-3.5 h-3.5" />
+                    </div>
                   </div>
 
+                  {/* Divider */}
+                  <div className="border-t border-gray-100 my-3" />
+
                   {/* Languages */}
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-4">
-                    <Globe className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                    <span className="truncate">{langs}</span>
+                  <div className="flex items-center gap-2 text-xs text-gray-600 mb-2.5">
+                    <Languages className="w-3.5 h-3.5 text-gray-500 shrink-0" />
+                    <span>{dict.guides.languages}</span>
+                  </div>
+
+                  {/* Group Size Badge */}
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#EAF4F4] text-[#07626A] text-xs font-medium mb-4">
+                    <Users className="w-3.5 h-3.5" />
+                    <span>{dict.guides.groupSize}</span>
                   </div>
                 </div>
 
-                {/* Phone Link */}
-                <div className="pt-3 border-t border-gray-50">
+                {/* Phone Call Link */}
+                <div>
                   <a
                     href={`tel:${guide.phone.replace(/\s+/g, "")}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-800 hover:text-teal-950 transition-colors"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-[#07626A] transition-colors"
                   >
-                    <Phone className="w-3.5 h-3.5 text-teal-600" />
+                    <Phone className="w-3.5 h-3.5 text-gray-800" />
                     <span>{guide.phone}</span>
                   </a>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
-        {/* CTA below cards */}
-        <div className="flex justify-center">
+        {/* Bottom CTA Button: Поддержите проект */}
+        <div className="flex justify-center mt-12">
           <Link
-            href="/tours"
-            className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-700 text-white text-xs font-semibold shadow-xs transition-colors"
+            href="#contacts"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#EAF4F4] hover:bg-[#D9EFEF] text-[#07626A] text-sm font-semibold transition-all shadow-xs active:scale-[0.98]"
           >
-            <span>{dict.guides.aboutProject}</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <span>{dict.guides.supportProject}</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

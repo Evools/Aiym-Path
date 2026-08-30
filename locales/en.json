@@ -37,20 +37,14 @@
   },
   "guides": {
     "badge": "Our People",
-    "title": "GUIDES & TRAVEL AGENTS",
-    "subtitle": "Professional verified guides and agents making your journey safe, clear, and unforgettable.",
-    "tabs": {
-      "all": "All",
-      "guide": "Guide",
-      "agency": "Travel Agency"
-    },
-    "verifiedBadge": "Certified",
-    "femaleGuideBadge": "Female Guide",
-    "languages": "Languages:",
-    "allGuides": "View All",
-    "aboutProject": "Learn More About Project",
-    "call": "Call",
-    "details": "Details"
+    "titlePrefix": "GUIDES",
+    "titleHighlight": "TOUR AGENTS",
+    "subtitle": "Professional guides and tour agents who make your journey comfortable, safe, and unforgettable.",
+    "certified": "Certified",
+    "firstAid": "First Aid Certified",
+    "groupSize": "From 2 to 5 people",
+    "languages": "Kyrgyz, Russian, English",
+    "supportProject": "Support Project"
   },
   "concept": {
     "badge": "Concept",
