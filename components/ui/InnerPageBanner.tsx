@@ -26,22 +26,23 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
   const { dict } = useLanguage();
 
   return (
-    <section className="relative w-full bg-white pt-8 sm:pt-12 pb-16 sm:pb-20 overflow-hidden border-b border-gray-100">
-      {/* Kyrgyz national ornament on the left */}
-      <div className="absolute top-0 left-0 bottom-0 z-0 w-full max-w-[280px] sm:max-w-[380px] lg:max-w-[480px] pointer-events-none select-none overflow-hidden flex items-center justify-start opacity-70">
+    <section className="relative w-full bg-white pt-8 sm:pt-12 pb-20 sm:pb-24 lg:pb-28 overflow-hidden">
+      {/* 1. Kyrgyz national ornament on the left (/images/banner/uzor.webp) */}
+      <div className="absolute top-0 left-0 bottom-0 z-10 w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[560px] pointer-events-none select-none overflow-hidden flex items-center justify-start">
         <div className="relative w-full h-full">
           <Image
             src="/images/banner/uzor.webp"
             alt="Кыргызский узор"
             fill
             priority
-            className="object-contain object-left"
+            sizes="(max-width: 768px) 320px, 560px"
+            className="object-contain object-left opacity-90"
           />
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 2. Main Content Container */}
+      <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500 hover:text-[#07626A] transition-colors mb-6 font-medium"
@@ -67,6 +68,20 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
           <p className="text-sm sm:text-base text-gray-600 leading-relaxed font-normal">
             {subtitle}
           </p>
+        </div>
+      </div>
+
+      {/* 3. Bottom Ragged Edge Effect (/images/banner/effect.webp) */}
+      <div className="absolute -bottom-1 left-0 right-0 w-full h-14 sm:h-20 lg:h-24 z-30 pointer-events-none select-none">
+        <div className="relative w-full h-full">
+          <Image
+            src="/images/banner/effect.webp"
+            alt="Torn edge effect"
+            fill
+            priority
+            sizes="100vw"
+            className="w-full object-cover object-top"
+          />
         </div>
       </div>
     </section>
