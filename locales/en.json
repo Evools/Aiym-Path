@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "about": "About Us",
+    "guide": "Guidebook",
+    "map": "Map",
+    "tours": "Tours",
+    "contacts": "Contacts",
+    "admin": "Admin"
+  },
+  "hero": {
+    "badge": "Pilot Project",
+    "titlePrefix": "AIYM PATH",
+    "title": "TRAVEL WITHOUT BOUNDARIES",
+    "subtitle": "We create a safe, accessible, and inspiring environment for women traveling across the Kyrgyz Republic",
+    "ctaAbout": "Learn More About Project",
+    "ctaMap": "Explore on Map"
+  },
+  "about": {
+    "badge": "About Us",
+    "title": "WHY AIYM PATH WAS CREATED",
+    "description": "A pilot initiative financed through the Gender Equality and Social Inclusion (GESI) Competitive Fund of the Asian Development Bank (ADB). GESI is a key ADB priority, and this project was designed to empower women and foster a safe, equitable travel community in Kyrgyzstan.",
+    "cards": {
+      "genderBalance": {
+        "title": "Industry Gender Balance",
+        "description": "Addressing tourism sector imbalances, ensuring equal conditions, comfort, and security for women travelers."
+      },
+      "womenEmpowerment": {
+        "title": "Women's Empowerment",
+        "description": "Training and encouraging female guides, expanding entrepreneurship opportunities in tourism."
+      },
+      "routeMapping": {
+        "title": "Route Mapping & Safety",
+        "description": "Designing verified hiking trails, accessible services, certified stays with interactive digital mapping."
+      }
+    }
+  },
+  "guides": {
+    "badge": "Our People",
+    "title": "GUIDES & TRAVEL AGENTS",
+    "subtitle": "Professional verified guides and agents making your journey safe, clear, and unforgettable.",
+    "tabs": {
+      "all": "All",
+      "guide": "Guide",
+      "agency": "Travel Agency"
+    },
+    "verifiedBadge": "Certified",
+    "femaleGuideBadge": "Female Guide",
+    "languages": "Languages:",
+    "allGuides": "View All",
+    "aboutProject": "Learn More About Project",
+    "call": "Call",
+    "details": "Details"
+  },
+  "concept": {
+    "badge": "Concept",
+    "title": "WHAT FEMALE-FRIENDLY MEANS",
+    "intro": "An approach to tourism development where women's safety, comfort, and preferences are factored in at every journey stage — from route planning to stays and guiding.",
+    "kyrgyzstanContext": "Crucial for Kyrgyzstan: while the country boasts tremendous natural and cultural tourism potential, safety assurances, quality stays, and clear logistics are vital for solo and group female travelers.",
+    "femaleFriendlyOffers": "Female-friendly elevates the tourism experience for everyone by providing:",
+    "points": [
+      "Safe, verified, and well-marked hiking trails;",
+      "Certified guest houses and tourist amenities;",
+      "Trained professional guides and companions;",
+      "Actionable travel safety recommendations;",
+      "Transparent information on terrain and risks."
+    ]
+  },
+  "locations": {
+    "badge": "Project Territory",
+    "title": "PROJECT TERRITORY",
+    "subtitle": "At launch, our focus is centered on verified trails and services across three premier destinations:",
+    "viewOnMap": "View on Map",
+    "items": {
+      "alaArcha": {
+        "title": "Ala-Archa Gorge",
+        "desc": "Scenic hiking trails near Bishkek with established basic infrastructure and alpine vistas."
+      },
+      "alamedin": {
+        "title": "Alamedin Gorge",
+        "desc": "Picturesque nature paths leading to mountain waterfalls and geothermal hot springs."
+      },
+      "chunkurchak": {
+        "title": "Chunkurchak Valley",
+        "desc": "High alpine plateau offering panoramic Chui valley views and family-friendly eco-services."
+      }
+    }
+  },
+  "cta": {
+    "title": "JOIN THE AIYM PATH INITIATIVE!",
+    "description": "Support the growth of female-friendly tourism in Kyrgyzstan and help build exceptional experiences for female travelers.",
+    "button": "Support Project",
+    "partnerButton": "Become a Partner"
+  },
+  "footer": {
+    "description": "Platform for safe, inspiring, and accessible female-friendly tourism in Kyrgyzstan.",
+    "navTitle": "Navigation",
+    "safetyTitle": "Safety",
+    "emergencyContacts": "Emergency Contacts",
+    "safeGuidelines": "Safety Guidelines",
+    "copyright": "© 2026 Aiym Path. All rights reserved. Created under inclusive tourism development initiatives."
+  }
+}
