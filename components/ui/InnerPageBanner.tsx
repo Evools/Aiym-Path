@@ -27,7 +27,19 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
 
   return (
     <section className="relative w-full bg-white pt-8 sm:pt-12 pb-20 sm:pb-24 lg:pb-28 overflow-hidden">
-      {/* 1. Kyrgyz national ornament on the left (/images/banner/uzor.webp) */}
+      {/* 1. Background Mountain Landscape Image (/images/banner/banner.webp) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+        <Image
+          src="/images/banner/banner.webp"
+          alt="Aiym Path Banner Background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </div>
+
+      {/* 2. Kyrgyz national ornament on the left (/images/banner/uzor.webp) */}
       <div className="absolute top-0 left-0 bottom-0 z-10 w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[560px] pointer-events-none select-none overflow-hidden flex items-center justify-start">
         <div className="relative w-full h-full">
           <Image
@@ -68,6 +80,20 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
           <p className="text-sm sm:text-base text-gray-600 leading-relaxed font-normal">
             {subtitle}
           </p>
+        </div>
+      </div>
+
+      {/* 3. Bottom Edge Effect (/images/banner/effect.webp) */}
+      <div className="absolute -bottom-1 left-0 right-0 w-full h-16 sm:h-24 lg:h-32 z-30 pointer-events-none select-none">
+        <div className="relative w-full h-full">
+          <Image
+            src="/images/banner/effect.webp"
+            alt="Edge effect"
+            fill
+            priority
+            sizes="100vw"
+            className="w-full object-cover object-top"
+          />
         </div>
       </div>
     </section>
