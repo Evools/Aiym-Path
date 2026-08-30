@@ -26,13 +26,14 @@ export const HeroSection: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Parallax offsets (slow gentle downward shift on scroll)
+  // Parallax offsets (slow gentle shifts on scroll)
   const girlShift = Math.min(scrollY * 0.12, 45); // Girl moves down slowly
   const bannerShift = Math.min(scrollY * 0.05, 25); // Background shifts down subtly
   const uzorShift = Math.min(scrollY * 0.08, 30); // Ornament shifts down subtly
+  const effectLift = Math.min(scrollY * 0.1, 30); // Effect smoothly rises slightly upwards on scroll
 
   return (
-    <section className="relative w-full min-h-[540px] sm:min-h-[620px] lg:min-h-[680px] flex items-center pt-8 sm:pt-12 lg:pt-16 pb-20 bg-white overflow-hidden">
+    <section className="relative w-full min-h-[540px] sm:min-h-[620px] lg:min-h-[680px] flex items-center pt-8 sm:pt-12 lg:pt-16 pb-20 bg-white">
       {/* Background Banner Image (/images/banner/banner.webp) with subtle parallax */}
       <div
         className="absolute inset-0 z-0 overflow-hidden will-change-transform transition-transform duration-75 ease-out"
@@ -132,17 +133,25 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Ragged Edge Effect (/images/banner/effect.webp) */}
-      <div className="absolute -bottom-1 left-0 right-0 w-full h-16 sm:h-24 lg:h-32 z-30 pointer-events-none select-none">
-        <div className="relative w-full h-full">
+      {/* Bottom Ragged Edge Effect (/images/banner/effect.webp) - 100% width, slightly lowered */}
+      <div
+        className="absolute -bottom-14 sm:-bottom-20 lg:-bottom-24 left-0 right-0 w-full z-30 pointer-events-none select-none will-change-transform transition-transform duration-75 ease-out flex flex-col"
+        style={{
+          transform: `translateY(-${effectLift}px)`,
+        }}
+      >
+        <div className="relative w-full h-16 sm:h-24 lg:h-32">
           <Image
             src="/images/banner/effect.webp"
             alt="Torn edge effect"
             fill
             priority
-            className="object-cover object-top"
+            sizes="100vw"
+            className="w-full object-cover object-top"
           />
         </div>
+        {/* Seamless solid white filler below the torn edge */}
+        <div className="w-full h-28 sm:h-36 bg-white" />
       </div>
     </section>
   );

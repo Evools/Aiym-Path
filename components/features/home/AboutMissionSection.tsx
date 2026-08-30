@@ -26,7 +26,7 @@ export const AboutMissionSection: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="py-12 px-4 sm:px-6 lg:px-8 bg-white">
+    <section id="about" className="relative z-10 pt-16 sm:pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="mb-10 max-w-4xl">
