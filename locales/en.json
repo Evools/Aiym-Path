@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Home",
     "about": "About Us",
     "guide": "Guidebook",
     "map": "Map",
@@ -48,7 +49,7 @@
     },
     "groupSize": "From 2 to 5 people",
     "languages": "Kyrgyz, Russian, English",
-    "supportProject": "Support Project"
+    "viewAllList": "View Full List"
   },
   "concept": {
     "badge": "Concept",
