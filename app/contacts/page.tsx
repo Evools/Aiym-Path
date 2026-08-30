@@ -12,10 +12,11 @@ import {
   Send,
   User,
   MessageSquare,
-  Sparkles,
   Copy,
   Check,
-  ExternalLink,
+  ChevronDown,
+  HelpCircle,
+  Clock,
   ShieldCheck,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
@@ -26,6 +27,7 @@ export default function ContactsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState("general");
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -45,6 +47,10 @@ export default function ContactsPage() {
     navigator.clipboard.writeText(text);
     setCopiedField(fieldId);
     setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex((prev) => (prev === index ? null : index));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -121,19 +127,19 @@ export default function ContactsPage() {
         </div>
       </section>
 
-      {/* Main Section */}
+      {/* Main Content Section */}
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            {/* Left Column: Direct Contacts & Interactive Map Card (5 cols) */}
+            {/* Left Column: Direct Contacts & FAQ Accordion (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
               
               {/* 1. Email Card with Quick Copy */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 hover:border-teal-200 transition-all flex items-center justify-between gap-3 group">
+              <div className="p-4 sm:p-4.5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 hover:border-teal-200 transition-all flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-11 h-11 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Mail className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Mail className="w-4.5 h-4.5" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
@@ -163,10 +169,10 @@ export default function ContactsPage() {
               </div>
 
               {/* 2. Phone Card with Quick Call/Copy */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 hover:border-teal-200 transition-all flex items-center justify-between gap-3 group">
+              <div className="p-4 sm:p-4.5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 hover:border-teal-200 transition-all flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-11 h-11 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Phone className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Phone className="w-4.5 h-4.5" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
@@ -196,9 +202,9 @@ export default function ContactsPage() {
               </div>
 
               {/* 3. Address Card */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <MapPin className="w-5 h-5" />
+              <div className="p-4 sm:p-4.5 rounded-2xl bg-[#F7FAFA] border border-teal-100/70 flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <MapPin className="w-4.5 h-4.5" />
                 </div>
                 <div>
                   <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
@@ -210,25 +216,55 @@ export default function ContactsPage() {
                 </div>
               </div>
 
-              {/* 4. Map Preview with Bishkek OpenStreetMap Embed */}
-              <div className="relative w-full h-[210px] sm:h-[230px] rounded-2xl overflow-hidden border border-gray-200/90 shadow-xs">
-                <iframe
-                  title="Bishkek Map"
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=74.5500%2C42.8500%2C74.6300%2C42.8900&amp;layer=mapnik"
-                  className="w-full h-full border-0 pointer-events-auto"
-                  loading="lazy"
-                />
-                <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-semibold text-gray-800 shadow-xs flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#07626A]" />
-                  <span>Бишкек, Кыргызстан</span>
+              {/* 4. Mini FAQ Accordion replacing Map */}
+              <div className="pt-2">
+                <div className="flex items-center gap-2 mb-3 px-1">
+                  <HelpCircle className="w-4 h-4 text-[#07626A]" />
+                  <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
+                    {dict.contactsPage.faqTitle}
+                  </h4>
+                </div>
+
+                <div className="space-y-2.5">
+                  {dict.contactsPage.faqs.map((faq, idx) => {
+                    const isOpen = openFaqIndex === idx;
+
+                    return (
+                      <div
+                        key={idx}
+                        className="rounded-2xl border border-gray-200/80 bg-white overflow-hidden transition-all duration-200"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => toggleFaq(idx)}
+                          className="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-[13px] font-semibold text-gray-900 hover:text-[#07626A] transition-colors cursor-pointer"
+                        >
+                          <span>{faq.q}</span>
+                          <ChevronDown
+                            className={`w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200 ${
+                              isOpen ? "rotate-180 text-[#07626A]" : ""
+                            }`}
+                          />
+                        </button>
+
+                        {isOpen && (
+                          <div className="px-4 pb-4 pt-0">
+                            <p className="text-xs text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
+                              {faq.a}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Trust Badge */}
+              {/* Response Time Notice */}
               <div className="p-4 rounded-xl bg-teal-50/70 border border-teal-100/80 flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-[#07626A] shrink-0" />
+                <Clock className="w-4.5 h-4.5 text-[#07626A] shrink-0" />
                 <p className="text-xs text-gray-600 leading-snug">
-                  Официальная поддержка и ответы в течение 24 рабочих часов.
+                  Время ответа: в течение 24 рабочих часов (Пн–Пт, 09:00–18:00).
                 </p>
               </div>
 

@@ -129,6 +129,21 @@
     "messageLabel": "Message",
     "messagePlaceholder": "Write your message here...",
     "submit": "Submit",
-    "successMessage": "Thank you! Your message has been sent successfully."
+    "successMessage": "Thank you! Your message has been sent successfully.",
+    "faqTitle": "Frequently Asked Questions",
+    "faqs": [
+      {
+        "q": "How to become a certified guide?",
+        "a": "Submit a request through the form or email us. We provide safety standards training, first aid certification, and community verification."
+      },
+      {
+        "q": "How is route safety verified?",
+        "a": "Our team on-site inspects trails, cell coverage, elevation changes, clean water sources, and verified women-friendly guest houses."
+      },
+      {
+        "q": "What is the typical response time?",
+        "a": "We process and answer all inquiries within 24 working hours Monday through Friday."
+      }
+    ]
   }
 }
