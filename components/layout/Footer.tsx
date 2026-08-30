@@ -17,6 +17,7 @@ export const Footer: React.FC = () => {
     { href: "/guide", label: dict.nav.guide },
     { href: "/map", label: dict.nav.map },
     { href: "/tours", label: dict.nav.tours },
+    { href: "/contacts", label: dict.nav.contacts },
   ];
 
   return (
