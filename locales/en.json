@@ -110,5 +110,25 @@
     "emergencyContacts": "Emergency Contacts",
     "safeGuidelines": "Safety Guidelines",
     "copyright": "© 2026 Aiym Path. All rights reserved."
+  },
+  "contactsPage": {
+    "badge": "Contacts",
+    "titlePrefix": "GET IN TOUCH WITH",
+    "titleHighlight": "AIYM PATH",
+    "subtitle": "Questions about the project, partnership, or training — write to us directly or fill out the form.",
+    "emailTitle": "hello@tumar-project.kg",
+    "emailDesc": "General inquiries & partnership",
+    "phoneTitle": "+996 700 000 000",
+    "phoneDesc": "Mon–Fri, 09:00–18:00",
+    "addressTitle": "Bishkek, Kyrgyz Republic",
+    "addressDesc": "Exact office address available upon email request",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "submit": "Submit",
+    "successMessage": "Thank you! Your message has been sent successfully."
   }
 }

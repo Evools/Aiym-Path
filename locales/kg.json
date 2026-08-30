@@ -110,5 +110,25 @@
     "emergencyContacts": "Шашылыш байланыштар",
     "safeGuidelines": "Коопсуздук эрежелери",
     "copyright": "© 2026 Aiym Path. Бардык укуктар корголгон."
+  },
+  "contactsPage": {
+    "badge": "Байланыштар",
+    "titlePrefix": "БАЙЛАНЫШУУ",
+    "titleHighlight": "AIYM PATH",
+    "subtitle": "Долбоор, өнөктөштүк же окутуу боюнча суроолор — бизге түз жазыңыз же форманы толтуруңуз.",
+    "emailTitle": "hello@tumar-project.kg",
+    "emailDesc": "Жалпы суроолор жана өнөктөштүк",
+    "phoneTitle": "+996 700 000 000",
+    "phoneDesc": "Дүйш–Жум, 09:00–18:00",
+    "addressTitle": "Бишкек ш., Кыргыз Республикасы",
+    "addressDesc": "Кеңсенин так дарегин почта аркылуу тактаңыз",
+    "nameLabel": "Аты-жөнү",
+    "namePlaceholder": "Сиздин атыңыз",
+    "emailLabel": "Электрондук почта",
+    "emailPlaceholder": "your@email.com",
+    "messageLabel": "Билдирүү",
+    "messagePlaceholder": "Билдирүүңүздү жазыңыз...",
+    "submit": "Жөнөтүү",
+    "successMessage": "Ыраазычылык билдиребиз! Сиздин билдирүүңүз ийгиликтүү жөнөтүлдү."
   }
 }
