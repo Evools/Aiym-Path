@@ -37,8 +37,15 @@ export const AboutMissionSection: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="mb-10 max-w-4xl">
-          {/* Badge: О нас */}
-          <span className="inline-block px-3.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-medium mb-4">
+          {/* Label: О нас */}
+          <span
+            className="block text-[20px] font-normal mb-3"
+            style={{
+              color: "#07626A",
+              fontFamily: "Inter, var(--font-geist-sans), sans-serif",
+              lineHeight: "normal",
+            }}
+          >
             {dict.about.badge}
           </span>
 
