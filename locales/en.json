@@ -87,10 +87,18 @@
     }
   },
   "cta": {
+    "badge": "Aiym Path Community",
     "title": "JOIN THE AIYM PATH INITIATIVE!",
     "description": "Support the growth of female-friendly tourism in Kyrgyzstan and help build exceptional experiences for female travelers.",
     "button": "Support Project",
-    "partnerButton": "Become a Partner"
+    "partnerButton": "Become a Partner",
+    "tagSafety": "Safe Tourism",
+    "tagRoutes": "Verified Routes",
+    "tagGuides": "Guide Support",
+    "roleTravelersTitle": "For Travelers",
+    "roleTravelersDesc": "Safe trails, verified female guides, and comprehensive safety guides.",
+    "rolePartnersTitle": "For Guides & Partners",
+    "rolePartnersDesc": "Training, certification, and direct reach to traveler community."
   },
   "footer": {
     "description": "Platform for safe, inspiring, and accessible female-friendly tourism in Kyrgyzstan.",
