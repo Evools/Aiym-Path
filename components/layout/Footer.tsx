@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Heart, Phone, Mail, MapPin, ArrowUpRight, ArrowUp } from "lucide-react";
+import { ShieldCheck, Phone, Mail, MapPin, ArrowUpRight, ArrowUp } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const Footer: React.FC = () => {
@@ -17,7 +17,6 @@ export const Footer: React.FC = () => {
     { href: "/guide", label: dict.nav.guide },
     { href: "/map", label: dict.nav.map },
     { href: "/tours", label: dict.nav.tours },
-    { href: "/admin", label: dict.nav.admin },
   ];
 
   return (
@@ -144,11 +143,14 @@ export const Footer: React.FC = () => {
           <p className="text-center sm:text-left">{dict.footer.copyright}</p>
           
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-1.5 text-gray-500">
-              <span>Made with</span>
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-              <span>for female travelers</span>
-            </div>
+            <a
+              href="https://t.me/web_commander"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-[#07626A] transition-colors font-medium"
+            >
+              @web_commander
+            </a>
 
             <button
               onClick={scrollToTop}

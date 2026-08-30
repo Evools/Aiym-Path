@@ -3,7 +3,6 @@ import { AboutMissionSection } from "@/components/features/home/AboutMissionSect
 import { GuidesPreviewSection } from "@/components/features/home/GuidesPreviewSection";
 import { FemaleFriendlyConceptSection } from "@/components/features/home/FemaleFriendlyConceptSection";
 import { LocationsSection } from "@/components/features/home/LocationsSection";
-import { CommunityCtaSection } from "@/components/features/home/CommunityCtaSection";
 
 export default function HomePage() {
   return (
@@ -13,7 +12,6 @@ export default function HomePage() {
       <GuidesPreviewSection />
       <FemaleFriendlyConceptSection />
       <LocationsSection />
-      <CommunityCtaSection />
     </div>
   );
 }
