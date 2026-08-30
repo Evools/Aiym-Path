@@ -3,67 +3,108 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Leaf, ChevronRight } from "lucide-react";
+import { Sparkles, ArrowRight, MessageSquare } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const HeroSection: React.FC = () => {
   const { dict } = useLanguage();
 
   return (
-    <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-6xl mx-auto">
-        {/* Banner container with rounded corners */}
-        <div className="relative min-h-[480px] sm:min-h-[520px] rounded-3xl overflow-hidden shadow-sm flex items-center">
-          {/* Background image & gradient overlay */}
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85"
-              alt="Кыргызстан Ала-Арча"
-              fill
-              priority
-              className="object-cover object-right sm:object-center"
-            />
-            {/* Dark left-to-right gradient overlay matching Figma */}
-            <div className="absolute inset-0 bg-gradient-to-r from-teal-950/90 via-teal-950/70 to-transparent" />
+    <section className="relative w-full min-h-[580px] sm:min-h-[660px] lg:min-h-[740px] flex items-center pt-28 pb-20 bg-white">
+      {/* Background Banner Image (/banner.png) */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <Image
+          src="/banner.png"
+          alt="Aiym Path Banner Background"
+          fill
+          priority
+          className="object-cover object-center"
+        />
+      </div>
+
+      {/* Kyrgyz national ornament on the left (/uzor.png) */}
+      <div className="absolute top-0 left-0 bottom-0 z-[5] w-full max-w-[380px] sm:max-w-[500px] lg:max-w-[620px] pointer-events-none select-none overflow-hidden flex items-center justify-start">
+        <div className="relative w-full h-full">
+          <Image
+            src="/uzor.png"
+            alt="Кыргызский национальный узор"
+            fill
+            priority
+            className="object-contain object-left"
+          />
+        </div>
+      </div>
+
+      {/* Girl traveler in the right corner (/asia-girl.png) */}
+      <div className="absolute bottom-0 right-0 z-10 w-full max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[620px] xl:max-w-[700px] h-[75%] sm:h-[85%] lg:h-[92%] pointer-events-none select-none flex items-end justify-end">
+        <div className="relative w-full h-full">
+          <Image
+            src="/asia-girl.png"
+            alt="Кыргызская девушка-путешественница"
+            fill
+            priority
+            className="object-contain object-bottom"
+          />
+        </div>
+      </div>
+
+      {/* Hero Content Container */}
+      <div className="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-xl">
+          {/* Pilot Project Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50/90 backdrop-blur-xs border border-teal-200/70 text-teal-800 text-xs font-semibold mb-6 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+            <span>{dict.hero.badge}</span>
           </div>
 
-          {/* Content */}
-          <div className="relative z-10 max-w-xl p-8 sm:p-12 lg:p-16 text-white">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-teal-200 text-xs font-medium mb-6">
-              <Leaf className="w-3 h-3 text-emerald-400" />
-              <span>{dict.hero.badge}</span>
-            </div>
+          {/* Large Heading */}
+          <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.08] mb-5 uppercase">
+            <span className="block text-gray-900">{dict.hero.titlePrefix}</span>
+            <span className="block" style={{ color: "#07626A" }}>
+              {dict.hero.titleLine2}
+            </span>
+            <span className="block" style={{ color: "#07626A" }}>
+              {dict.hero.titleLine3}
+            </span>
+          </h1>
 
-            {/* Heading */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.1] mb-5 uppercase">
-              <span className="block text-teal-300">{dict.hero.titlePrefix}</span>
-              {dict.hero.title}
-            </h1>
+          {/* Subtitle */}
+          <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mb-8 max-w-lg">
+            {dict.hero.subtitle}
+          </p>
 
-            {/* Description */}
-            <p className="text-xs sm:text-sm text-teal-100/90 leading-relaxed font-normal mb-8 max-w-md">
-              {dict.hero.subtitle}
-            </p>
+          {/* Buttons */}
+          <div className="flex flex-wrap items-center gap-3.5">
+            <Link
+              href="#about"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+              style={{ backgroundColor: "#07626A" }}
+            >
+              <span>{dict.hero.ctaAbout}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
 
-            {/* Action buttons */}
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="#about"
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold shadow-xs transition-colors"
-              >
-                <span>{dict.hero.ctaAbout}</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
-              <Link
-                href="/map"
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 text-xs font-semibold transition-colors"
-              >
-                <span>{dict.hero.ctaMap}</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+            <Link
+              href="#contacts"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs sm:text-sm font-semibold shadow-xs transition-all active:scale-[0.98]"
+            >
+              <span>{dict.hero.ctaContact}</span>
+              <MessageSquare className="w-4 h-4 text-gray-500" />
+            </Link>
           </div>
+        </div>
+      </div>
+
+      {/* Bottom Ragged Edge Effect (/effect.png) - on top of banner and girl */}
+      <div className="absolute -bottom-1 sm:bottom-0 left-0 right-0 w-full h-20 sm:h-28 lg:h-36 z-30 pointer-events-none select-none">
+        <div className="relative w-full h-full">
+          <Image
+            src="/effect.png"
+            alt="Torn edge effect"
+            fill
+            priority
+            className="object-cover object-top"
+          />
         </div>
       </div>
     </section>

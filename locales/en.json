@@ -10,10 +10,11 @@
   "hero": {
     "badge": "Pilot Project",
     "titlePrefix": "AIYM PATH",
-    "title": "TRAVEL WITHOUT BOUNDARIES",
-    "subtitle": "We create a safe, accessible, and inspiring environment for women traveling across the Kyrgyz Republic",
+    "titleLine2": "TRAVEL WITHOUT",
+    "titleLine3": "BOUNDARIES",
+    "subtitle": "We create a safe, accessible, and inspiring environment for women traveling across the Kyrgyz Republic.",
     "ctaAbout": "Learn More About Project",
-    "ctaMap": "Explore on Map"
+    "ctaContact": "Contact Us"
   },
   "about": {
     "badge": "About Us",
