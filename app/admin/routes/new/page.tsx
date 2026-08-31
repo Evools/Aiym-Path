@@ -170,15 +170,12 @@ export default function CreateRoutePage() {
         </div>
       </div>
 
-      {/* 1. Multilingual Content & Region/Cover */}
+      {/* 1. Main Info & Description */}
       <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-6 shadow-2xs">
-        <div className="flex items-center justify-between pb-3 border-b border-[#E1E1E1]">
+        <div className="pb-3 border-b border-[#E1E1E1]">
           <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
-            1. Основная информация и описание (i18n RU • KG • EN)
+            1. Основная информация и описание
           </h3>
-          <span className="text-xs text-[#0D0D0D]/50 font-medium">
-            3 языка поддержки
-          </span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
