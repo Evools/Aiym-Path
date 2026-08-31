@@ -11,6 +11,16 @@ export interface RegionItem {
   };
 }
 
+export type POIType =
+  | "pass"
+  | "waterfall"
+  | "viewpoint"
+  | "camp"
+  | "caution"
+  | "rescue"
+  | "guesthouse"
+  | "service";
+
 export interface RoutePOI {
   id: string;
   name: {
@@ -18,9 +28,15 @@ export interface RoutePOI {
     kg: string;
     en: string;
   };
-  type: "guesthouse" | "service" | "rescue" | "viewpoint";
+  type: POIType;
   lat: number;
   lng: number;
+  altitudeMeters?: number;
+  description?: {
+    ru?: string;
+    kg?: string;
+    en?: string;
+  };
 }
 
 export interface AssignedGuide {

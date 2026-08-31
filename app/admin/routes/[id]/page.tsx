@@ -14,7 +14,7 @@ import {
   AdminStorageService,
   AdminGuideItem,
 } from "@/lib/services/admin-storage.service";
-import { RouteItem, RouteRegion, AssignedGuide } from "@/types/route.types";
+import { RouteItem, RouteRegion, AssignedGuide, RoutePOI } from "@/types/route.types";
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
 import { RouteMapEditorWrapper } from "@/components/features/admin/RouteMapEditorWrapper";
 import { CustomSelect } from "@/components/ui/CustomSelect";
@@ -40,6 +40,7 @@ export default function EditRoutePage() {
   const [imageUrl, setImageUrl] = useState<string>("");
   const [selectedGuideIds, setSelectedGuideIds] = useState<string[]>([]);
   const [coordinates, setCoordinates] = useState<[number, number][]>([]);
+  const [pois, setPois] = useState<RoutePOI[]>([]);
 
   useEffect(() => {
     const guides = AdminStorageService.getGuides();
@@ -64,6 +65,7 @@ export default function EditRoutePage() {
       setElevationGainMeters(existingRoute.elevationGainMeters);
       setImageUrl(existingRoute.imageUrl || "");
       setCoordinates(existingRoute.coordinates || []);
+      setPois(existingRoute.pois || []);
 
       // Guides
       if (existingRoute.assignedGuides && existingRoute.assignedGuides.length > 0) {
@@ -149,22 +151,25 @@ export default function EditRoutePage() {
       coordinates,
       assignedGuides,
       assignedGuide: assignedGuides[0],
-      pois: [
-        {
-          id: `${routeId}-poi-start`,
-          name: { ru: "Старт маршрута", kg: "Маршруттун башталышы", en: "Trail Start" },
-          lat: coordinates[0][0],
-          lng: coordinates[0][1],
-          type: "service",
-        },
-        {
-          id: `${routeId}-poi-finish`,
-          name: { ru: "Финишная панорама", kg: "Панорамалык чекит", en: "Trail Finish" },
-          lat: coordinates[coordinates.length - 1][0],
-          lng: coordinates[coordinates.length - 1][1],
-          type: "viewpoint",
-        },
-      ],
+      pois:
+        pois.length > 0
+          ? pois
+          : [
+              {
+                id: `${routeId}-poi-start`,
+                name: { ru: "Старт маршрута", kg: "Маршруттун башталышы", en: "Trail Start" },
+                lat: coordinates[0][0],
+                lng: coordinates[0][1],
+                type: "service",
+              },
+              {
+                id: `${routeId}-poi-finish`,
+                name: { ru: "Финишная панорама", kg: "Панорамалык чекит", en: "Trail Finish" },
+                lat: coordinates[coordinates.length - 1][0],
+                lng: coordinates[coordinates.length - 1][1],
+                type: "viewpoint",
+              },
+            ],
     };
 
     AdminStorageService.saveRoute(updatedRoute);
@@ -326,6 +331,8 @@ export default function EditRoutePage() {
         <RouteMapEditorWrapper
           coordinates={coordinates}
           onChangeCoordinates={setCoordinates}
+          pois={pois}
+          onChangePOIs={setPois}
           onDistanceCalculated={handleDistanceCalculated}
           onMetricsCalculated={handleMetricsCalculated}
           center={coordinates[0]}

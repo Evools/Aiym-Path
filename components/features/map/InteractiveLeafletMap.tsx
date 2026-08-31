@@ -238,6 +238,42 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
       const finishMarker = L.marker(finish, { icon: finishIcon });
       activeTrailLayer.addLayer(finishMarker);
 
+      // Render Waypoints / POIs along the trail
+      if (currentRoute.pois && currentRoute.pois.length > 0) {
+        const poiColorMap: Record<string, string> = {
+          pass: "#4F46E5",
+          waterfall: "#0284C7",
+          viewpoint: "#D97706",
+          camp: "#059669",
+          caution: "#E11D48",
+          rescue: "#0D9488",
+          guesthouse: "#07626A",
+          service: "#334155",
+        };
+
+        currentRoute.pois.forEach((poi) => {
+          const poiColor = poiColorMap[poi.type] || "#4F46E5";
+          const poiName = poi.name[language] || poi.name.ru;
+          const poiIcon = L.divIcon({
+            className: "trail-poi-marker",
+            html: `
+              <div style="background-color: ${poiColor}; color: #FFFFFF; padding: 4px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; border: 2px solid #FFFFFF; box-shadow: 0 4px 8px rgba(0,0,0,0.25); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;">
+                <span>${poiName}${poi.altitudeMeters ? ` (${poi.altitudeMeters}м)` : ""}</span>
+              </div>
+            `,
+            iconSize: [110, 26],
+            iconAnchor: [55, 13],
+          });
+
+          const poiMarker = L.marker([poi.lat, poi.lng], { icon: poiIcon });
+          poiMarker.bindTooltip(
+            `<b>${poiName}</b>${poi.altitudeMeters ? `<br/>Высота: ${poi.altitudeMeters} м` : ""}`,
+            { direction: "top" }
+          );
+          activeTrailLayer.addLayer(poiMarker);
+        });
+      }
+
       map.fitBounds(polyline.getBounds(), { padding: [80, 80], maxZoom: 14 });
     }
   }, [routes, selectedRegion, selectedRouteId, language, onSelectRoute]);

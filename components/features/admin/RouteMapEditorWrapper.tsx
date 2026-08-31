@@ -2,6 +2,7 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import { RoutePOI } from "@/types/route.types";
 
 const DynamicRouteMapEditor = dynamic(
   () => import("./RouteMapEditor").then((mod) => mod.RouteMapEditor),
@@ -26,6 +27,8 @@ interface RouteMetrics {
 interface RouteMapEditorWrapperProps {
   coordinates: [number, number][];
   onChangeCoordinates: (coords: [number, number][]) => void;
+  pois?: RoutePOI[];
+  onChangePOIs?: (pois: RoutePOI[]) => void;
   center?: [number, number];
   onDistanceCalculated?: (distanceKm: number) => void;
   onMetricsCalculated?: (metrics: RouteMetrics) => void;
