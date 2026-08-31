@@ -47,6 +47,7 @@ export const MapExplorerSection: React.FC = () => {
           <MapRegionTabs
             selectedRegion={selectedRegion}
             onSelectRegion={handleSelectRegion}
+            routes={routesData}
           />
         </div>
 

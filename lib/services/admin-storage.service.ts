@@ -191,38 +191,6 @@ export const DEFAULT_REGIONS: AdminRegionItem[] = [
       en: "Chunkurchak Gorge",
     },
   },
-  {
-    id: "kegety",
-    label: {
-      ru: "Кегети и Кёль-Тор",
-      kg: "Кегети жана Көл-Төр",
-      en: "Kegety & Kol-Tor",
-    },
-  },
-  {
-    id: "karakol",
-    label: {
-      ru: "Каракол и Джеты-Огуз",
-      kg: "Каракол жана Жети-Өгүз",
-      en: "Karakol & Jeti-Oguz",
-    },
-  },
-  {
-    id: "issyk-ata",
-    label: {
-      ru: "Ысык-Ата (Тёплые Ключи)",
-      kg: "Ысык-Ата",
-      en: "Issyk-Ata",
-    },
-  },
-  {
-    id: "song-kul",
-    label: {
-      ru: "Озеро Сон-Көл",
-      kg: "Соң-Көл көлү",
-      en: "Song-Kul Lake",
-    },
-  },
 ];
 
 const STORAGE_KEYS = {
