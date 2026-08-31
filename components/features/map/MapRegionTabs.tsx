@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { RouteRegion } from "@/types/route.types";
+import { RouteFilterRegion } from "@/types/route.types";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface MapRegionTabsProps {
-  selectedRegion: RouteRegion;
-  onSelectRegion: (region: RouteRegion) => void;
+  selectedRegion: RouteFilterRegion;
+  onSelectRegion: (region: RouteFilterRegion) => void;
 }
 
 export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
@@ -15,7 +15,7 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
 }) => {
   const { language } = useLanguage();
 
-  const regions: { id: RouteRegion; label: { ru: string; kg: string; en: string } }[] = [
+  const regions: { id: RouteFilterRegion; label: { ru: string; kg: string; en: string } }[] = [
     {
       id: "all",
       label: {

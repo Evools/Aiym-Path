@@ -1,24 +1,29 @@
 "use client";
 
-import React, { useState, useMemo, useRef } from "react";
-import { RouteRegion, RouteItem } from "@/types/route.types";
-import { ROUTES_DATA } from "@/data/routes.data";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { RouteFilterRegion, RouteItem } from "@/types/route.types";
+import { AdminStorageService } from "@/lib/services/admin-storage.service";
 import { MapRegionTabs } from "./MapRegionTabs";
 import { InteractiveMapWrapper } from "./InteractiveMapWrapper";
 import { MapLegend } from "./MapLegend";
 import { RoutesListSection } from "./RoutesListSection";
 
 export const MapExplorerSection: React.FC = () => {
-  const [selectedRegion, setSelectedRegion] = useState<RouteRegion>("all");
+  const [routesData, setRoutesData] = useState<RouteItem[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<RouteFilterRegion>("all");
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const filteredRoutes = useMemo(() => {
-    if (selectedRegion === "all") return ROUTES_DATA;
-    return ROUTES_DATA.filter((r) => r.region === selectedRegion);
-  }, [selectedRegion]);
+  useEffect(() => {
+    setRoutesData(AdminStorageService.getRoutes());
+  }, []);
 
-  const handleSelectRegion = (region: RouteRegion) => {
+  const filteredRoutes = useMemo(() => {
+    if (selectedRegion === "all") return routesData;
+    return routesData.filter((r) => r.region === selectedRegion);
+  }, [routesData, selectedRegion]);
+
+  const handleSelectRegion = (region: RouteFilterRegion) => {
     setSelectedRegion(region);
     setSelectedRouteId(null);
   };
@@ -58,7 +63,7 @@ export const MapExplorerSection: React.FC = () => {
         {/* 3. Map Legend */}
         <MapLegend />
 
-        {/* 4. Rich Routes Directory Section */}
+        {/* 4. Filtered Route Cards List */}
         <RoutesListSection
           routes={filteredRoutes}
           selectedRouteId={selectedRouteId}

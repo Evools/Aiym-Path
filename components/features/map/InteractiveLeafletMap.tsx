@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { RouteItem, RouteRegion, AssignedGuide } from "@/types/route.types";
+import { RouteItem, RouteRegion, RouteFilterRegion, AssignedGuide } from "@/types/route.types";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   Footprints,
@@ -79,7 +79,7 @@ const BASECAMPS: BasecampHub[] = [
 
 interface InteractiveLeafletMapProps {
   routes: RouteItem[];
-  selectedRegion: RouteRegion;
+  selectedRegion: RouteFilterRegion;
   selectedRouteId: string | null;
   onSelectRoute: (id: string) => void;
 }

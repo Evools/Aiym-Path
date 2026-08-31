@@ -21,6 +21,11 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Hide public header when inside admin
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   const navLinks = [
     { href: "/#about", label: dict.nav.about },
     { href: "/guide", label: dict.nav.guide },
