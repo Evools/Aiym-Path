@@ -13,7 +13,6 @@ import {
   Award,
   Users,
   Radio,
-  ArrowRight,
 } from "lucide-react";
 import { GuidebookItem } from "@/types/guidebook.types";
 import { useLanguage } from "@/context/LanguageContext";
@@ -24,7 +23,7 @@ interface GuidebookCardProps {
 }
 
 export const GuidebookCard: React.FC<GuidebookCardProps> = ({ item, onSelect }) => {
-  const { language, dict } = useLanguage();
+  const { language } = useLanguage();
 
   const renderIcon = (iconName: GuidebookItem["iconName"]) => {
     const iconClass = "w-5 h-5 text-[#07626A]";
@@ -58,43 +57,29 @@ export const GuidebookCard: React.FC<GuidebookCardProps> = ({ item, onSelect }) 
 
   const title = item.title[language] || item.title.ru;
   const description = item.shortDescription[language] || item.shortDescription.ru;
-  const badge = item.badgeText ? item.badgeText[language] || item.badgeText.ru : null;
 
   return (
     <div
       onClick={() => onSelect(item)}
-      className="group relative flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-white border border-gray-200/90 shadow-2xs hover:shadow-lg hover:border-teal-300/60 transition-all duration-200 cursor-pointer text-left"
+      className="flex flex-col items-start gap-[10px] p-[24px_32px] self-stretch justify-self-stretch rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-150 cursor-pointer text-left"
     >
-      <div>
-        {/* Top Header: Icon & Optional Badge */}
-        <div className="flex items-center justify-between gap-3 mb-5">
-          <div className="w-12 h-12 rounded-2xl bg-[#EAF4F4] flex items-center justify-center shrink-0 border border-teal-100/60 group-hover:scale-105 group-hover:bg-teal-100/70 transition-transform duration-200">
-            {renderIcon(item.iconName)}
-          </div>
-
-          {badge && (
-            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-gray-100 text-gray-700 group-hover:bg-teal-50 group-hover:text-[#07626A] transition-colors">
-              {badge}
-            </span>
-          )}
-        </div>
-
-        {/* Card Title */}
-        <h3 className="text-lg font-bold text-gray-900 mb-3 leading-snug group-hover:text-[#07626A] transition-colors">
-          {title}
-        </h3>
-
-        {/* Card Description */}
-        <p className="text-sm text-gray-600 leading-relaxed font-normal">
-          {description}
-        </p>
+      {/* Icon Box */}
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mb-1"
+        style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
+      >
+        {renderIcon(item.iconName)}
       </div>
 
-      {/* Action Footer Link */}
-      <div className="pt-5 mt-5 border-t border-gray-100/80 flex items-center justify-between text-xs font-semibold text-[#07626A]">
-        <span>{dict.guidebook?.readMore || "Подробнее"}</span>
-        <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" />
-      </div>
+      {/* Card Title */}
+      <h3 className="text-base sm:text-lg font-bold text-[#0D0D0D] leading-snug">
+        {title}
+      </h3>
+
+      {/* Card Description */}
+      <p className="text-sm text-[#0D0D0D]/75 leading-relaxed font-normal">
+        {description}
+      </p>
     </div>
   );
 };

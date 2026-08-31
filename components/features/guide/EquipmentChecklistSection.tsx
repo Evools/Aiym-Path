@@ -24,35 +24,41 @@ export const EquipmentChecklistSection: React.FC = () => {
   const percentage = Math.round((current / total) * 100);
 
   return (
-    <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/70 border-t border-gray-100">
+    <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white border-t border-[#E1E1E1]">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100/70 text-[#07626A] text-xs font-semibold uppercase mb-3">
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[#07626A] text-xs font-semibold uppercase mb-3"
+              style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
+            >
               <Backpack className="w-3.5 h-3.5" />
               <span>{dict.guidebook?.checklistTitle || "Чек-лист экипировки"}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0D0D0D] tracking-tight">
               {language === "kg"
                 ? "Тоо сапарына керектүү буюмдар"
                 : language === "en"
                 ? "Essential Mountain Gear Checklist"
                 : "Что взять с собой в горный треккинг"}
             </h2>
-            <p className="text-sm text-gray-600 mt-2 max-w-xl">
+            <p className="text-sm text-[#0D0D0D]/75 mt-2 max-w-xl">
               {dict.guidebook?.checklistSubtitle ||
                 "Отметьте вещи, которые вы уже собрали в рюкзак перед выходом в горы"}
             </p>
           </div>
 
           {/* Progress & Reset */}
-          <div className="flex items-center gap-4 bg-white p-3.5 rounded-2xl border border-gray-200/80 shadow-2xs self-start md:self-auto">
+          <div className="flex items-center gap-4 bg-white p-3.5 rounded-2xl border border-[#E1E1E1] self-start md:self-auto">
             <div className="text-left">
-              <span className="text-xs text-gray-500 font-medium block">
+              <span className="text-xs text-[#0D0D0D]/70 font-medium block">
                 {dict.guidebook?.checklistProgress || "Собрано"}: {current} / {total}
               </span>
-              <div className="w-32 h-2 rounded-full bg-gray-100 overflow-hidden mt-1.5">
+              <div
+                className="w-32 h-2 rounded-full overflow-hidden mt-1.5"
+                style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
+              >
                 <div
                   className="h-full bg-[#07626A] transition-all duration-300 rounded-full"
                   style={{ width: `${percentage}%` }}
@@ -65,7 +71,8 @@ export const EquipmentChecklistSection: React.FC = () => {
                 type="button"
                 onClick={handleReset}
                 title={dict.guidebook?.checklistReset || "Сбросить"}
-                className="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                className="p-2 rounded-xl text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors cursor-pointer"
+                style={{ backgroundColor: "rgba(7, 98, 106, 0.05)" }}
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
@@ -85,15 +92,16 @@ export const EquipmentChecklistSection: React.FC = () => {
                 key={item.id}
                 type="button"
                 onClick={() => toggleItem(item.id)}
-                className={`flex items-start gap-3.5 p-4 rounded-2xl text-left transition-all duration-200 cursor-pointer border select-none ${
+                className={`flex items-start gap-3.5 p-4 rounded-2xl text-left transition-colors duration-150 cursor-pointer border select-none ${
                   isChecked
-                    ? "bg-teal-50/50 border-teal-200/80 shadow-2xs"
-                    : "bg-white border-gray-200/90 hover:border-teal-200 hover:shadow-2xs"
+                    ? "border-[#07626A]"
+                    : "bg-white border-[#E1E1E1] hover:border-[#07626A]"
                 }`}
+                style={isChecked ? { backgroundColor: "rgba(7, 98, 106, 0.05)" } : undefined}
               >
                 <div
                   className={`mt-0.5 shrink-0 transition-colors ${
-                    isChecked ? "text-[#07626A]" : "text-gray-300"
+                    isChecked ? "text-[#07626A]" : "text-[#0D0D0D]/30"
                   }`}
                 >
                   {isChecked ? (
@@ -108,8 +116,8 @@ export const EquipmentChecklistSection: React.FC = () => {
                     <span
                       className={`text-sm font-semibold transition-colors ${
                         isChecked
-                          ? "line-through text-gray-500"
-                          : "text-gray-900"
+                          ? "line-through text-[#0D0D0D]/50"
+                          : "text-[#0D0D0D]"
                       }`}
                     >
                       {label}
@@ -119,7 +127,7 @@ export const EquipmentChecklistSection: React.FC = () => {
                   {note && (
                     <p
                       className={`text-xs mt-1 transition-colors ${
-                        isChecked ? "text-gray-400" : "text-gray-500"
+                        isChecked ? "text-[#0D0D0D]/40" : "text-[#0D0D0D]/70"
                       }`}
                     >
                       {note}
@@ -132,7 +140,10 @@ export const EquipmentChecklistSection: React.FC = () => {
         </div>
 
         {percentage === 100 && (
-          <div className="mt-6 p-4 rounded-2xl bg-teal-50 border border-teal-200 text-[#07626A] flex items-center gap-3 text-sm font-semibold animate-in fade-in">
+          <div
+            className="mt-6 p-4 rounded-2xl border border-[#07626A] text-[#07626A] flex items-center gap-3 text-sm font-semibold"
+            style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
+          >
             <Sparkles className="w-5 h-5 shrink-0" />
             <span>{dict.guidebook?.checklistCompleted || "Отлично! Вы полностью готовы к безопасному походу."}</span>
           </div>

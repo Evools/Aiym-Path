@@ -20,14 +20,14 @@ export const GuidebookTabs: React.FC<GuidebookTabsProps> = ({
   const { dict } = useLanguage();
 
   return (
-    <div className="inline-flex p-1.5 rounded-2xl bg-gray-100/90 border border-gray-200/80 shadow-2xs">
+    <div className="inline-flex p-1.5 rounded-2xl bg-[#F0F2F2] border border-[#E1E1E1]">
       <button
         type="button"
         onClick={() => onChangeAudience("travelers")}
-        className={`px-5 sm:px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 select-none ${
+        className={`px-5 sm:px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-150 cursor-pointer flex items-center gap-2 select-none ${
           activeAudience === "travelers"
-            ? "bg-[#07626A] text-white shadow-xs"
-            : "text-gray-600 hover:text-gray-900 hover:bg-white/60"
+            ? "bg-[#07626A] text-white"
+            : "text-[#0D0D0D] hover:text-[#07626A]"
         }`}
       >
         <span>{dict.guidebook?.tabTravelers || "Путешественникам"}</span>
@@ -35,7 +35,7 @@ export const GuidebookTabs: React.FC<GuidebookTabsProps> = ({
           className={`text-xs px-2 py-0.5 rounded-full font-medium ${
             activeAudience === "travelers"
               ? "bg-white/20 text-white"
-              : "bg-gray-200/70 text-gray-600"
+              : "bg-black/5 text-[#0D0D0D]"
           }`}
         >
           {travelersCount}
@@ -45,10 +45,10 @@ export const GuidebookTabs: React.FC<GuidebookTabsProps> = ({
       <button
         type="button"
         onClick={() => onChangeAudience("providers")}
-        className={`px-5 sm:px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 select-none ${
+        className={`px-5 sm:px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-150 cursor-pointer flex items-center gap-2 select-none ${
           activeAudience === "providers"
-            ? "bg-[#07626A] text-white shadow-xs"
-            : "text-gray-600 hover:text-gray-900 hover:bg-white/60"
+            ? "bg-[#07626A] text-white"
+            : "text-[#0D0D0D] hover:text-[#07626A]"
         }`}
       >
         <span>{dict.guidebook?.tabProviders || "Поставщикам услуг"}</span>
@@ -56,7 +56,7 @@ export const GuidebookTabs: React.FC<GuidebookTabsProps> = ({
           className={`text-xs px-2 py-0.5 rounded-full font-medium ${
             activeAudience === "providers"
               ? "bg-white/20 text-white"
-              : "bg-gray-200/70 text-gray-600"
+              : "bg-black/5 text-[#0D0D0D]"
           }`}
         >
           {providersCount}
