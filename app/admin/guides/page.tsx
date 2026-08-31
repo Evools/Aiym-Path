@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Plus,
+  Check,
   ShieldCheck,
   Phone,
   Trash2,
@@ -21,6 +22,7 @@ import {
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
 import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 import { CustomMultiSelect, MultiSelectOption } from "@/components/ui/CustomMultiSelect";
+import { useToast } from "@/context/ToastContext";
 
 const LANGUAGE_OPTIONS: MultiSelectOption[] = [
   { value: "Кыргызча", label: "Кыргызча", sublabel: "Мамлекеттик тил" },
@@ -48,6 +50,7 @@ const POPULAR_QUICK_LANGS = [
 ];
 
 export default function AdminGuidesPage() {
+  const toast = useToast();
   const [guides, setGuides] = useState<AdminGuideItem[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [editingGuide, setEditingGuide] = useState<AdminGuideItem | null>(null);
@@ -118,7 +121,7 @@ export default function AdminGuidesPage() {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert("Введите имя гида");
+      toast.warning("Введите имя гида", "Ошибка");
       return;
     }
 
@@ -136,11 +139,20 @@ export default function AdminGuidesPage() {
 
     AdminStorageService.saveGuide(guideData);
     setGuides(AdminStorageService.getGuides());
+    toast.success(editingGuide ? "Профиль гида обновлен" : "Гид успешно добавлен");
     setIsModalOpen(false);
   };
 
-  const handleDelete = (id: string, guideName: string) => {
-    if (confirm(`Удалить профиль гида «${guideName}»?`)) {
+  const handleDelete = async (id: string, guideName: string) => {
+    const isConfirmed = await toast.confirm({
+      title: "Удалить гида?",
+      message: `Вы уверены, что хотите удалить профиль гида «${guideName}»?`,
+      confirmText: "Удалить",
+      cancelText: "Отмена",
+      isDestructive: true,
+    });
+
+    if (isConfirmed) {
       AdminStorageService.deleteGuide(id);
       setGuides(AdminStorageService.getGuides());
     }
@@ -478,13 +490,18 @@ export default function AdminGuidesPage() {
                                 key={lang}
                                 type="button"
                                 onClick={() => handleToggleQuickLanguage(lang)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
                                   isSelected
                                     ? "bg-[#07626A] text-white border-[#07626A] shadow-xs"
                                     : "bg-white text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[#07626A] hover:text-[#0D0D0D]"
                                 }`}
                               >
-                                {isSelected ? `✓ ${lang}` : `+ ${lang}`}
+                                {isSelected ? (
+                                  <Check className="w-3 h-3 stroke-[2.5]" />
+                                ) : (
+                                  <Plus className="w-3 h-3" />
+                                )}
+                                <span>{lang}</span>
                               </button>
                             );
                           })}

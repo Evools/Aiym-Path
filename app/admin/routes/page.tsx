@@ -17,8 +17,10 @@ import {
 } from "lucide-react";
 import { AdminStorageService } from "@/lib/services/admin-storage.service";
 import { RouteItem, RouteFilterRegion } from "@/types/route.types";
+import { useToast } from "@/context/ToastContext";
 
 export default function AdminRoutesPage() {
+  const toast = useToast();
   const [routes, setRoutes] = useState<RouteItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<RouteFilterRegion>("all");
@@ -27,10 +29,19 @@ export default function AdminRoutesPage() {
     setRoutes(AdminStorageService.getRoutes());
   }, []);
 
-  const handleDelete = (id: string, title: string) => {
-    if (confirm(`Вы уверены, что хотите удалить маршрут «${title}»?`)) {
+  const handleDelete = async (id: string, title: string) => {
+    const isConfirmed = await toast.confirm({
+      title: "Удалить маршрут?",
+      message: `Вы уверены, что хотите удалить маршрут «${title}»?`,
+      confirmText: "Удалить",
+      cancelText: "Отмена",
+      isDestructive: true,
+    });
+
+    if (isConfirmed) {
       AdminStorageService.deleteRoute(id);
       setRoutes(AdminStorageService.getRoutes());
+      toast.success(`Маршрут «${title}» удален`);
     }
   };
 

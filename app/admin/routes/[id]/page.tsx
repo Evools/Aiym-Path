@@ -18,11 +18,13 @@ import { RouteItem, RouteRegion, AssignedGuide } from "@/types/route.types";
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
 import { RouteMapEditorWrapper } from "@/components/features/admin/RouteMapEditorWrapper";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { useToast } from "@/context/ToastContext";
 
 export default function EditRoutePage() {
   const router = useRouter();
   const params = useParams();
   const routeId = params.id as string;
+  const toast = useToast();
 
   const [isLoading, setIsLoading] = useState(true);
   const [availableGuides, setAvailableGuides] = useState<AdminGuideItem[]>([]);
@@ -87,12 +89,12 @@ export default function EditRoutePage() {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.ru.trim()) {
-      alert("Пожалуйста, укажите название маршрута");
+      toast.warning("Пожалуйста, укажите название маршрута", "Заполните поле");
       return;
     }
 
     if (coordinates.length < 2) {
-      alert("Пожалуйста, оставьте на карте минимум 2 точки маршрута");
+      toast.warning("Пожалуйста, оставьте на карте минимум 2 точки маршрута (Старт и Финиш)", "Карта маршрута");
       return;
     }
 
@@ -150,12 +152,22 @@ export default function EditRoutePage() {
     };
 
     AdminStorageService.saveRoute(updatedRoute);
+    toast.success(`Маршрут «${title.ru}» успешно обновлен`);
     router.push("/admin/routes");
   };
 
-  const handleDelete = () => {
-    if (confirm("Вы точно хотите удалить этот маршрут?")) {
+  const handleDelete = async () => {
+    const isConfirmed = await toast.confirm({
+      title: "Удалить маршрут?",
+      message: `Вы точно хотите удалить маршрут «${title.ru || routeId}»? Это действие нельзя будет отменить.`,
+      confirmText: "Да, удалить",
+      cancelText: "Отмена",
+      isDestructive: true,
+    });
+
+    if (isConfirmed) {
       AdminStorageService.deleteRoute(routeId);
+      toast.success("Маршрут успешно удален");
       router.push("/admin/routes");
     }
   };
@@ -216,15 +228,19 @@ export default function EditRoutePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Multilingual Content & Metrics (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
-          {/* 1. Multilingual Titles & Descriptions */}
-          <div className="p-6 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5">
-            <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
-              1. Текстовое описание (i18n RU • KG • EN)
-            </h3>
+      {/* 1. Multilingual Content & Region/Cover */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-6 shadow-2xs">
+        <div className="flex items-center justify-between pb-3 border-b border-[#E1E1E1]">
+          <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
+            1. Основная информация и описание (i18n RU • KG • EN)
+          </h3>
+          <span className="text-xs text-[#0D0D0D]/50 font-medium">
+            3 языка поддержки
+          </span>
+        </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-8 flex flex-col gap-5">
             <I18nFieldEditor
               label="Название маршрута"
               required
@@ -241,83 +257,18 @@ export default function EditRoutePage() {
             />
           </div>
 
-          {/* 2. Route Metrics & Difficulty */}
-          <div className="p-6 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5">
-            <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
-              2. Характеристики и сложность
-            </h3>
+          <div className="lg:col-span-4 flex flex-col gap-4">
+            <CustomSelect
+              label="Регион / Ущелье"
+              value={region}
+              onChange={(val) => setRegion(val as RouteRegion)}
+              options={[
+                { value: "ala-archa", label: "Ала-Арча (Ala-Archa)", sublabel: "Национальный парк" },
+                { value: "alamedin", label: "Аламедин (Alamedin)", sublabel: "Ущелье и водопады" },
+                { value: "chunkurchak", label: "Чункурчак (Chunkurchak)", sublabel: "Горные панорамы" },
+              ]}
+            />
 
-            {/* Custom Selects for Region & Difficulty */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <CustomSelect
-                label="Регион / Ущелье"
-                value={region}
-                onChange={(val) => setRegion(val as RouteRegion)}
-                options={[
-                  { value: "ala-archa", label: "Ала-Арча (Ala-Archa)", sublabel: "Национальный парк" },
-                  { value: "alamedin", label: "Аламедин (Alamedin)", sublabel: "Ущелье и водопады" },
-                  { value: "chunkurchak", label: "Чункурчак (Chunkurchak)", sublabel: "Горные панорамы" },
-                ]}
-              />
-
-              <CustomSelect
-                label="Сложность маршрута"
-                value={difficulty}
-                onChange={(val) => setDifficulty(val as RouteItem["difficulty"])}
-                options={[
-                  { value: "easy", label: "Лёгкая (Easy)", sublabel: "Подходит для новичков и семей" },
-                  { value: "medium", label: "Средняя (Moderate)", sublabel: "Базовая физическая форма" },
-                  { value: "hard", label: "Высокая (Difficult)", sublabel: "Крутой рельеф и скалы" },
-                ]}
-              />
-            </div>
-
-            {/* 3 Numerical Metrics */}
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="block text-[11px] font-bold text-[#0D0D0D]/60 uppercase tracking-wider mb-1.5">
-                  Дистанция (км)
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  required
-                  value={distanceKm}
-                  onChange={(e) => setDistanceKm(Number(e.target.value))}
-                  className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs font-bold text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-[#0D0D0D]/60 uppercase tracking-wider mb-1.5">
-                  Время в пути (ч)
-                </label>
-                <input
-                  type="number"
-                  step="0.5"
-                  required
-                  value={durationHours}
-                  onChange={(e) => setDurationHours(Number(e.target.value))}
-                  className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs font-bold text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-[#0D0D0D]/60 uppercase tracking-wider mb-1.5">
-                  Набор высоты (м)
-                </label>
-                <input
-                  type="number"
-                  step="10"
-                  required
-                  value={elevationGainMeters}
-                  onChange={(e) => setElevationGainMeters(Number(e.target.value))}
-                  className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs font-bold text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                />
-              </div>
-            </div>
-
-            {/* Cover Image URL */}
             <div>
               <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
                 URL обложки маршрута
@@ -327,73 +278,184 @@ export default function EditRoutePage() {
                 required
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="https://images.unsplash.com/..."
                 className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs font-medium text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
               />
             </div>
+
+            {imageUrl && (
+              <div className="relative w-full h-36 rounded-2xl overflow-hidden border border-[#E1E1E1] bg-[#F0F2F2]">
+                <img
+                  src={imageUrl}
+                  alt="Cover preview"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Full-Width Interactive Map Studio */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E1E1E1]">
+          <div>
+            <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
+              2. Интерактивная карта и GPS трек (OpenStreetMap)
+            </h3>
+            <p className="text-xs text-[#0D0D0D]/60 mt-0.5">
+              Укажите точки на карте — дистанция, время и перепад высот рассчитаются автоматически
+            </p>
           </div>
 
-          {/* 3. Assign Verified Female Guides with Custom Checkboxes */}
-          <div className="p-6 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-4">
-            <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
-              3. Привязка женских гидов
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {availableGuides.map((guide) => {
-                const isChecked = selectedGuideIds.includes(guide.id);
-
-                return (
-                  <button
-                    key={guide.id}
-                    type="button"
-                    onClick={() => handleToggleGuide(guide.id)}
-                    className={`flex items-center gap-3.5 p-3.5 rounded-2xl border transition-all cursor-pointer text-left w-full ${
-                      isChecked
-                        ? "bg-[rgba(7,98,106,0.08)] border-[#07626A] shadow-2xs"
-                        : "bg-white border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] hover:bg-[#F3F3F3]"
-                    }`}
-                  >
-                    {/* Custom Checkbox Box */}
-                    <div
-                      className={`w-5 h-5 rounded-lg flex items-center justify-center transition-colors shrink-0 border ${
-                        isChecked
-                          ? "bg-[#07626A] border-[#07626A] text-white"
-                          : "bg-white border-[#E1E1E1]"
-                      }`}
-                    >
-                      {isChecked && <Check className="w-3.5 h-3.5" />}
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <span className="text-xs font-bold text-[#0D0D0D] block truncate">
-                        {guide.name}
-                      </span>
-                      <span className="text-[10px] text-[#0D0D0D]/60 block truncate mt-0.5">
-                        {guide.role.ru} • {guide.experienceYears} лет опыта
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-[#07626A] bg-[#07626A]/10 px-3 py-1 rounded-xl">
+              Точек в треке: {coordinates.length}
+            </span>
           </div>
         </div>
 
-        {/* Right Column: Interactive Map Editor (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col gap-6 sticky top-20">
-          <div className="p-6 rounded-3xl bg-white border border-[#E1E1E1]">
-            <RouteMapEditorWrapper
-              coordinates={coordinates}
-              onChangeCoordinates={setCoordinates}
-              center={
-                coordinates[0] ||
-                (region === "ala-archa"
-                  ? [42.5644, 74.4823]
-                  : region === "alamedin"
-                  ? [42.6318, 74.6727]
-                  : [42.6389, 74.6281])
-              }
-            />
+        <RouteMapEditorWrapper
+          coordinates={coordinates}
+          onChangeCoordinates={setCoordinates}
+          onDistanceCalculated={(dist) => setDistanceKm(dist)}
+          onMetricsCalculated={(m) => {
+            setDistanceKm(m.distanceKm);
+            setDurationHours(m.durationHours);
+            setElevationGainMeters(m.elevationGainMeters);
+          }}
+          center={
+            coordinates[0] ||
+            (region === "ala-archa"
+              ? [42.5644, 74.4823]
+              : region === "alamedin"
+              ? [42.6318, 74.6727]
+              : [42.6389, 74.6281])
+          }
+        />
+      </div>
+
+      {/* 3. Metrics & Assigned Guides Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left: Metrics & Difficulty (6 cols) */}
+        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5 shadow-2xs">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E1E1E1]">
+            <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
+              3. Характеристики и сложность
+            </h3>
+            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+              Авто-расчёт с карты
+            </span>
+          </div>
+
+          <CustomSelect
+            label="Сложность маршрута"
+            value={difficulty}
+            onChange={(val) => setDifficulty(val as RouteItem["difficulty"])}
+            options={[
+              { value: "easy", label: "Лёгкая (Easy)", sublabel: "Подходит для новичков и семей" },
+              { value: "medium", label: "Средняя (Moderate)", sublabel: "Базовая физическая форма" },
+              { value: "hard", label: "Высокая (Difficult)", sublabel: "Крутой рельеф и скалы" },
+            ]}
+          />
+
+          {/* Numerical Metrics Inputs */}
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
+                Дистанция (км)
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                required
+                value={distanceKm}
+                onChange={(e) => setDistanceKm(Number(e.target.value))}
+                className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs font-bold text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
+                Время в пути (ч)
+              </label>
+              <input
+                type="number"
+                step="0.5"
+                required
+                value={durationHours}
+                onChange={(e) => setDurationHours(Number(e.target.value))}
+                className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs font-bold text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
+                Набор высоты (м)
+              </label>
+              <input
+                type="number"
+                step="10"
+                required
+                value={elevationGainMeters}
+                onChange={(e) => setElevationGainMeters(Number(e.target.value))}
+                className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs font-bold text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
+              />
+            </div>
+          </div>
+          <p className="text-[11px] text-[#0D0D0D]/50">
+            Значения обновляются автоматически при прокладке трека на карте, но при необходимости вы можете скорректировать их вручную.
+          </p>
+        </div>
+
+        {/* Right: Female Guides Selection (6 cols) */}
+        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-4 shadow-2xs">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E1E1E1]">
+            <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
+              4. Закреплённые женские гиды
+            </h3>
+            <span className="text-xs text-[#07626A] font-bold">
+              Выбрано: {selectedGuideIds.length}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {availableGuides.map((guide) => {
+              const isChecked = selectedGuideIds.includes(guide.id);
+
+              return (
+                <button
+                  key={guide.id}
+                  type="button"
+                  onClick={() => handleToggleGuide(guide.id)}
+                  className={`flex items-center gap-3.5 p-3 rounded-2xl border transition-all cursor-pointer text-left w-full ${
+                    isChecked
+                      ? "bg-[rgba(7,98,106,0.08)] border-[#07626A] shadow-2xs"
+                      : "bg-white border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] hover:bg-[#F3F3F3]"
+                  }`}
+                >
+                  {/* Custom Checkbox Box */}
+                  <div
+                    className={`w-5 h-5 rounded-lg flex items-center justify-center transition-colors shrink-0 border ${
+                      isChecked
+                        ? "bg-[#07626A] border-[#07626A] text-white"
+                        : "bg-white border-[#E1E1E1]"
+                    }`}
+                  >
+                    {isChecked && <Check className="w-3.5 h-3.5" />}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <span className="text-xs font-bold text-[#0D0D0D] block truncate">
+                      {guide.name}
+                    </span>
+                    <span className="text-[10px] text-[#0D0D0D]/60 block truncate mt-0.5">
+                      {guide.role.ru} • {guide.experienceYears} лет опыта
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

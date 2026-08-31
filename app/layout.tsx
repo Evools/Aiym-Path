@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { ToastProvider } from "@/context/ToastContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -38,9 +39,11 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col bg-white text-[#0D0D0D] selection:bg-[rgba(7,98,106,0.20)] selection:text-[#07626A]">
         <LanguageProvider>
-          <Header />
-          <main className="flex-1 w-full">{children}</main>
-          <Footer />
+          <ToastProvider>
+            <Header />
+            <main className="flex-1 w-full">{children}</main>
+            <Footer />
+          </ToastProvider>
         </LanguageProvider>
       </body>
     </html>

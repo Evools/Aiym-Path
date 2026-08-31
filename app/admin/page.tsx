@@ -20,8 +20,10 @@ import {
   AdminLocationItem,
 } from "@/lib/services/admin-storage.service";
 import { RouteItem } from "@/types/route.types";
+import { useToast } from "@/context/ToastContext";
 
 export default function AdminDashboardPage() {
+  const toast = useToast();
   const [routes, setRoutes] = useState<RouteItem[]>([]);
   const [guides, setGuides] = useState<AdminGuideItem[]>([]);
   const [locations, setLocations] = useState<AdminLocationItem[]>([]);
@@ -32,12 +34,21 @@ export default function AdminDashboardPage() {
     setLocations(AdminStorageService.getLocations());
   }, []);
 
-  const handleResetData = () => {
-    if (confirm("Сбросить все данные к исходным моковым маршрутам и гидам?")) {
+  const handleResetData = async () => {
+    const isConfirmed = await toast.confirm({
+      title: "Сбросить все данные?",
+      message: "Все добавленные и отредактированные маршруты, гиды и локации будут возвращены к исходным значениям по умолчанию.",
+      confirmText: "Сбросить данные",
+      cancelText: "Отмена",
+      isDestructive: true,
+    });
+
+    if (isConfirmed) {
       AdminStorageService.resetAll();
       setRoutes(AdminStorageService.getRoutes());
       setGuides(AdminStorageService.getGuides());
       setLocations(AdminStorageService.getLocations());
+      toast.success("Данные успешно сброшены к начальным значениям");
     }
   };
 

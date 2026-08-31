@@ -20,8 +20,10 @@ import {
   AdminLocationItem,
 } from "@/lib/services/admin-storage.service";
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
+import { useToast } from "@/context/ToastContext";
 
 export default function AdminLocationsPage() {
+  const toast = useToast();
   const [locations, setLocations] = useState<AdminLocationItem[]>([]);
   const [editingLoc, setEditingLoc] = useState<AdminLocationItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,7 +87,7 @@ export default function AdminLocationsPage() {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.ru.trim()) {
-      alert("Введите название локации");
+      toast.warning("Введите название локации", "Заполните поле");
       return;
     }
 
@@ -107,11 +109,20 @@ export default function AdminLocationsPage() {
 
     AdminStorageService.saveLocation(locData);
     setLocations(AdminStorageService.getLocations());
+    toast.success(editingLoc ? `Локация «${title.ru}» обновлена` : `Локация «${title.ru}» создана`);
     setIsModalOpen(false);
   };
 
-  const handleDelete = (id: string, name: string) => {
-    if (confirm(`Удалить локацию «${name}»?`)) {
+  const handleDelete = async (id: string, name: string) => {
+    const isConfirmed = await toast.confirm({
+      title: "Удалить локацию?",
+      message: `Вы уверены, что хотите удалить локацию «${name}»?`,
+      confirmText: "Удалить",
+      cancelText: "Отмена",
+      isDestructive: true,
+    });
+
+    if (isConfirmed) {
       AdminStorageService.deleteLocation(id);
       setLocations(AdminStorageService.getLocations());
     }
