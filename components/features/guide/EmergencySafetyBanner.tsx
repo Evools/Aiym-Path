@@ -1,173 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Phone, ShieldAlert, Check, Copy, MessageCircle, AlertTriangle, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-
-interface EmergencyContact {
-  id: string;
-  name: {
-    ru: string;
-    kg: string;
-    en: string;
-  };
-  number: string;
-  badge: {
-    ru: string;
-    kg: string;
-    en: string;
-  };
-  description: {
-    ru: string;
-    kg: string;
-    en: string;
-  };
-  isWhatsApp?: boolean;
-  isMain?: boolean;
-}
+import { AdminStorageService, AdminEmergencyContact, DEFAULT_CONTACTS } from "@/lib/services/admin-storage.service";
 
 export const EmergencySafetyBanner: React.FC = () => {
   const { language } = useLanguage();
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [contacts, setContacts] = useState<AdminEmergencyContact[]>(DEFAULT_CONTACTS.emergencyContacts);
 
-  const contacts: EmergencyContact[] = [
-    {
-      id: "sos-112",
-      name: {
-        ru: "Единая служба экстренной помощи (МЧС)",
-        kg: "Бирдиктүү шашылыш жардам кызматы (ӨКМ)",
-        en: "Unified Emergency Dispatch (All Services)",
-      },
-      number: "112",
-      badge: {
-        ru: "24/7 • Бесплатно",
-        kg: "24/7 • Акысыз",
-        en: "24/7 • Free Call",
-      },
-      description: {
-        ru: "Единый номер для всех экстренных служб, работает без SIM-карты",
-        kg: "Бардык шашылыш кызматтар үчүн бирдиктүү номер, SIM-картасыз да иштейт",
-        en: "All emergency services, accessible even without a SIM card",
-      },
-      isMain: true,
-    },
-    {
-      id: "sos-102",
-      name: {
-        ru: "Полиция (Милиция)",
-        kg: "Милиция",
-        en: "Police Department",
-      },
-      number: "102",
-      badge: {
-        ru: "Круглосуточно",
-        kg: "Күнү-түнү",
-        en: "24/7 Service",
-      },
-      description: {
-        ru: "Защита правопорядка, реагирование на правонарушения и угрозы",
-        kg: "Коомдук коопсуздукту коргоо жана мыйзам бузууларга чара көрүү",
-        en: "Law enforcement, urgent safety threats, and rapid response",
-      },
-    },
-    {
-      id: "sos-103",
-      name: {
-        ru: "Скорая медицинская помощь",
-        kg: "Тез медициналык жардам",
-        en: "Ambulance & Medical Aid",
-      },
-      number: "103",
-      badge: {
-        ru: "Круглосуточно",
-        kg: "Күнү-түнү",
-        en: "24/7 Service",
-      },
-      description: {
-        ru: "Неотложная медицинская помощь при травмах и заболеваниях",
-        kg: "Жаракат алганда жана ооруп калганда тез медициналык жардам",
-        en: "Emergency trauma and medical assistance across regions",
-      },
-    },
-    {
-      id: "sos-101",
-      name: {
-        ru: "Пожарно-спасательная служба",
-        kg: "Өрт өчүрүү жана куткаруу кызматы",
-        en: "Fire & Rescue Service",
-      },
-      number: "101",
-      badge: {
-        ru: "Круглосуточно",
-        kg: "Күнү-түнү",
-        en: "24/7 Service",
-      },
-      description: {
-        ru: "Ликвидация пожаров, эвакуация и спасательные операции",
-        kg: "Өрттү өчүрүү, эвакуация жана куткаруу иштери",
-        en: "Firefighting, evacuation, and emergency rescue operations",
-      },
-    },
-    {
-      id: "sos-117",
-      name: {
-        ru: "Горячая линия по вопросам гендерного насилия",
-        kg: "Гендердик зомбулук маселелери боюнча түз байланыш",
-        en: "Domestic & Gender-Based Violence Hotline",
-      },
-      number: "117",
-      badge: {
-        ru: "Анонимно • Бесплатно",
-        kg: "Анонимдүү • Акысыз",
-        en: "Anonymous • Free",
-      },
-      description: {
-        ru: "Психологическая и правовая поддержка женщин в кризисных ситуациях",
-        kg: "Кризистик кырдаалда калган аялдарга психологиялык жана укуктук колдоо",
-        en: "Psychological and legal crisis counseling for women",
-      },
-    },
-    {
-      id: "sos-sezim",
-      name: {
-        ru: "Кризисный центр «Сезим» (Бишкек)",
-        kg: "«Сезим» кризистик борбору (Бишкек)",
-        en: "Sezim Crisis Center (Bishkek)",
-      },
-      number: "+996 312 66-15-92",
-      badge: {
-        ru: "Центр помощи",
-        kg: "Жардам борбору",
-        en: "Crisis Center",
-      },
-      description: {
-        ru: "Ассоциация кризисных центров Кыргызстана, шелтер и юристы",
-        kg: "Кыргызстандын кризистик борборлор ассоциациясы, башпаанек жана юристтер",
-        en: "Shelter, direct assistance, and legal aid for women in Kyrgyzstan",
-      },
-    },
-    {
-      id: "sos-tourist-police",
-      name: {
-        ru: "Туристическая милиция (Иссык-Куль)",
-        kg: "Туристтик милиция (Ысык-Көл)",
-        en: "Tourist Police (Issyk-Kul)",
-      },
-      number: "+996 705 00 91 02",
-      badge: {
-        ru: "RU/EN • WhatsApp",
-        kg: "RU/EN • WhatsApp",
-        en: "RU/EN • WhatsApp",
-      },
-      description: {
-        ru: "Поддержка туристов на английском и русском языках (сезонно)",
-        kg: "Англис жана орус тилдеринде туристтерге жардам (сезондук)",
-        en: "Bilingual tourist security and assistance via Phone and WhatsApp",
-      },
-      isWhatsApp: true,
-    },
-  ];
-
+  useEffect(() => {
+    const loaded = AdminStorageService.getContacts();
+    if (loaded?.emergencyContacts) {
+      setContacts(loaded.emergencyContacts);
+    }
+  }, []);
   const handleCopy = (number: string, id: string) => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(number.replace(/\s+/g, ""));

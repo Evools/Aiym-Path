@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Mail,
   Phone,
@@ -19,13 +19,19 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { InnerPageBanner } from "@/components/ui/InnerPageBanner";
+import { AdminStorageService, AdminProjectContacts, DEFAULT_CONTACTS } from "@/lib/services/admin-storage.service";
 
 export default function ContactsPage() {
-  const { dict } = useLanguage();
+  const { language, dict } = useLanguage();
+  const [contactsData, setContactsData] = useState<AdminProjectContacts>(DEFAULT_CONTACTS);
   const [selectedTopic, setSelectedTopic] = useState("general");
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [showUnavailableModal, setShowUnavailableModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    setContactsData(AdminStorageService.getContacts());
+  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -104,7 +110,7 @@ export default function ContactsPage() {
                     </h3>
                     <span className="text-[11px] text-[#0D0D0D]/60 flex items-center gap-1 mt-0.5">
                       <Clock className="w-3 h-3 text-[#07626A]" />
-                      <span>Пн–Пт, 09:00–18:00</span>
+                      <span>{contactsData.workingHours[language] || contactsData.workingHours.ru}</span>
                     </span>
                   </div>
                 </div>
@@ -117,17 +123,17 @@ export default function ContactsPage() {
                     </div>
                     <div className="min-w-0">
                       <a
-                        href="mailto:info@aiympath.kg"
+                        href={`mailto:${contactsData.email}`}
                         className="text-xs font-bold text-[#0D0D0D] hover:text-[#07626A] transition-colors truncate block"
                       >
-                        info@aiympath.kg
+                        {contactsData.email}
                       </a>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => handleCopy("info@aiympath.kg", "email")}
+                    onClick={() => handleCopy(contactsData.email, "email")}
                     title="Скопировать email"
                     className="p-1.5 rounded-lg text-[#0D0D0D]/50 hover:text-[#07626A] hover:bg-white transition-colors shrink-0 cursor-pointer"
                   >
@@ -147,17 +153,17 @@ export default function ContactsPage() {
                     </div>
                     <div className="min-w-0">
                       <a
-                        href="tel:+996700000001"
+                        href={`tel:${contactsData.phone.replace(/[^0-9+]/g, "")}`}
                         className="text-xs font-bold text-[#0D0D0D] hover:text-[#07626A] transition-colors block"
                       >
-                        +996 700 000 001
+                        {contactsData.phone}
                       </a>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => handleCopy("+996 700 000 001", "phone")}
+                    onClick={() => handleCopy(contactsData.phone, "phone")}
                     title="Скопировать телефон"
                     className="p-1.5 rounded-lg text-[#0D0D0D]/50 hover:text-[#07626A] hover:bg-white transition-colors shrink-0 cursor-pointer"
                   >
@@ -176,7 +182,7 @@ export default function ContactsPage() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-bold text-[#0D0D0D]">
-                      г. Бишкек, Кыргызская Республика
+                      {contactsData.address[language] || contactsData.address.ru}
                     </p>
                     <p className="text-[11px] text-[#0D0D0D]/60 mt-0.5">
                       Фонд Ага Хана (AKF) / MSDSP Кыргызстан • Программа GESI
@@ -465,7 +471,7 @@ export default function ContactsPage() {
             <div className="flex flex-col gap-2.5">
               {/* Email Card */}
               <a
-                href="mailto:info@aiympath.kg"
+                href={`mailto:${contactsData.email}`}
                 className="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -480,7 +486,7 @@ export default function ContactsPage() {
                       Электронная почта
                     </span>
                     <span className="text-xs sm:text-sm font-bold text-[#0D0D0D] group-hover:text-[#07626A] transition-colors truncate block">
-                      info@aiympath.kg
+                      {contactsData.email}
                     </span>
                   </div>
                 </div>
@@ -493,7 +499,7 @@ export default function ContactsPage() {
 
               {/* Phone Card */}
               <a
-                href="tel:+996700000001"
+                href={`tel:${contactsData.phone.replace(/[^0-9+]/g, "")}`}
                 className="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -508,7 +514,7 @@ export default function ContactsPage() {
                       Прямой телефон
                     </span>
                     <span className="text-xs sm:text-sm font-bold text-[#0D0D0D] group-hover:text-[#07626A] transition-colors block">
-                      +996 700 000 001
+                      {contactsData.phone}
                     </span>
                   </div>
                 </div>

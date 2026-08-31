@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Search, HelpCircle } from "lucide-react";
 import { GuidebookAudience, GuidebookItem } from "@/types/guidebook.types";
 import { GUIDEBOOK_ITEMS } from "@/data/guidebook.data";
+import { AdminStorageService } from "@/lib/services/admin-storage.service";
 import { useLanguage } from "@/context/LanguageContext";
 import { GuidebookTabs } from "./GuidebookTabs";
 import { GuidebookCard } from "./GuidebookCard";
@@ -11,18 +12,23 @@ import { GuideDetailModal } from "./GuideDetailModal";
 
 export const GuidebookSection: React.FC = () => {
   const { language, dict } = useLanguage();
+  const [items, setItems] = useState<GuidebookItem[]>(GUIDEBOOK_ITEMS);
   const [activeAudience, setActiveAudience] = useState<GuidebookAudience>("travelers");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<GuidebookItem | null>(null);
 
+  useEffect(() => {
+    setItems(AdminStorageService.getGuidebookItems());
+  }, []);
+
   const travelersItems = useMemo(
-    () => GUIDEBOOK_ITEMS.filter((item) => item.audience === "travelers"),
-    []
+    () => items.filter((item) => item.audience === "travelers"),
+    [items]
   );
 
   const providersItems = useMemo(
-    () => GUIDEBOOK_ITEMS.filter((item) => item.audience === "providers"),
-    []
+    () => items.filter((item) => item.audience === "providers"),
+    [items]
   );
 
   const currentAudienceItems = activeAudience === "travelers" ? travelersItems : providersItems;

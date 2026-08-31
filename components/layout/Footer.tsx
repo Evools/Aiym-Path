@@ -1,14 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShieldCheck, Phone, Mail, MapPin, ArrowUpRight, ArrowUp } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { AdminStorageService, AdminProjectContacts, DEFAULT_CONTACTS } from "@/lib/services/admin-storage.service";
 
 export const Footer: React.FC = () => {
   const { language, dict } = useLanguage();
+  const [contactsData, setContactsData] = useState<AdminProjectContacts>(DEFAULT_CONTACTS);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setContactsData(AdminStorageService.getContacts());
+  }, []);
 
   if (pathname?.startsWith("/admin")) {
     return null;
@@ -118,25 +124,27 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3 text-xs sm:text-[13px]">
               <li className="flex items-start gap-2.5 text-gray-500">
                 <MapPin className="w-4 h-4 text-[#07626A] shrink-0 mt-0.5" />
-                <span className="leading-snug">г. Бишкек, Кыргызская Республика</span>
+                <span className="leading-snug">
+                  {contactsData.address[language] || contactsData.address.ru}
+                </span>
               </li>
               <li>
                 <a
-                  href="mailto:info@aiympath.kg"
+                  href={`mailto:${contactsData.email}`}
                   className="flex items-center gap-2.5 text-gray-500 hover:text-[#07626A] transition-colors group"
                 >
                   <Mail className="w-4 h-4 text-[#07626A] shrink-0" />
-                  <span>info@aiympath.kg</span>
+                  <span>{contactsData.email}</span>
                   <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+996700000001"
+                  href={`tel:${contactsData.phone.replace(/[^0-9+]/g, "")}`}
                   className="flex items-center gap-2.5 text-gray-500 hover:text-[#07626A] transition-colors group"
                 >
                   <Phone className="w-4 h-4 text-[#07626A] shrink-0" />
-                  <span>+996 700 000 001</span>
+                  <span>{contactsData.phone}</span>
                   <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
               </li>

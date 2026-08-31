@@ -11,6 +11,8 @@ import {
   Compass,
   ArrowUpRight,
   Building2,
+  BookOpen,
+  PhoneCall,
   LogOut,
 } from "lucide-react";
 import { useAdminAuth } from "@/context/AdminAuthContext";
@@ -44,6 +46,18 @@ export const AdminSidebar: React.FC = () => {
       name: "Базы отдыха & Хабы",
       href: "/admin/locations",
       icon: Building2,
+      exact: false,
+    },
+    {
+      name: "Путеводитель (Guide)",
+      href: "/admin/guidebook",
+      icon: BookOpen,
+      exact: false,
+    },
+    {
+      name: "Контакты & SOS",
+      href: "/admin/contacts",
+      icon: PhoneCall,
       exact: false,
     },
   ];

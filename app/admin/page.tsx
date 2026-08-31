@@ -8,18 +8,20 @@ import {
   Building2,
   Plus,
   ArrowRight,
-  TrendingUp,
-  Compass,
   RotateCcw,
   Sparkles,
+  BookOpen,
+  PhoneCall,
   ExternalLink,
 } from "lucide-react";
 import {
   AdminStorageService,
   AdminGuideItem,
   AdminLocationItem,
+  AdminProjectContacts,
 } from "@/lib/services/admin-storage.service";
 import { RouteItem } from "@/types/route.types";
+import { GuidebookItem } from "@/types/guidebook.types";
 import { useToast } from "@/context/ToastContext";
 
 export default function AdminDashboardPage() {
@@ -27,17 +29,21 @@ export default function AdminDashboardPage() {
   const [routes, setRoutes] = useState<RouteItem[]>([]);
   const [guides, setGuides] = useState<AdminGuideItem[]>([]);
   const [locations, setLocations] = useState<AdminLocationItem[]>([]);
+  const [guidebookItems, setGuidebookItems] = useState<GuidebookItem[]>([]);
+  const [contacts, setContacts] = useState<AdminProjectContacts | null>(null);
 
   useEffect(() => {
     setRoutes(AdminStorageService.getRoutes());
     setGuides(AdminStorageService.getGuides());
     setLocations(AdminStorageService.getLocations());
+    setGuidebookItems(AdminStorageService.getGuidebookItems());
+    setContacts(AdminStorageService.getContacts());
   }, []);
 
   const handleResetData = async () => {
     const isConfirmed = await toast.confirm({
       title: "Сбросить все данные?",
-      message: "Все добавленные и отредактированные маршруты, гиды и локации будут возвращены к исходным значениям по умолчанию.",
+      message: "Все добавленные и отредактированные маршруты, гиды, локации, путеводитель и контакты будут возвращены к исходным значениям по умолчанию.",
       confirmText: "Сбросить данные",
       cancelText: "Отмена",
       isDestructive: true,
@@ -48,6 +54,8 @@ export default function AdminDashboardPage() {
       setRoutes(AdminStorageService.getRoutes());
       setGuides(AdminStorageService.getGuides());
       setLocations(AdminStorageService.getLocations());
+      setGuidebookItems(AdminStorageService.getGuidebookItems());
+      setContacts(AdminStorageService.getContacts());
       toast.success("Данные успешно сброшены к начальным значениям");
     }
   };
@@ -67,7 +75,7 @@ export default function AdminDashboardPage() {
             Обзор платформы Aiym Path
           </h1>
           <p className="text-xs sm:text-sm text-[#0D0D0D]/65 mt-1">
-            Управляйте пешими маршрутами, верификацией женских гидов и безопасными локациями на 3 языках (RU, KG, EN).
+            Управляйте пешими маршрутами, верификацией женских гидов, базами отдыха, статьями путеводителя и контактами.
           </p>
         </div>
 
@@ -92,8 +100,8 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Key Metric Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Key Metric Summary Cards (5 columns / grid) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {/* Metric 1: Routes */}
         <Link
           href="/admin/routes"
@@ -112,7 +120,7 @@ export default function AdminDashboardPage() {
               {routes.length}
             </span>
             <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
-              Суммарно ~{totalKm.toFixed(1)} км треков
+              ~{totalKm.toFixed(1)} км GPS треков
             </p>
           </div>
         </Link>
@@ -124,7 +132,7 @@ export default function AdminDashboardPage() {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
-              Гиды
+              Женские гиды
             </span>
             <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
               <Users className="w-4 h-4" />
@@ -135,7 +143,7 @@ export default function AdminDashboardPage() {
               {guides.length}
             </span>
             <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
-              Верифицированные женские гиды
+              Верифицированные гиды
             </p>
           </div>
         </Link>
@@ -163,25 +171,51 @@ export default function AdminDashboardPage() {
           </div>
         </Link>
 
-        {/* Metric 4: Multilingual Support */}
-        <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1] flex flex-col justify-between">
+        {/* Metric 4: Guidebook */}
+        <Link
+          href="/admin/guidebook"
+          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between group"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
-              Языки
+              Путеводитель
             </span>
             <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
-              <Compass className="w-4 h-4" />
+              <BookOpen className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-2xl font-extrabold text-[#07626A]">
-              RU • KG • EN
+            <span className="text-3xl font-extrabold text-[#0D0D0D]">
+              {guidebookItems.length}
             </span>
             <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
-              100% мультиязычный контент
+              Статей и рекомендаций
             </p>
           </div>
-        </div>
+        </Link>
+
+        {/* Metric 5: Contacts & SOS */}
+        <Link
+          href="/admin/contacts"
+          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between group"
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
+              Контакты & SOS
+            </span>
+            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
+              <PhoneCall className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-4">
+            <span className="text-3xl font-extrabold text-[#0D0D0D]">
+              {contacts?.emergencyContacts.length || 7}
+            </span>
+            <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
+              Экстренных служб и горячих линий
+            </p>
+          </div>
+        </Link>
       </div>
 
       {/* Routes Quick Table */}

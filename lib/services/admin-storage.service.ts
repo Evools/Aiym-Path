@@ -1,7 +1,9 @@
 import { RouteItem, AssignedGuide } from "@/types/route.types";
 import { ProjectLocation } from "@/types/location.types";
+import { GuidebookItem } from "@/types/guidebook.types";
 import { ROUTES_DATA } from "@/data/routes.data";
 import { INITIAL_LOCATIONS } from "@/data/locations.data";
+import { GUIDEBOOK_ITEMS } from "@/data/guidebook.data";
 
 export interface AdminGuideItem {
   id: string;
@@ -45,6 +47,148 @@ export interface AdminLocationItem {
   phone?: string;
   amenities?: string[];
 }
+
+export interface AdminEmergencyContact {
+  id: string;
+  name: { ru: string; kg: string; en: string };
+  number: string;
+  badge: { ru: string; kg: string; en: string };
+  description: { ru: string; kg: string; en: string };
+  isMain?: boolean;
+  isWhatsApp?: boolean;
+}
+
+export interface AdminProjectContacts {
+  email: string;
+  phone: string;
+  address: { ru: string; kg: string; en: string };
+  workingHours: { ru: string; kg: string; en: string };
+  emergencyContacts: AdminEmergencyContact[];
+}
+
+export const DEFAULT_CONTACTS: AdminProjectContacts = {
+  email: "info@aiympath.kg",
+  phone: "+996 700 000 001",
+  address: {
+    ru: "г. Бишкек, Кыргызская Республика",
+    kg: "Бишкек ш., Кыргыз Республикасы",
+    en: "Bishkek, Kyrgyz Republic",
+  },
+  workingHours: {
+    ru: "Пн–Пт, 09:00–18:00",
+    kg: "Дүй–Жум, 09:00–18:00",
+    en: "Mon–Fri, 09:00–18:00",
+  },
+  emergencyContacts: [
+    {
+      id: "sos-112",
+      name: {
+        ru: "Единая служба экстренной помощи (МЧС)",
+        kg: "Бирдиктүү шашылыш жардам кызматы (ӨКМ)",
+        en: "Unified Emergency Dispatch (All Services)",
+      },
+      number: "112",
+      badge: { ru: "24/7 • Бесплатно", kg: "24/7 • Акысыз", en: "24/7 • Free Call" },
+      description: {
+        ru: "Единый номер для всех экстренных служб, работает без SIM-карты",
+        kg: "Бардык шашылыш кызматтар үчүн бирдиктүү номер, SIM-картасыз да иштейт",
+        en: "All emergency services, accessible even without a SIM card",
+      },
+      isMain: true,
+    },
+    {
+      id: "sos-102",
+      name: {
+        ru: "Полиция (Милиция)",
+        kg: "Милиция",
+        en: "Police Department",
+      },
+      number: "102",
+      badge: { ru: "Круглосуточно", kg: "Күнү-түнү", en: "24/7 Service" },
+      description: {
+        ru: "Защита правопорядка, реагирование на правонарушения и угрозы",
+        kg: "Коомдук коопсуздукту коргоо жана мыйзам бузууларга чара көрүү",
+        en: "Law enforcement, urgent safety threats, and rapid response",
+      },
+    },
+    {
+      id: "sos-103",
+      name: {
+        ru: "Скорая медицинская помощь",
+        kg: "Тез медициналык жардам",
+        en: "Ambulance & Medical Aid",
+      },
+      number: "103",
+      badge: { ru: "Круглосуточно", kg: "Күнү-түнү", en: "24/7 Service" },
+      description: {
+        ru: "Неотложная медицинская помощь при травмах и заболеваниях",
+        kg: "Жаракат алганда жана ооруп калганда тез медициналык жардам",
+        en: "Emergency trauma and medical assistance across regions",
+      },
+    },
+    {
+      id: "sos-101",
+      name: {
+        ru: "Пожарно-спасательная служба",
+        kg: "Өрт өчүрүү жана куткаруу кызматы",
+        en: "Fire & Rescue Service",
+      },
+      number: "101",
+      badge: { ru: "Круглосуточно", kg: "Күнү-түнү", en: "24/7 Service" },
+      description: {
+        ru: "Ликвидация пожаров, эвакуация и спасательные операции",
+        kg: "Өрттү өчүрүү, эвакуация жана куткаруу иштери",
+        en: "Firefighting, evacuation, and emergency rescue operations",
+      },
+    },
+    {
+      id: "sos-117",
+      name: {
+        ru: "Горячая линия по вопросам гендерного насилия",
+        kg: "Гендердик зомбулук маселелери боюнча түз байланыш",
+        en: "Domestic & Gender-Based Violence Hotline",
+      },
+      number: "117",
+      badge: { ru: "Анонимно • Бесплатно", kg: "Анонимдүү • Акысыз", en: "Anonymous • Free" },
+      description: {
+        ru: "Психологическая и правовая поддержка женщин в кризисных ситуациях",
+        kg: "Кризистик кырдаалда калган аялдарга психологиялык жана укуктук колдоо",
+        en: "Psychological and legal crisis counseling for women",
+      },
+    },
+    {
+      id: "sos-sezim",
+      name: {
+        ru: "Кризисный центр «Сезим» (Бишкек)",
+        kg: "«Сезим» кризистик борбору (Бишкек)",
+        en: "Sezim Crisis Center (Bishkek)",
+      },
+      number: "+996 312 66-15-92",
+      badge: { ru: "Центр помощи", kg: "Жардам борбору", en: "Crisis Center" },
+      description: {
+        ru: "Ассоциация кризисных центров Кыргызстана, шелтер и юристы",
+        kg: "Кыргызстандын кризистик борборлор ассоциациясы, башпаанек жана юристтер",
+        en: "Shelter, direct assistance, and legal aid for women in Kyrgyzstan",
+      },
+    },
+    {
+      id: "sos-tourist-police",
+      name: {
+        ru: "Туристическая милиция (Иссык-Куль)",
+        kg: "Туристтик милиция (Ысык-Көл)",
+        en: "Tourist Police (Issyk-Kul)",
+      },
+      number: "+996 705 00 91 02",
+      badge: { ru: "RU/EN • WhatsApp", kg: "RU/EN • WhatsApp", en: "RU/EN • WhatsApp" },
+      description: {
+        ru: "Поддержка туристов на английском и русском языках (сезонно)",
+        kg: "Англис жана орус тилдеринде туристтерге жардам (сезондук)",
+        en: "Bilingual tourist security and assistance via Phone and WhatsApp",
+      },
+      isWhatsApp: true,
+    },
+  ],
+};
 
 const DEFAULT_GUIDES: AdminGuideItem[] = [
   {
@@ -198,6 +342,8 @@ const STORAGE_KEYS = {
   GUIDES: "aiym_path_guides_v1",
   LOCATIONS: "aiym_path_locations_v1",
   REGIONS: "aiym_path_regions_v1",
+  GUIDEBOOK: "aiym_path_guidebook_v1",
+  CONTACTS: "aiym_path_contacts_v1",
 };
 
 export const AdminStorageService = {
@@ -338,6 +484,64 @@ export const AdminStorageService = {
     localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
   },
 
+  // --- GUIDEBOOK ITEMS ---
+  getGuidebookItems(): GuidebookItem[] {
+    if (typeof window === "undefined") return GUIDEBOOK_ITEMS;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.GUIDEBOOK);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(GUIDEBOOK_ITEMS));
+      return GUIDEBOOK_ITEMS;
+    } catch {
+      return GUIDEBOOK_ITEMS;
+    }
+  },
+
+  getGuidebookItemById(id: string): GuidebookItem | null {
+    const items = this.getGuidebookItems();
+    return items.find((i) => i.id === id) || null;
+  },
+
+  saveGuidebookItem(item: GuidebookItem): void {
+    if (typeof window === "undefined") return;
+    const items = this.getGuidebookItems();
+    const existingIndex = items.findIndex((i) => i.id === item.id);
+    if (existingIndex >= 0) {
+      items[existingIndex] = item;
+    } else {
+      items.unshift(item);
+    }
+    localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(items));
+  },
+
+  deleteGuidebookItem(id: string): void {
+    if (typeof window === "undefined") return;
+    const items = this.getGuidebookItems().filter((i) => i.id !== id);
+    localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(items));
+  },
+
+  // --- PROJECT CONTACTS & EMERGENCY ---
+  getContacts(): AdminProjectContacts {
+    if (typeof window === "undefined") return DEFAULT_CONTACTS;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.CONTACTS);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(DEFAULT_CONTACTS));
+      return DEFAULT_CONTACTS;
+    } catch {
+      return DEFAULT_CONTACTS;
+    }
+  },
+
+  saveContacts(contacts: AdminProjectContacts): void {
+    if (typeof window === "undefined") return;
+    localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+  },
+
   // Reset to default seed data
   resetAll(): void {
     if (typeof window === "undefined") return;
@@ -345,5 +549,7 @@ export const AdminStorageService = {
     localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(DEFAULT_GUIDES));
     localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(DEFAULT_LOCATIONS));
     localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(DEFAULT_REGIONS));
+    localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(GUIDEBOOK_ITEMS));
+    localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(DEFAULT_CONTACTS));
   },
 };
