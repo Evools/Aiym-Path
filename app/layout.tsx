@@ -36,7 +36,7 @@ export default function RootLayout({
       lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} ${nunitoSans.variable} antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-white text-gray-900 selection:bg-teal-100 selection:text-teal-900">
+      <body className="min-h-screen flex flex-col bg-white text-[#0D0D0D] selection:bg-[rgba(7,98,106,0.20)] selection:text-[#07626A]">
         <LanguageProvider>
           <Header />
           <main className="flex-1 w-full">{children}</main>
