@@ -13,6 +13,21 @@ export interface RoutePOI {
   lng: number;
 }
 
+export interface AssignedGuide {
+  id?: string | number;
+  name: string;
+  role: {
+    ru: string;
+    kg: string;
+    en: string;
+  };
+  image: string;
+  phone: string;
+  experienceYears: number;
+  languages: string[];
+  isVerified: boolean;
+}
+
 export interface RouteItem {
   id: string;
   region: "ala-archa" | "alamedin" | "chunkurchak";
@@ -34,5 +49,7 @@ export interface RouteItem {
   centerCoordinates: [number, number];
   coordinates: [number, number][];
   imageUrl?: string;
+  assignedGuides?: AssignedGuide[];
+  assignedGuide?: AssignedGuide;
   pois?: RoutePOI[];
 }

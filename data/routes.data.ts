@@ -3,6 +3,37 @@ import { RouteItem } from "@/types/route.types";
 export const ROUTES_DATA: RouteItem[] = [
   {
     id: "route-ratsek",
+    assignedGuides: [
+      {
+        id: "guide-aisuluu",
+        name: "Айсулуу Жумабекова",
+        role: {
+          ru: "Лицензированный горный гид",
+          kg: "Лицензияланган тоо гиди",
+          en: "Certified Mountain Guide"
+        },
+        image: "/images/guides/guide-2.jpg",
+        phone: "+996 701 112 233",
+        experienceYears: 6,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      },
+      {
+        id: "guide-nargiza",
+        name: "Наргиза Касымова",
+        role: {
+          ru: "Инструктор по треккингу (WFA)",
+          kg: "Треккинг боюнча инструктор",
+          en: "Trekking & Wilderness First Aid Guide"
+        },
+        image: "/images/guides/guide-3.jpg",
+        phone: "+996 555 443 322",
+        experienceYears: 5,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      }
+    ],
+    
     imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
     region: "ala-archa",
     title: {
@@ -60,6 +91,23 @@ export const ROUTES_DATA: RouteItem[] = [
   },
   {
     id: "route-adygene",
+    assignedGuides: [
+      {
+        id: "guide-aisuluu",
+        name: "Айсулуу Жумабекова",
+        role: {
+          ru: "Лицензированный горный гид",
+          kg: "Лицензияланган тоо гиди",
+          en: "Certified Mountain Guide"
+        },
+        image: "/images/guides/guide-2.jpg",
+        phone: "+996 701 112 233",
+        experienceYears: 6,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      }
+    ],
+    
     imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop",
     region: "ala-archa",
     title: {
@@ -117,6 +165,37 @@ export const ROUTES_DATA: RouteItem[] = [
   },
   {
     id: "route-alamedin",
+    assignedGuides: [
+      {
+        id: "guide-alina",
+        name: "Алина Таалайбекова",
+        role: {
+          ru: "Сертифицированный эко-гид",
+          kg: "Сертификатталган эко-гид",
+          en: "Certified Eco Guide"
+        },
+        image: "/images/guides/guide-2.jpg",
+        phone: "+996 770 998 877",
+        experienceYears: 4,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      },
+      {
+        id: "guide-nargiza",
+        name: "Наргиза Касымова",
+        role: {
+          ru: "Инструктор по треккингу (WFA)",
+          kg: "Треккинг боюнча инструктор",
+          en: "Trekking & Wilderness First Aid Guide"
+        },
+        image: "/images/guides/guide-3.jpg",
+        phone: "+996 555 443 322",
+        experienceYears: 5,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      }
+    ],
+    
     imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=800&auto=format&fit=crop",
     region: "alamedin",
     title: {
@@ -174,6 +253,37 @@ export const ROUTES_DATA: RouteItem[] = [
   },
   {
     id: "route-chunkurchak",
+    assignedGuides: [
+      {
+        id: "guide-alina",
+        name: "Алина Таалайбекова",
+        role: {
+          ru: "Сертифицированный эко-гид",
+          kg: "Сертификатталган эко-гид",
+          en: "Certified Eco Guide"
+        },
+        image: "/images/guides/guide-2.jpg",
+        phone: "+996 770 998 877",
+        experienceYears: 4,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      },
+      {
+        id: "guide-elmira",
+        name: "Эльмира Асанова",
+        role: {
+          ru: "Этнографический гид и краевед",
+          kg: "Этнографиялык гид",
+          en: "Cultural & Ethno Guide"
+        },
+        image: "/images/guides/guide-3.jpg",
+        phone: "+996 500 123 456",
+        experienceYears: 7,
+        languages: ["RU", "KG"],
+        isVerified: true
+      }
+    ],
+    
     imageUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800&auto=format&fit=crop",
     region: "chunkurchak",
     title: {
