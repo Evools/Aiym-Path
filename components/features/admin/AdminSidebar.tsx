@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -9,13 +10,16 @@ import {
   Users,
   Compass,
   ArrowUpRight,
-  ShieldCheck,
   Building2,
-  BookOpen,
+  LogOut,
 } from "lucide-react";
+import { useAdminAuth } from "@/context/AdminAuthContext";
+import { useToast } from "@/context/ToastContext";
 
 export const AdminSidebar: React.FC = () => {
   const pathname = usePathname();
+  const { user, logout } = useAdminAuth();
+  const toast = useToast();
 
   const navigation = [
     {
@@ -43,6 +47,21 @@ export const AdminSidebar: React.FC = () => {
       exact: false,
     },
   ];
+
+  const handleLogout = async () => {
+    const isConfirmed = await toast.confirm({
+      title: "Выйти из админ-панели?",
+      message: "Вы уверены, что хотите завершить текущую сессию администратора?",
+      confirmText: "Выйти",
+      cancelText: "Остаться",
+      isDestructive: true,
+    });
+
+    if (isConfirmed) {
+      logout();
+      toast.info("Вы вышли из учетной записи администратора");
+    }
+  };
 
   return (
     <aside className="w-64 bg-white border-r border-[#E1E1E1] flex flex-col justify-between shrink-0 min-h-screen">
@@ -100,8 +119,42 @@ export const AdminSidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Switcher: Go to Public Website */}
-      <div className="p-4 border-t border-[#E1E1E1] flex flex-col gap-2">
+      {/* Bottom Section: Admin User Info & Switchers */}
+      <div className="p-4 border-t border-[#E1E1E1] flex flex-col gap-3">
+        {/* User Card */}
+        {user && (
+          <div className="p-3 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="relative w-8 h-8 rounded-xl bg-[#07626A]/10 overflow-hidden shrink-0 border border-[#07626A]/20">
+                <Image
+                  src={user.avatar || "/images/guides/guide-2.jpg"}
+                  alt={user.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="min-w-0">
+                <span className="text-xs font-bold text-[#0D0D0D] block truncate leading-tight">
+                  {user.name}
+                </span>
+                <span className="text-[10px] text-[#0D0D0D]/50 block truncate">
+                  {user.role}
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer shrink-0"
+              title="Выйти из админки"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        {/* Go to Public Website */}
         <Link
           href="/"
           target="_blank"
