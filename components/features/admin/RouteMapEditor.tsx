@@ -205,16 +205,14 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
       ];
 
       if (editorMode === "smart") {
-        setSmartWaypoints((prev) => {
-          const next = [...prev, newPt];
-          if (next.length >= 2) {
-            buildSmartRoute(next);
-          } else {
-            onChangeCoordsRef.current([newPt]);
-            setRouteSuccessMsg("Точка А (Старт) установлена. Кликните вторую точку для финиша/перевала.");
-          }
-          return next;
-        });
+        const nextWaypoints = [...smartWaypoints, newPt];
+        setSmartWaypoints(nextWaypoints);
+        if (nextWaypoints.length >= 2) {
+          buildSmartRoute(nextWaypoints);
+        } else {
+          onChangeCoordsRef.current([newPt]);
+          setRouteSuccessMsg("Точка А (Старт) установлена. Кликните вторую точку для финиша/перевала.");
+        }
       } else {
         // Manual mode
         const nextCoords = [...coordinates, newPt];
@@ -224,7 +222,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
         if (onMetricsCalcRef.current) onMetricsCalcRef.current(metrics);
       }
     });
-  }, [editorMode, coordinates, calculateMetrics]);
+  }, [editorMode, smartWaypoints, coordinates, calculateMetrics]);
 
   // Redraw Trail & Markers
   useEffect(() => {
