@@ -18,6 +18,7 @@ interface CustomMultiSelectProps {
   searchPlaceholder?: string;
   allowCustom?: boolean;
   onAddCustomOption?: (val: string) => void;
+  dropUp?: boolean;
 }
 
 export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
@@ -29,6 +30,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
   searchPlaceholder = "Поиск по списку...",
   allowCustom = true,
   onAddCustomOption,
+  dropUp = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,11 +49,14 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
 
   useEffect(() => {
     if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 50);
     }
   }, [isOpen]);
 
-  const toggleOption = (val: string) => {
+  const toggleOption = (val: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     if (selectedValues.includes(val)) {
       onChange(selectedValues.filter((v) => v !== val));
     } else {
@@ -64,15 +69,19 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
     onChange(selectedValues.filter((v) => v !== val));
   };
 
-  const handleSelectAll = () => {
-    onChange(Array.from(new Set([...selectedValues, ...filteredOptions.map((o) => o.value)])));
+  const handleSelectAll = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const allValues = Array.from(new Set([...selectedValues, ...filteredOptions.map((o) => o.value)]));
+    onChange(allValues);
   };
 
-  const handleClearAll = () => {
+  const handleClearAll = (e: React.MouseEvent) => {
+    e.stopPropagation();
     onChange([]);
   };
 
-  const handleAddCustom = () => {
+  const handleAddCustom = (e: React.MouseEvent) => {
+    e.stopPropagation();
     const trimmed = searchQuery.trim();
     if (!trimmed) return;
     if (!selectedValues.includes(trimmed)) {
@@ -112,7 +121,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
       {/* Main Trigger Field */}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full min-h-[48px] px-3.5 py-2 rounded-2xl border bg-white flex items-center justify-between gap-2 cursor-pointer transition-all ${
+        className={`w-full min-h-[46px] px-3 py-1.5 rounded-xl border bg-white flex items-center justify-between gap-2 cursor-pointer transition-all ${
           isOpen
             ? "border-[#07626A] ring-2 ring-[#07626A]/15"
             : "border-[#E1E1E1] hover:border-[#07626A]/50"
@@ -120,7 +129,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
       >
         <div className="flex flex-wrap gap-1.5 items-center flex-1 min-w-0">
           {selectedValues.length === 0 ? (
-            <span className="text-xs text-[#0D0D0D]/40 font-medium">
+            <span className="text-xs text-[#0D0D0D]/40 font-medium py-1">
               {placeholder}
             </span>
           ) : (
@@ -131,13 +140,13 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
               return (
                 <span
                   key={val}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#07626A]/10 border border-[#07626A]/20 text-[#07626A] text-xs font-bold transition-all"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[rgba(7,98,106,0.08)] border border-[rgba(7,98,106,0.20)] text-[#07626A] text-xs font-bold transition-all"
                 >
-                  <span className="truncate max-w-[140px]">{displayLabel}</span>
+                  <span className="truncate max-w-[150px]">{displayLabel}</span>
                   <button
                     type="button"
                     onClick={(e) => removeValue(val, e)}
-                    className="hover:bg-[#07626A]/20 rounded-full p-0.5 text-[#07626A] transition-colors"
+                    className="hover:bg-[#07626A]/20 rounded-full p-0.5 text-[#07626A] transition-colors cursor-pointer"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -156,7 +165,12 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
 
       {/* Dropdown Popover */}
       {isOpen && (
-        <div className="absolute left-0 right-0 mt-2 p-3 rounded-2xl bg-white border border-[#E1E1E1] shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2.5">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={`absolute left-0 right-0 p-3 rounded-2xl bg-white border border-[#E1E1E1] shadow-2xl z-[100] animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2.5 ${
+            dropUp ? "bottom-full mb-2" : "top-full mt-2"
+          }`}
+        >
           {/* Search Box */}
           <div className="relative">
             <Search className="w-4 h-4 text-[#0D0D0D]/40 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -168,7 +182,7 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
               onKeyDown={(e) => {
                 if (e.key === "Enter" && allowCustom && searchQuery.trim() && !exactMatchExists) {
                   e.preventDefault();
-                  handleAddCustom();
+                  handleAddCustom(e as any);
                 }
               }}
               placeholder={searchPlaceholder}
@@ -199,14 +213,14 @@ export const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
           </div>
 
           {/* Options List */}
-          <div className="max-h-56 overflow-y-auto space-y-1 pr-1">
+          <div className="max-h-48 overflow-y-auto space-y-1 pr-1">
             {filteredOptions.map((opt) => {
               const isChecked = selectedValues.includes(opt.value);
 
               return (
                 <div
                   key={opt.value}
-                  onClick={() => toggleOption(opt.value)}
+                  onClick={(e) => toggleOption(opt.value, e)}
                   className={`flex items-center justify-between p-2.5 rounded-xl text-xs cursor-pointer select-none transition-colors ${
                     isChecked
                       ? "bg-[#07626A]/10 text-[#07626A] font-bold"

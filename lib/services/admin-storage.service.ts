@@ -6,6 +6,7 @@ import { INITIAL_LOCATIONS } from "@/data/locations.data";
 export interface AdminGuideItem {
   id: string;
   name: string;
+  category: "guide" | "agency";
   role: {
     ru: string;
     kg: string;
@@ -15,6 +16,14 @@ export interface AdminGuideItem {
   phone: string;
   experienceYears: number;
   languages: string[];
+  locations: string[];
+  groupSize: string;
+  skills: {
+    firstAid: boolean;
+    mountaineer: boolean;
+    mountainGuide: boolean;
+  };
+  isFemale: boolean;
   isVerified: boolean;
 }
 
@@ -41,6 +50,7 @@ const DEFAULT_GUIDES: AdminGuideItem[] = [
   {
     id: "guide-aisuluu",
     name: "Айсулуу Жумабекова",
+    category: "guide",
     role: {
       ru: "Лицензированный горный гид",
       kg: "Лицензияланган тоо гиди",
@@ -50,11 +60,20 @@ const DEFAULT_GUIDES: AdminGuideItem[] = [
     phone: "+996 701 112 233",
     experienceYears: 6,
     languages: ["Русский", "Кыргызча", "English"],
+    locations: ["Бишкек", "Ала-Арча", "Чуй"],
+    groupSize: "1–8 человек",
+    skills: {
+      firstAid: true,
+      mountaineer: true,
+      mountainGuide: true,
+    },
+    isFemale: true,
     isVerified: true,
   },
   {
     id: "guide-nargiza",
     name: "Наргиза Касымова",
+    category: "guide",
     role: {
       ru: "Инструктор по треккингу (WFA)",
       kg: "Треккинг боюнча инструктор (WFA)",
@@ -64,20 +83,37 @@ const DEFAULT_GUIDES: AdminGuideItem[] = [
     phone: "+996 555 443 322",
     experienceYears: 4,
     languages: ["Русский", "English"],
+    locations: ["Каракол", "Ысык-Көл", "Жеты-Огуз"],
+    groupSize: "до 10 человек",
+    skills: {
+      firstAid: true,
+      mountaineer: true,
+      mountainGuide: false,
+    },
+    isFemale: true,
     isVerified: true,
   },
   {
     id: "guide-gulmira",
     name: "Гульмира Токтогулова",
+    category: "agency",
     role: {
       ru: "Эксперт по эко-туризму и травам",
       kg: "Эко-туризм жана дары чөптөр боюнча адис",
       en: "Eco-tourism & Alpine Flora Expert",
     },
-    image: "/images/guides/guide-4.jpg",
+    image: "/images/guides/guide-2.jpg",
     phone: "+996 700 998 877",
     experienceYears: 8,
     languages: ["Русский", "Кыргызча"],
+    locations: ["Ош", "Сары-Челек", "Арсланбоб"],
+    groupSize: "1–12 человек",
+    skills: {
+      firstAid: true,
+      mountaineer: false,
+      mountainGuide: true,
+    },
+    isFemale: true,
     isVerified: true,
   },
 ];
