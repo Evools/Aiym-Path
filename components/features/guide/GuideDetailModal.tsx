@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { X, CheckCircle2, Phone, Share2 } from "lucide-react";
+import { X, CheckCircle2, Phone } from "lucide-react";
 import { GuidebookItem } from "@/types/guidebook.types";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -12,7 +12,6 @@ interface GuideDetailModalProps {
 
 export const GuideDetailModal: React.FC<GuideDetailModalProps> = ({ item, onClose }) => {
   const { language, dict } = useLanguage();
-  const [copied, setCopied] = React.useState(false);
 
   if (!item) return null;
 
@@ -20,14 +19,6 @@ export const GuideDetailModal: React.FC<GuideDetailModalProps> = ({ item, onClos
   const shortDesc = item.shortDescription[language] || item.shortDescription.ru;
   const details = item.details[language] || item.details.ru;
   const badge = item.badgeText ? item.badgeText[language] || item.badgeText.ru : null;
-
-  const handleCopyLink = () => {
-    if (typeof window !== "undefined") {
-      navigator.clipboard.writeText(`${window.location.origin}/guide#${item.id}`);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -100,40 +91,23 @@ export const GuideDetailModal: React.FC<GuideDetailModalProps> = ({ item, onClos
         </div>
 
         {/* Footer Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-[#E1E1E1]">
+        <div className="flex items-center justify-between gap-3 pt-5 border-t border-[#E1E1E1]">
           {item.category === "emergency" ? (
             <a
               href="tel:112"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#07626A] text-white text-sm font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-semibold hover:bg-[#07626A]/90 transition-colors"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-3.5 h-3.5" />
               <span>SOS: 112</span>
             </a>
           ) : (
-            <button
-              type="button"
-              onClick={handleCopyLink}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[#07626A] text-xs font-semibold transition-colors cursor-pointer"
-              style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
-            >
-              {copied ? (
-                <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#07626A]" />
-                  <span>{dict.guidebook?.copied || "Скопировано"}</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5" />
-                  <span>{language === "kg" ? "Бөлүшүү" : language === "en" ? "Share Guide" : "Поделиться"}</span>
-                </>
-              )}
-            </button>
+            <div />
           )}
 
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-semibold hover:bg-[#07626A]/90 transition-colors cursor-pointer"
+            className="px-6 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-semibold hover:bg-[#07626A]/90 transition-colors cursor-pointer"
           >
             {dict.guidebook?.close || "Закрыть"}
           </button>

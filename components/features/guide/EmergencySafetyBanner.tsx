@@ -266,29 +266,31 @@ export const EmergencySafetyBanner: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-[#E1E1E1] flex items-center justify-between gap-2">
-                  <span className="text-base sm:text-lg font-black tracking-wider text-[#07626A] font-mono">
-                    {c.number}
-                  </span>
+                <div className="pt-4 border-t border-[#E1E1E1] flex flex-col gap-2.5">
+                  {/* Phone number row with copy action */}
+                  <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white border border-[#E1E1E1]">
+                    <span className="text-sm sm:text-[15px] font-black tracking-wider text-[#07626A] font-mono select-all">
+                      {c.number}
+                    </span>
 
-                  <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => handleCopy(c.number, c.id)}
-                      className="p-2 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] text-[#0D0D0D]/60 hover:text-[#07626A] transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-[#0D0D0D]/50 hover:text-[#07626A] hover:bg-[#F0F2F2] transition-colors cursor-pointer shrink-0"
                       title="Скопировать номер"
                     >
-                      {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      {isCopied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                     </button>
-
-                    <a
-                      href={`tel:${c.number.replace(/[^0-9+]/g, "")}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors cursor-pointer shadow-2xs"
-                    >
-                      <Phone className="w-3.5 h-3.5" />
-                      <span>Позвонить</span>
-                    </a>
                   </div>
+
+                  {/* Full-width call CTA */}
+                  <a
+                    href={`tel:${c.number.replace(/[^0-9+]/g, "")}`}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors cursor-pointer shadow-2xs"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>Позвонить</span>
+                  </a>
                 </div>
               </div>
             );
