@@ -250,14 +250,26 @@ export default function ContactsPage() {
                 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   
-                  {/* Header of Form */}
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-bold text-[#0D0D0D] tracking-tight mb-1">
-                      Напишите нам
-                    </h3>
-                    <p className="text-xs sm:text-sm text-[#0D0D0D]/70">
-                      Выберите тему обращения и оставьте контакты для обратной связи.
-                    </p>
+                  {/* Header of Form with Info Button */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-bold text-[#0D0D0D] tracking-tight mb-1">
+                        Напишите нам
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#0D0D0D]/70">
+                        Выберите тему обращения и оставьте контакты для обратной связи.
+                      </p>
+                    </div>
+
+                    {/* Subtle Info Icon Trigger */}
+                    <button
+                      type="button"
+                      onClick={() => setShowUnavailableModal(true)}
+                      className="p-2 rounded-xl text-[#0D0D0D]/50 hover:text-[#07626A] hover:bg-[#F3F3F3] border border-transparent hover:border-[#E1E1E1] transition-colors cursor-pointer shrink-0"
+                      title="Информация о форме"
+                    >
+                      <AlertCircle className="w-4 h-4 text-[#07626A]" />
+                    </button>
                   </div>
 
                   {/* Topic Selector Chips */}
