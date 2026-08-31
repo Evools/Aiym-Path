@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { RouteRegion, RouteItem } from "@/types/route.types";
 import { ROUTES_DATA } from "@/data/routes.data";
 import { MapRegionTabs } from "./MapRegionTabs";
@@ -11,6 +11,7 @@ import { RoutesListSection } from "./RoutesListSection";
 export const MapExplorerSection: React.FC = () => {
   const [selectedRegion, setSelectedRegion] = useState<RouteRegion>("all");
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   const filteredRoutes = useMemo(() => {
     if (selectedRegion === "all") return ROUTES_DATA;
@@ -23,9 +24,13 @@ export const MapExplorerSection: React.FC = () => {
   };
 
   const handleSelectRoute = (route: RouteItem) => {
-    setSelectedRouteId((prev) => (prev === route.id ? null : route.id));
+    setSelectedRouteId(route.id);
     if (route.region !== selectedRegion && selectedRegion !== "all") {
       setSelectedRegion("all");
+    }
+
+    if (mapContainerRef.current) {
+      mapContainerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -41,17 +46,19 @@ export const MapExplorerSection: React.FC = () => {
         </div>
 
         {/* 2. Interactive Map */}
-        <InteractiveMapWrapper
-          routes={filteredRoutes}
-          selectedRegion={selectedRegion}
-          selectedRouteId={selectedRouteId}
-          onSelectRoute={(id) => setSelectedRouteId((prev) => (prev === id ? null : id))}
-        />
+        <div ref={mapContainerRef}>
+          <InteractiveMapWrapper
+            routes={filteredRoutes}
+            selectedRegion={selectedRegion}
+            selectedRouteId={selectedRouteId}
+            onSelectRoute={(id) => setSelectedRouteId((prev) => (prev === id ? null : id))}
+          />
+        </div>
 
         {/* 3. Map Legend */}
         <MapLegend />
 
-        {/* 4. Routes List Section */}
+        {/* 4. Rich Routes Directory Section */}
         <RoutesListSection
           routes={filteredRoutes}
           selectedRouteId={selectedRouteId}

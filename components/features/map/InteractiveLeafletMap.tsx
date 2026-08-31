@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import Link from "next/link";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { RouteItem, RouteRegion } from "@/types/route.types";
 import { useLanguage } from "@/context/LanguageContext";
 import {
-  Navigation,
-  ExternalLink,
   RotateCcw,
   Footprints,
   MapPin,
@@ -15,6 +14,8 @@ import {
   TrendingUp,
   Compass,
   ArrowRight,
+  Plus,
+  Minus,
 } from "lucide-react";
 
 interface BasecampHub {
@@ -92,7 +93,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
   const [activeRoute, setActiveRoute] = useState<RouteItem | null>(null);
   const [isLocating, setIsLocating] = useState(false);
 
-  // 1. Initialize Leaflet Map
+  // 1. Initialize Leaflet Map without default top-left zoom controls
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (mapInstanceRef.current) return;
@@ -100,7 +101,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     const map = L.map(mapContainerRef.current, {
       center: [42.58, 74.56],
       zoom: 11,
-      zoomControl: true,
+      zoomControl: false, // Disables standard top-left zoom control
       attributionControl: false,
     });
 
@@ -241,6 +242,15 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     onSelectRoute("");
   };
 
+  // Custom Zoom Handlers
+  const handleZoomIn = () => {
+    mapInstanceRef.current?.zoomIn();
+  };
+
+  const handleZoomOut = () => {
+    mapInstanceRef.current?.zoomOut();
+  };
+
   // Locate User GPS
   const handleLocateMe = () => {
     if (!navigator.geolocation) {
@@ -267,14 +277,6 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
   const startPt = activeRoute?.coordinates[0] || [42.56, 74.48];
   const finishPt = activeRoute?.coordinates[activeRoute.coordinates.length - 1] || [42.52, 74.52];
 
-  const googleMapsDirectionsUrl = activeRoute
-    ? `https://www.google.com/maps/dir/?api=1&origin=${startPt[0]},${startPt[1]}&destination=${finishPt[0]},${finishPt[1]}&travelmode=walking`
-    : "#";
-
-  const twoGisDirectionsUrl = activeRoute
-    ? `https://2gis.kg/bishkek/directions/points/${startPt[1]}%2C${startPt[0]}%7C${finishPt[1]}%2C${finishPt[0]}`
-    : "#";
-
   return (
     <div className="relative w-full h-full min-h-[580px] sm:min-h-[660px] lg:min-h-[720px]">
       {/* Leaflet Map Canvas */}
@@ -283,8 +285,9 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
         className="w-full h-full min-h-[580px] sm:min-h-[660px] lg:min-h-[720px] z-0 rounded-2xl sm:rounded-3xl"
       />
 
-      {/* Top Right GPS Button */}
-      <div className="absolute top-4 right-4 z-10">
+      {/* Top Right Controls: GPS Locate & Custom Zoom In/Out Buttons */}
+      <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2.5">
+        {/* GPS Locate Button */}
         <button
           type="button"
           onClick={handleLocateMe}
@@ -296,6 +299,26 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
             {isLocating ? "Определяем..." : "Моё местоположение"}
           </span>
         </button>
+
+        {/* Custom Clean Zoom In (+) / Zoom Out (-) Controls in Top-Right */}
+        <div className="flex flex-col rounded-xl bg-white border border-[#E1E1E1] overflow-hidden">
+          <button
+            type="button"
+            onClick={handleZoomIn}
+            className="p-2.5 hover:bg-[#F0F2F2] text-[#07626A] transition-colors border-b border-[#E1E1E1] cursor-pointer flex items-center justify-center"
+            title="Приблизить карту"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={handleZoomOut}
+            className="p-2.5 hover:bg-[#F0F2F2] text-[#07626A] transition-colors cursor-pointer flex items-center justify-center"
+            title="Отдалить карту"
+          >
+            <Minus className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* 1. Modal: Select Route from Clicked Basecamp */}
@@ -456,27 +479,21 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
             </div>
           </div>
 
-          {/* Direct Navigator Export Buttons */}
-          <div className="flex items-center gap-2 pt-1 border-t border-[#E1E1E1]">
-            <a
-              href={googleMapsDirectionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[#07626A] text-white text-xs font-semibold hover:bg-[#07626A]/90 transition-colors"
+          {/* Action: Find Verified Guide */}
+          <div className="pt-1 border-t border-[#E1E1E1]">
+            <Link
+              href="/tours"
+              className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors"
             >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>Google Maps</span>
-            </a>
-
-            <a
-              href={twoGisDirectionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-[#07626A] border border-[#E1E1E1] hover:border-[#07626A] transition-colors"
-            >
-              <Navigation className="w-3.5 h-3.5" />
-              <span>В 2GIS</span>
-            </a>
+              <span>
+                {language === "kg"
+                  ? "Бул маршрутка гид тандоо"
+                  : language === "en"
+                  ? "Find a Guide for this Trail"
+                  : "Найти гида на этот маршрут"}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       )}

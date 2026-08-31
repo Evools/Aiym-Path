@@ -3,6 +3,7 @@ import { RouteItem } from "@/types/route.types";
 export const ROUTES_DATA: RouteItem[] = [
   {
     id: "route-ratsek",
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
     region: "ala-archa",
     title: {
       ru: "Тропа к хижине Рацека",
@@ -59,6 +60,7 @@ export const ROUTES_DATA: RouteItem[] = [
   },
   {
     id: "route-adygene",
+    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop",
     region: "ala-archa",
     title: {
       ru: "Долина Адыгене",
@@ -115,6 +117,7 @@ export const ROUTES_DATA: RouteItem[] = [
   },
   {
     id: "route-alamedin",
+    imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=800&auto=format&fit=crop",
     region: "alamedin",
     title: {
       ru: "К горячим источникам Аламедин",
@@ -171,6 +174,7 @@ export const ROUTES_DATA: RouteItem[] = [
   },
   {
     id: "route-chunkurchak",
+    imageUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800&auto=format&fit=crop",
     region: "chunkurchak",
     title: {
       ru: "Плато Чункурчак",

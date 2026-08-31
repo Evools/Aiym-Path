@@ -33,5 +33,6 @@ export interface RouteItem {
   elevationGainMeters: number;
   centerCoordinates: [number, number];
   coordinates: [number, number][];
+  imageUrl?: string;
   pois?: RoutePOI[];
 }
