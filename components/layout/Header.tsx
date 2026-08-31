@@ -15,9 +15,9 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -30,34 +30,47 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 py-3.5 transition-all duration-200">
+    <header
+      className={`sticky top-0 left-0 right-0 z-50 transition-all duration-200 ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-md border-b border-[#E1E1E1] py-3"
+          : "bg-white border-b border-[#E1E1E1] py-3.5"
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand */}
-        <Link href="/" className="flex flex-col group py-1">
+        {/* Brand Logo */}
+        <Link href="/" className="flex flex-col group py-0.5">
           <span
-            className="text-2xl sm:text-[24px] font-bold tracking-normal leading-none"
+            className="text-2xl sm:text-[24px] font-extrabold tracking-tight leading-none text-[#07626A]"
             style={{
-              color: "#07626A",
               fontFamily: "var(--font-nunito-sans), 'Nunito Sans', sans-serif",
             }}
           >
             Aiym Path
           </span>
-          <span className="text-[10px] text-gray-500 font-medium mt-0.5">
+          <span className="text-[10px] text-[#0D0D0D]/60 font-semibold tracking-wider uppercase mt-0.5">
             female-friendly туризм
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* Desktop Navigation Links */}
+        <nav className="hidden md:flex items-center gap-1.5 lg:gap-2">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : link.href.startsWith("/#")
+                ? false
+                : pathname.startsWith(link.href);
+
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-xs font-medium transition-colors hover:text-teal-700 ${
-                  isActive ? "text-teal-700" : "text-gray-700"
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors duration-150 ${
+                  isActive
+                    ? "bg-[rgba(7,98,106,0.10)] text-[#07626A]"
+                    : "text-[#0D0D0D]/75 hover:text-[#07626A] hover:bg-[#F0F2F2]"
                 }`}
               >
                 {link.label}
@@ -66,38 +79,51 @@ export const Header: React.FC = () => {
           })}
         </nav>
 
-        {/* Actions */}
-        <div className="hidden md:flex items-center gap-4">
+        {/* Actions & Language Switcher */}
+        <div className="hidden md:flex items-center gap-3">
           <LanguageSwitcher isScrolled={isScrolled} />
         </div>
 
         {/* Mobile controls */}
-        <div className="flex md:hidden items-center gap-3">
+        <div className="flex md:hidden items-center gap-2.5">
           <LanguageSwitcher isScrolled={isScrolled} />
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-lg text-gray-700 hover:bg-gray-100"
+            className="p-2 rounded-xl text-[#0D0D0D] hover:bg-[#F0F2F2] border border-[#E1E1E1] transition-colors cursor-pointer"
             aria-label="Меню"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-100 px-6 py-4 space-y-3">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-1.5 text-sm font-medium text-gray-800 hover:text-teal-700"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="md:hidden bg-white border-b border-[#E1E1E1] px-4 sm:px-6 py-4 space-y-1.5 animate-in fade-in duration-150">
+          {navLinks.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : link.href.startsWith("/#")
+                ? false
+                : pathname.startsWith(link.href);
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block py-2.5 px-3.5 rounded-xl text-xs font-bold transition-colors ${
+                  isActive
+                    ? "bg-[rgba(7,98,106,0.10)] text-[#07626A]"
+                    : "text-[#0D0D0D]/80 hover:text-[#07626A] hover:bg-[#F0F2F2]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
       )}
     </header>

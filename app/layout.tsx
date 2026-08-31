@@ -34,16 +34,15 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${geistSans.variable} ${geistMono.variable} ${nunitoSans.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${nunitoSans.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-900 selection:bg-teal-100 selection:text-teal-900">
+      <body className="min-h-screen flex flex-col bg-white text-gray-900 selection:bg-teal-100 selection:text-teal-900">
         <LanguageProvider>
           <Header />
-          <main className="flex-1 w-full overflow-x-clip">{children}</main>
+          <main className="flex-1 w-full">{children}</main>
           <Footer />
         </LanguageProvider>
       </body>
     </html>
   );
 }
-
