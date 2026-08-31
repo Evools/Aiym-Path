@@ -19,12 +19,13 @@ interface SearchResult {
 }
 
 const PRESET_PLACES = [
-  { name: "Чункурчак", coords: [42.6389, 74.6281] as [number, number] },
-  { name: "Ала-Арча (Альплагерь)", coords: [42.5644, 74.4823] as [number, number] },
-  { name: "Хижина Рацека", coords: [42.5186, 74.5298] as [number, number] },
+  { name: "Альплагерь Ала-Арча", coords: [42.5644, 74.4823] as [number, number] },
+  { name: "Водопад Ак-Сай", coords: [42.5539, 74.4983] as [number, number] },
+  { name: "Хижина Рацека", coords: [42.5350, 74.5288] as [number, number] },
+  { name: "Чункурчак", coords: [42.6392, 74.6285] as [number, number] },
+  { name: "Озеро Кель-Тор", coords: [42.5467, 75.1878] as [number, number] },
   { name: "Тёплые Ключи", coords: [42.6318, 74.6727] as [number, number] },
   { name: "Каракол", coords: [42.4907, 78.3936] as [number, number] },
-  { name: "Озеро Кель-Тор", coords: [42.5417, 75.1432] as [number, number] },
   { name: "Сон-Көл", coords: [41.7644, 75.1322] as [number, number] },
   { name: "Ош", coords: [40.5283, 72.7985] as [number, number] },
 ];

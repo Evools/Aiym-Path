@@ -42,11 +42,11 @@ interface SearchResult {
 
 const PRESET_LOCATIONS = [
   { name: "Альплагерь Ала-Арча", coords: [42.5644, 74.4823] as [number, number] },
-  { name: "Хижина Рацека", coords: [42.5186, 74.5298] as [number, number] },
-  { name: "Водопад Ак-Сай", coords: [42.5350, 74.5020] as [number, number] },
-  { name: "Ущелье Чункурчак", coords: [42.6389, 74.6281] as [number, number] },
-  { name: "Озеро Кель-Тор", coords: [42.5417, 75.1432] as [number, number] },
-  { name: "Перевал Теке-Тор", coords: [42.5025, 74.5211] as [number, number] },
+  { name: "Водопад Ак-Сай", coords: [42.5539, 74.4983] as [number, number] },
+  { name: "Хижина Рацека", coords: [42.5350, 74.5288] as [number, number] },
+  { name: "Ущелье Чункурчак", coords: [42.6392, 74.6285] as [number, number] },
+  { name: "Озеро Кель-Тор", coords: [42.5467, 75.1878] as [number, number] },
+  { name: "Перевал Теке-Тор", coords: [42.5125, 74.5020] as [number, number] },
 ];
 
 const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
