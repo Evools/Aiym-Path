@@ -39,6 +39,9 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
         />
       </div>
 
+      {/* 1.1 Protective Gradient Overlay for 100% text contrast on mobile & desktop */}
+      <div className="absolute inset-0 z-[5] bg-gradient-to-b from-white/95 via-white/85 to-white/40 sm:bg-gradient-to-r sm:from-white sm:via-white/85 sm:to-transparent pointer-events-none" />
+
       {/* 2. Kyrgyz national ornament on the left (/images/banner/uzor.webp) */}
       <div className="absolute top-0 left-0 bottom-0 z-10 w-full max-w-[320px] sm:max-w-[440px] lg:max-w-[560px] pointer-events-none select-none overflow-hidden flex items-center justify-start">
         <div className="relative w-full h-full">
@@ -87,7 +90,7 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base text-gray-600 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-[#0D0D0D]/85 sm:text-gray-700 leading-relaxed font-medium">
             {subtitle}
           </p>
         </div>
