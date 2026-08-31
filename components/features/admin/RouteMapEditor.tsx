@@ -24,6 +24,8 @@ import {
   Sparkles,
   X,
   Tag,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 import { RoutePOI, POIType } from "@/types/route.types";
 import { useToast } from "@/context/ToastContext";
@@ -176,6 +178,35 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
   const [poiNameKg, setPoiNameKg] = useState("");
   const [poiNameEn, setPoiNameEn] = useState("");
   const [isTranslatingPOI, setIsTranslatingPOI] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Lock body scroll when in fullscreen mode
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isFullscreen]);
+
+  const toggleFullscreen = useCallback(() => {
+    setIsFullscreen((prev) => {
+      const next = !prev;
+      requestAnimationFrame(() => {
+        mapInstanceRef.current?.invalidateSize();
+      });
+      setTimeout(() => {
+        mapInstanceRef.current?.invalidateSize();
+      }, 50);
+      setTimeout(() => {
+        mapInstanceRef.current?.invalidateSize();
+      }, 250);
+      return next;
+    });
+  }, []);
 
   // Calculate distance & elevation
   const calculateMetrics = useCallback((coords: [number, number][]): RouteMetrics => {
@@ -813,32 +844,61 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
       )}
 
       {/* 5. Map Canvas Container */}
-      <div className="relative w-full h-[650px] sm:h-[750px] lg:h-[820px] rounded-3xl border border-[#E1E1E1] overflow-hidden shadow-sm">
+      <div
+        className={
+          isFullscreen
+            ? "fixed inset-0 z-[9999] w-screen h-screen bg-[#F0F2F2]"
+            : "relative w-full h-[500px] sm:h-[700px] lg:h-[800px] rounded-3xl border border-[#E1E1E1] overflow-hidden shadow-sm"
+        }
+      >
         <div ref={mapContainerRef} className="w-full h-full z-0" />
 
-        {/* Custom Zoom Controls in Top Right */}
-        <div className="absolute top-4 right-4 z-10 flex flex-col rounded-2xl bg-white border border-[#E1E1E1] overflow-hidden shadow-md">
+        {/* Floating Controls in Top Right */}
+        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 flex flex-col items-end gap-2">
+          {/* Fullscreen Toggle */}
           <button
             type="button"
-            onClick={() => mapInstanceRef.current?.zoomIn()}
-            className="p-2.5 hover:bg-[#F3F3F3] text-[#07626A] transition-colors border-b border-[#E1E1E1] cursor-pointer"
-            title="Приблизить"
+            onClick={toggleFullscreen}
+            className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] text-xs font-semibold text-[#07626A] shadow-md transition-colors cursor-pointer"
+            title={isFullscreen ? "Свернуть карту" : "Развернуть во весь экран"}
           >
-            <Plus className="w-4 h-4" />
+            {isFullscreen ? (
+              <>
+                <Minimize2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Свернуть</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Во весь экран</span>
+              </>
+            )}
           </button>
-          <button
-            type="button"
-            onClick={() => mapInstanceRef.current?.zoomOut()}
-            className="p-2.5 hover:bg-[#F3F3F3] text-[#07626A] transition-colors cursor-pointer"
-            title="Отдалить"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
+
+          {/* Zoom Controls */}
+          <div className="flex flex-col rounded-xl bg-white border border-[#E1E1E1] shadow-md overflow-hidden">
+            <button
+              type="button"
+              onClick={() => mapInstanceRef.current?.zoomIn()}
+              className="p-2.5 hover:bg-[#F3F3F3] text-[#07626A] transition-colors border-b border-[#E1E1E1] cursor-pointer flex items-center justify-center"
+              title="Приблизить"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => mapInstanceRef.current?.zoomOut()}
+              className="p-2.5 hover:bg-[#F3F3F3] text-[#07626A] transition-colors cursor-pointer flex items-center justify-center"
+              title="Отдалить"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Current Stats Overlay in Top Left */}
-        <div className="absolute top-4 left-4 z-10 px-4 py-2 rounded-2xl bg-white/95 backdrop-blur-xs border border-[#E1E1E1] shadow-sm text-xs font-bold text-[#07626A] flex items-center gap-3">
-          <span>{coordinates.length} GPS точек</span>
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl bg-white/95 backdrop-blur-xs border border-[#E1E1E1] shadow-sm text-[11px] sm:text-xs font-bold text-[#07626A] flex items-center gap-2 sm:gap-3 flex-wrap max-w-[calc(100%-90px)] sm:max-w-none">
+          <span>{coordinates.length} точек</span>
           <span>•</span>
           <span>~{currentMetrics.distanceKm} км</span>
           <span>•</span>
@@ -846,16 +906,16 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
           {pois.length > 0 && (
             <>
               <span>•</span>
-              <span className="text-[#4F46E5] font-extrabold">{pois.length} ориентиров (POI)</span>
+              <span className="text-[#07626A] font-extrabold">{pois.length} ориентиров</span>
             </>
           )}
         </div>
 
         {/* Bottom Instruction Prompt */}
-        <div className="absolute bottom-4 left-4 right-4 sm:right-auto z-10 px-4 py-2.5 rounded-2xl bg-white/95 backdrop-blur-xs border border-[#E1E1E1] shadow-lg text-xs text-[#0D0D0D] font-medium flex items-center gap-2.5">
+        <div className="hidden sm:flex absolute bottom-4 left-4 right-4 sm:right-auto z-10 px-4 py-2.5 rounded-2xl bg-white/95 backdrop-blur-xs border border-[#E1E1E1] shadow-lg text-xs text-[#0D0D0D] font-medium items-center gap-2.5">
           <MapPin className="w-4 h-4 text-[#07626A] shrink-0" />
           <span>
-            Кликните в пустое место для новой точки. Кликните <span className="font-bold text-[#4F46E5]">на любую точку</span>, чтобы привязать перевал или ориентир.
+            Кликните в пустое место для новой точки. Кликните <span className="font-bold text-[#07626A]">на любую точку</span>, чтобы привязать перевал или ориентир.
           </span>
         </div>
       </div>
