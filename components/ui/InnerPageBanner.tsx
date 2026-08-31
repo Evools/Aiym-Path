@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface InnerPageBannerProps {
+  breadcrumbLabel?: string;
   badge: string;
   badgeIcon?: React.ReactNode;
   titlePrefix: string;
@@ -15,6 +16,7 @@ interface InnerPageBannerProps {
 }
 
 export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
+  breadcrumbLabel,
   badge,
   badgeIcon,
   titlePrefix,
@@ -53,13 +55,23 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
 
       {/* 2. Main Content Container */}
       <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500 hover:text-[#07626A] transition-colors mb-6 font-medium"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>{dict.nav.home}</span>
-        </Link>
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-6 font-medium">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 hover:text-[#07626A] transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>{dict.nav.home}</span>
+          </Link>
+          {(breadcrumbLabel || badge) && (
+            <>
+              <span className="text-gray-300">/</span>
+              <span className="text-[#07626A] font-semibold">
+                {breadcrumbLabel || badge}
+              </span>
+            </>
+          )}
+        </div>
 
         <div className="max-w-2xl">
           {/* Badge */}

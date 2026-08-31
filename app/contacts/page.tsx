@@ -1,14 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import {
   Mail,
   Phone,
   MapPin,
   CheckCircle2,
-  ArrowLeft,
   Send,
   User,
   MessageSquare,
@@ -17,7 +14,6 @@ import {
   ChevronDown,
   HelpCircle,
   Clock,
-  ShieldCheck,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 

@@ -145,5 +145,29 @@
         "a": "We process and answer all inquiries within 24 working hours Monday through Friday."
       }
     ]
+  },
+  "guidebook": {
+    "badge": "Guidebook",
+    "titlePrefix": "GUIDEBOOK",
+    "titleHighlight": "AIYM PATH",
+    "subtitle": "Practical advice, safety protocols, gear checklists, and trail recommendations for female travelers in Kyrgyzstan.",
+    "introDescription": "Recommendations are structured separately for travelers and tourism service providers. Content is updated regularly by the project team.",
+    "tabTravelers": "For Travelers",
+    "tabProviders": "For Service Providers",
+    "searchPlaceholder": "Search tips, guidelines, or topics...",
+    "allTopics": "All Topics",
+    "readMore": "Read Details",
+    "close": "Close",
+    "safetyBadge": "Safety",
+    "checklistTitle": "Interactive Mountain Gear Checklist",
+    "checklistSubtitle": "Check off the essential items you have packed before departing into the mountains",
+    "checklistReset": "Reset Checklist",
+    "checklistProgress": "Packed",
+    "checklistCompleted": "Great! You are fully prepared for a safe journey.",
+    "sosTitle": "Emergency Services & Safety Hotline",
+    "sosSubtitle": "Save these emergency numbers or note them down before heading onto the trail",
+    "sosCall": "Call Now",
+    "copied": "Copied",
+    "essentialNote": "Essential"
   }
 }

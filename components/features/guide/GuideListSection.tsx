@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, MapPin, SlidersHorizontal, Users } from "lucide-react";
+import { Search, MapPin, Users } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { INITIAL_GUIDES, GuideItem } from "@/data/guides.data";
+import { INITIAL_GUIDES } from "@/data/guides.data";
 import { GuideCard } from "./GuideCard";
 
 export const GuideListSection: React.FC = () => {

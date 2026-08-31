@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { Search, MapPin, Users } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { INITIAL_GUIDES, GuideItem } from "@/data/guides.data";
+import { INITIAL_GUIDES } from "@/data/guides.data";
 import { GuideCard } from "@/components/features/guide/GuideCard";
 
 export const ToursGuideListSection: React.FC = () => {
