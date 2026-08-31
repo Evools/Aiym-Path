@@ -1,0 +1,187 @@
+import { RouteItem } from "@/types/route.types";
+
+export const ROUTES_DATA: RouteItem[] = [
+  {
+    id: "route-ratsek",
+    region: "ala-archa",
+    title: {
+      ru: "Тропа к хижине Рацека",
+      kg: "Рацек алачыгына чыйыр",
+      en: "Trail to Ratsek Hut",
+    },
+    description: {
+      ru: "Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой, а не поодиночке.",
+      kg: "Маршрутту ишенимдүү адамга билдирип, аба ырайын текшерип, аптечка алыңыз. Татаал тилкелерде жалгыз эмес, топ менен жүрүңүз.",
+      en: "Share your route with a trusted contact, check mountain weather forecasts, and pack a first-aid kit. Move in groups on steep terrain.",
+    },
+    difficulty: "medium",
+    distanceKm: 12,
+    durationHours: 6,
+    hasFemaleGuide: true,
+    elevationGainMeters: 1200,
+    centerCoordinates: [42.542, 74.505],
+    coordinates: [
+      [42.564, 74.482],
+      [42.557, 74.491],
+      [42.548, 74.502],
+      [42.536, 74.515],
+      [42.528, 74.523],
+      [42.520, 74.529],
+    ],
+    pois: [
+      {
+        id: "poi-alplager",
+        name: {
+          ru: "Альплагерь Ала-Арча",
+          kg: "Ала-Арча Альплагери",
+          en: "Ala-Archa Alpine Camp",
+        },
+        type: "service",
+        lat: 42.564,
+        lng: 74.482,
+      },
+      {
+        id: "poi-ratsek",
+        name: {
+          ru: "Хижина Рацека (Приют)",
+          kg: "Рацек алачыгы",
+          en: "Ratsek Hut Camp",
+        },
+        type: "guesthouse",
+        lat: 42.520,
+        lng: 74.529,
+      },
+    ],
+  },
+  {
+    id: "route-adygene",
+    region: "ala-archa",
+    title: {
+      ru: "Долина Адыгене",
+      kg: "Адыгене өрөөнү",
+      en: "Adygene Valley",
+    },
+    description: {
+      ru: "Выбирайте гостевые дома и сервисы с отметкой female-friendly, уточняйте наличие женского персонала заранее и не стесняйтесь спрашивать гида о деталях маршрута.",
+      kg: "Female-friendly белгиси бар конок үйлөрдү тандаңыз, аял кызматкерлердин бар-жогун алдын ала сурап, гидден маршрут тууралуу так маалымат алыңыз.",
+      en: "Select female-friendly certified guesthouses, verify female staff in advance, and freely ask your guide for trail specifics.",
+    },
+    difficulty: "hard",
+    distanceKm: 18,
+    durationHours: 9,
+    hasFemaleGuide: true,
+    elevationGainMeters: 1450,
+    centerCoordinates: [42.548, 74.460],
+    coordinates: [
+      [42.564, 74.482],
+      [42.560, 74.471],
+      [42.551, 74.455],
+      [42.543, 74.444],
+      [42.531, 74.437],
+    ],
+    pois: [
+      {
+        id: "poi-adygene-memo",
+        name: {
+          ru: "Мемориал альпинистов",
+          kg: "Альпинисттер мемориалы",
+          en: "Mountaineers Memorial",
+        },
+        type: "viewpoint",
+        lat: 42.551,
+        lng: 74.455,
+      },
+    ],
+  },
+  {
+    id: "route-alamedin",
+    region: "alamedin",
+    title: {
+      ru: "К горячим источникам Аламедин",
+      kg: "Аламүдүн ысык булактарына",
+      en: "To Alamedin Hot Springs",
+    },
+    description: {
+      ru: "Оцените свой уровень подготовки честно: сверьтесь с указанной сложностью и перепадом высот маршрута. Возьмите многослойную одежду и достаточный запас воды.",
+      kg: "Даярдык деңгээлиңизди туура баалаңыз: маршруттун татаалдыгы жана бийиктик айырмасы менен таанышыңыз. Көп катмарлуу кийим жана жетиштүү суу алыңыз.",
+      en: "Assess your fitness level honestly: review the trail difficulty and elevation profile. Bring layered apparel and ample water.",
+    },
+    difficulty: "easy",
+    distanceKm: 8,
+    durationHours: 3.5,
+    hasFemaleGuide: true,
+    elevationGainMeters: 350,
+    centerCoordinates: [42.587, 74.689],
+    coordinates: [
+      [42.612, 74.685],
+      [42.601, 74.688],
+      [42.585, 74.690],
+      [42.573, 74.691],
+      [42.562, 74.693],
+    ],
+    pois: [
+      {
+        id: "poi-springs",
+        name: {
+          ru: "Термальные источники «Теплые Ключи»",
+          kg: "«Жылуу Булактар» комплекси",
+          en: "Thermal Hot Springs Hub",
+        },
+        type: "service",
+        lat: 42.612,
+        lng: 74.685,
+      },
+      {
+        id: "poi-alamedin-gh",
+        name: {
+          ru: "Гостевой дом «Аламедин Эко»",
+          kg: "«Аламүдүн Эко» конок үйү",
+          en: "Alamedin Eco Homestay",
+        },
+        type: "guesthouse",
+        lat: 42.608,
+        lng: 74.686,
+      },
+    ],
+  },
+  {
+    id: "route-chunkurchak",
+    region: "chunkurchak",
+    title: {
+      ru: "Плато Чункурчак",
+      kg: "Чүңкүрчак платосу",
+      en: "Chunkurchak Plateau",
+    },
+    description: {
+      ru: "Уносите мусор с собой, уважайте местные традиции и спрашивайте разрешения перед фотографированием людей. Горы Кыргызстана — дом для местных сообществ.",
+      kg: "Таштандыны өзүңүз менен алып кетиңиз, жергиликтүү каада-салттарды сыйлаңыз жана адамдарды сүрөткө тартуудан мурун уруксат сураңыз. Кыргызстандын тоолору — жергиликтүү элдин үйү.",
+      en: "Pack out all waste, respect cultural traditions, and ask permission before taking photos of people. Kyrgyzstan mountains are home to local communities.",
+    },
+    difficulty: "easy",
+    distanceKm: 6,
+    durationHours: 2.5,
+    hasFemaleGuide: true,
+    elevationGainMeters: 200,
+    centerCoordinates: [42.625, 74.630],
+    coordinates: [
+      [42.639, 74.622],
+      [42.632, 74.626],
+      [42.623, 74.631],
+      [42.616, 74.635],
+      [42.610, 74.638],
+    ],
+    pois: [
+      {
+        id: "poi-chunkurchak-yurt",
+        name: {
+          ru: "Юрточный городок «Супара Чункурчак»",
+          kg: "«Супара Чүңкүрчак» боз үй айылы",
+          en: "Supara Chunkurchak Yurt Hub",
+        },
+        type: "guesthouse",
+        lat: 42.635,
+        lng: 74.624,
+      },
+    ],
+  },
+];
