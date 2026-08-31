@@ -81,7 +81,7 @@ export const EquipmentChecklistSection: React.FC = () => {
         </div>
 
         {/* Checklist Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
           {EQUIPMENT_CHECKLIST.map((item) => {
             const isChecked = checkedIds.includes(item.id);
             const label = item.label[language] || item.label.ru;

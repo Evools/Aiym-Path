@@ -75,7 +75,7 @@ export const GuidebookSection: React.FC = () => {
 
         {/* 6 Recommendations Cards Grid */}
         {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px]">
             {filteredItems.map((item) => (
               <GuidebookCard
                 key={item.id}

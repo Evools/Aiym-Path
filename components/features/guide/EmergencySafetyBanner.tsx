@@ -141,7 +141,7 @@ export const EmergencySafetyBanner: React.FC = () => {
         </div>
 
         {/* 3 Actionable Contact Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[20px] mb-8">
           {contacts.map((c) => {
             const isCopied = copiedId === c.id;
             const name = c.name[language] || c.name.ru;
