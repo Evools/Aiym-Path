@@ -23,6 +23,7 @@ import {
   DEFAULT_CONTACTS,
 } from "@/lib/services/admin-storage.service";
 import { useToast } from "@/context/ToastContext";
+import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
 
 export default function AdminContactsPage() {
   const toast = useToast();
@@ -196,51 +197,38 @@ export default function AdminContactsPage() {
               </div>
             </div>
 
-            {/* Address */}
-            <div>
-              <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
-                Адрес офиса / Локация (RU) <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0D0D0D]/40" />
-                <input
-                  type="text"
-                  required
-                  value={contacts.address.ru}
-                  onChange={(e) =>
-                    setContacts({
-                      ...contacts,
-                      address: { ...contacts.address, ru: e.target.value },
-                    })
-                  }
-                  placeholder="г. Бишкек, Кыргызская Республика"
-                  className="w-full h-11 pl-10 pr-4 rounded-xl border border-[#E1E1E1] bg-white text-xs font-medium text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                />
-              </div>
-            </div>
+          </div>
 
-            {/* Working Hours */}
-            <div>
-              <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
-                График работы (RU) <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative">
-                <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0D0D0D]/40" />
-                <input
-                  type="text"
-                  required
-                  value={contacts.workingHours.ru}
-                  onChange={(e) =>
-                    setContacts({
-                      ...contacts,
-                      workingHours: { ...contacts.workingHours, ru: e.target.value },
-                    })
-                  }
-                  placeholder="Пн–Пт, 09:00–18:00"
-                  className="w-full h-11 pl-10 pr-4 rounded-xl border border-[#E1E1E1] bg-white text-xs font-medium text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                />
-              </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2 border-t border-[#E1E1E1]">
+            {/* Address I18n */}
+            <I18nFieldEditor
+              label="Адрес офиса / Локация"
+              value={contacts.address}
+              onChange={(val) =>
+                setContacts((prev) => ({ ...prev, address: val }))
+              }
+              placeholder={{
+                ru: "г. Бишкек, Кыргызская Республика",
+                kg: "Бишкек ш., Кыргыз Республикасы",
+                en: "Bishkek, Kyrgyz Republic",
+              }}
+              required
+            />
+
+            {/* Working Hours I18n */}
+            <I18nFieldEditor
+              label="График работы"
+              value={contacts.workingHours}
+              onChange={(val) =>
+                setContacts((prev) => ({ ...prev, workingHours: val }))
+              }
+              placeholder={{
+                ru: "Пн–Пт, 09:00–18:00",
+                kg: "Дүй–Жум, 09:00–18:00",
+                en: "Mon–Fri, 09:00–18:00",
+              }}
+              required
+            />
           </div>
         </div>
 

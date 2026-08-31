@@ -15,6 +15,7 @@ interface CustomSelectProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  required?: boolean;
 }
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -23,6 +24,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   value,
   onChange,
   placeholder = "Выберите...",
+  required = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,7 +45,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
     <div className="relative w-full" ref={dropdownRef}>
       {label && (
         <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-2">
-          {label}
+          {label} {required && <span className="text-rose-500">*</span>}
         </label>
       )}
 

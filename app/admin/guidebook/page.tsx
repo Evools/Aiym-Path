@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
   BookOpen,
@@ -9,19 +9,38 @@ import {
   Edit2,
   Trash2,
   ExternalLink,
-  ShieldCheck,
-  Languages,
-  Sparkles,
   X,
-  CheckCircle2,
   HelpCircle,
-  Loader2,
 } from "lucide-react";
-import {
-  AdminStorageService,
-} from "@/lib/services/admin-storage.service";
+import { AdminStorageService } from "@/lib/services/admin-storage.service";
 import { GuidebookItem, GuidebookAudience, GuidebookCategory } from "@/types/guidebook.types";
 import { useToast } from "@/context/ToastContext";
+import { CustomSelect, CustomSelectOption } from "@/components/ui/CustomSelect";
+import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
+
+const AUDIENCE_OPTIONS: CustomSelectOption[] = [
+  {
+    value: "travelers",
+    label: "Для путешественниц (Travelers)",
+    sublabel: "Рекомендации, правила безопасности, снаряжение",
+  },
+  {
+    value: "providers",
+    label: "Для бизнеса и CBT (Providers)",
+    sublabel: "Стандарты гостеприимства, инфраструктура, обучение",
+  },
+];
+
+const CATEGORY_OPTIONS: CustomSelectOption[] = [
+  { value: "safety", label: "Безопасность на маршруте (Safety)" },
+  { value: "female_tips", label: "Female-friendly специфика" },
+  { value: "trekking", label: "Треккинг и экипировка" },
+  { value: "standards", label: "Стандарты сервиса CBT" },
+  { value: "infrastructure", label: "Инфраструктура и гигиена" },
+  { value: "emergency", label: "Экстренная помощь (SOS)" },
+  { value: "eco_culture", label: "Экология и культурные нормы" },
+  { value: "planning", label: "Планирование поездки" },
+];
 
 export default function AdminGuidebookPage() {
   const toast = useToast();
@@ -31,7 +50,7 @@ export default function AdminGuidebookPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<GuidebookItem | null>(null);
 
-  // Form State
+  // Form State using I18n models
   const [formData, setFormData] = useState<{
     id: string;
     audience: GuidebookAudience;
@@ -40,9 +59,7 @@ export default function AdminGuidebookPage() {
     title: { ru: string; kg: string; en: string };
     shortDescription: { ru: string; kg: string; en: string };
     badgeText: { ru: string; kg: string; en: string };
-    detailsRu: string;
-    detailsKg: string;
-    detailsEn: string;
+    details: { ru: string; kg: string; en: string };
   }>({
     id: "",
     audience: "travelers",
@@ -50,17 +67,32 @@ export default function AdminGuidebookPage() {
     iconName: "ShieldCheck",
     title: { ru: "", kg: "", en: "" },
     shortDescription: { ru: "", kg: "", en: "" },
-    badgeText: { ru: "", kg: "", en: "" },
-    detailsRu: "",
-    detailsKg: "",
-    detailsEn: "",
+    badgeText: { ru: "Рекомендация", kg: "Сунуш", en: "Guideline" },
+    details: {
+      ru: "Обязательно соблюдайте правила безопасности\nПроверяйте прогноз погоды перед выходом\nБерите с собой аптечку и пауэрбанк",
+      kg: "Коопсуздук эрежелерин сактаңыз\nЖөнөө алдында аба ырайын текшериңиз\nАптечка жана кубаттагыч ала жүрүңүз",
+      en: "Always follow mountain safety standards\nCheck weather forecast before departing\nPack a first-aid kit and power bank",
+    },
   });
-
-  const [isTranslating, setIsTranslating] = useState(false);
 
   useEffect(() => {
     setItems(AdminStorageService.getGuidebookItems());
   }, []);
+
+  // Close modal on Escape key
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isModalOpen) {
+        setIsModalOpen(false);
+      }
+    },
+    [isModalOpen]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -87,9 +119,11 @@ export default function AdminGuidebookPage() {
       title: { ru: "", kg: "", en: "" },
       shortDescription: { ru: "", kg: "", en: "" },
       badgeText: { ru: "Рекомендация", kg: "Сунуш", en: "Guideline" },
-      detailsRu: "Обязательно соблюдайте правила безопасности\nПроверяйте снаряжение перед выходом",
-      detailsKg: "Коопсуздук эрежелерин сактаңыз\nЖөнөө алдында жабдууларды текшериңиз",
-      detailsEn: "Always follow mountain safety standards\nCheck all gear before departing",
+      details: {
+        ru: "Обязательно соблюдайте правила безопасности\nПроверяйте прогноз погоды перед выходом\nБерите с собой аптечку и пауэрбанк",
+        kg: "Коопсуздук эрежелерин сактаңыз\nЖөнөө алдында аба ырайын текшериңиз\nАптечка жана кубаттагыч ала жүрүңүз",
+        en: "Always follow mountain safety standards\nCheck weather forecast before departing\nPack a first-aid kit and power bank",
+      },
     });
     setIsModalOpen(true);
   };
@@ -104,21 +138,23 @@ export default function AdminGuidebookPage() {
       title: { ...item.title },
       shortDescription: { ...item.shortDescription },
       badgeText: {
-        ru: item.badgeText?.ru || "",
-        kg: item.badgeText?.kg || "",
-        en: item.badgeText?.en || "",
+        ru: item.badgeText?.ru || "Рекомендация",
+        kg: item.badgeText?.kg || "Сунуш",
+        en: item.badgeText?.en || "Guideline",
       },
-      detailsRu: item.details.ru.join("\n"),
-      detailsKg: item.details.kg.join("\n"),
-      detailsEn: item.details.en.join("\n"),
+      details: {
+        ru: (item.details?.ru || []).join("\n"),
+        kg: (item.details?.kg || []).join("\n"),
+        en: (item.details?.en || []).join("\n"),
+      },
     });
     setIsModalOpen(true);
   };
 
   const handleDelete = async (id: string, titleRu: string) => {
     const isConfirmed = await toast.confirm({
-      title: "Удалить рекомендацию?",
-      message: `Вы действительно хотите удалить «${titleRu}» из путеводителя?`,
+      title: "Удалить статью?",
+      message: `Вы уверены, что хотите удалить «${titleRu}» из путеводителя?`,
       confirmText: "Удалить",
       cancelText: "Отмена",
       isDestructive: true,
@@ -127,69 +163,7 @@ export default function AdminGuidebookPage() {
     if (isConfirmed) {
       AdminStorageService.deleteGuidebookItem(id);
       setItems(AdminStorageService.getGuidebookItems());
-      toast.success("Рекомендация удалена из путеводителя");
-    }
-  };
-
-  const handleAutoTranslate = async () => {
-    if (!formData.title.ru.trim() && !formData.shortDescription.ru.trim()) {
-      toast.error("Сначала введите название или описание на русском языке");
-      return;
-    }
-
-    setIsTranslating(true);
-    try {
-      // 1. Translate Title
-      let translatedTitleKg = formData.title.kg;
-      let translatedTitleEn = formData.title.en;
-      if (formData.title.ru.trim()) {
-        const res = await fetch("/api/translate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: formData.title.ru }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          translatedTitleEn = data.en || translatedTitleEn;
-          translatedTitleKg = data.kg || translatedTitleKg;
-        }
-      }
-
-      // 2. Translate Short Description
-      let translatedDescKg = formData.shortDescription.kg;
-      let translatedDescEn = formData.shortDescription.en;
-      if (formData.shortDescription.ru.trim()) {
-        const res = await fetch("/api/translate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: formData.shortDescription.ru }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          translatedDescEn = data.en || translatedDescEn;
-          translatedDescKg = data.kg || translatedDescKg;
-        }
-      }
-
-      setFormData((prev) => ({
-        ...prev,
-        title: {
-          ru: prev.title.ru,
-          kg: translatedTitleKg || prev.title.kg,
-          en: translatedTitleEn || prev.title.en,
-        },
-        shortDescription: {
-          ru: prev.shortDescription.ru,
-          kg: translatedDescKg || prev.shortDescription.kg,
-          en: translatedDescEn || prev.shortDescription.en,
-        },
-      }));
-
-      toast.success("Автоперевод успешно выполнен на кыргызский и английский");
-    } catch {
-      toast.error("Не удалось выполнить автоперевод");
-    } finally {
-      setIsTranslating(false);
+      toast.success("Статья удалена из путеводителя");
     }
   };
 
@@ -197,7 +171,7 @@ export default function AdminGuidebookPage() {
     e.preventDefault();
 
     if (!formData.title.ru.trim()) {
-      toast.error("Введите название рекомендации на русском языке");
+      toast.error("Введите название статьи на русском языке");
       return;
     }
 
@@ -214,7 +188,7 @@ export default function AdminGuidebookPage() {
       shortDescription: {
         ru: formData.shortDescription.ru.trim(),
         kg: formData.shortDescription.kg.trim() || formData.shortDescription.ru.trim(),
-        en: formData.title.en.trim() || formData.shortDescription.ru.trim(),
+        en: formData.shortDescription.en.trim() || formData.shortDescription.ru.trim(),
       },
       badgeText: {
         ru: formData.badgeText.ru.trim() || "Рекомендация",
@@ -222,9 +196,9 @@ export default function AdminGuidebookPage() {
         en: formData.badgeText.en.trim() || "Guideline",
       },
       details: {
-        ru: formData.detailsRu.split("\n").map((s) => s.trim()).filter(Boolean),
-        kg: formData.detailsKg.split("\n").map((s) => s.trim()).filter(Boolean),
-        en: formData.detailsEn.split("\n").map((s) => s.trim()).filter(Boolean),
+        ru: formData.details.ru.split("\n").map((s) => s.trim()).filter(Boolean),
+        kg: formData.details.kg.split("\n").map((s) => s.trim()).filter(Boolean),
+        en: formData.details.en.split("\n").map((s) => s.trim()).filter(Boolean),
       },
     };
 
@@ -232,7 +206,7 @@ export default function AdminGuidebookPage() {
     setItems(AdminStorageService.getGuidebookItems());
     setIsModalOpen(false);
     toast.success(
-      editingItem ? "Рекомендация успешно обновлена" : "Новая рекомендация добавлена"
+      editingItem ? "Статья успешно обновлена" : "Новая статья добавлена в путеводитель"
     );
   };
 
@@ -400,10 +374,20 @@ export default function AdminGuidebookPage() {
         </div>
       )}
 
-      {/* 4. Create / Edit Modal */}
+      {/* 4. Create / Edit Modal with Backdrop Click & ESC support */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 border border-[#E1E1E1] animate-in zoom-in-95 duration-150 my-8 flex flex-col gap-6 relative max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsModalOpen(false);
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 border border-[#E1E1E1] shadow-2xl relative my-8 flex flex-col gap-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-[#E1E1E1]">
               <div className="flex items-center gap-3">
@@ -418,7 +402,7 @@ export default function AdminGuidebookPage() {
                     {editingItem ? "Редактирование статьи" : "Новая статья путеводителя"}
                   </h3>
                   <span className="text-xs text-[#0D0D0D]/50">
-                    Заполните данные на русском, кыргызском и английском языках
+                    Заполните данные с поддержкой автоперевода на 3 языка (RU, KG, EN)
                   </span>
                 </div>
               </div>
@@ -427,271 +411,104 @@ export default function AdminGuidebookPage() {
                 type="button"
                 onClick={() => setIsModalOpen(false)}
                 className="p-2 rounded-xl text-[#0D0D0D]/50 hover:text-[#0D0D0D] hover:bg-[#F0F2F2] transition-colors cursor-pointer"
+                title="Закрыть (Esc)"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleSave} className="space-y-5">
-              {/* Audience & Category Grid */}
+            <form onSubmit={handleSave} className="space-y-6">
+              {/* Custom Selects for Audience & Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Audience */}
-                <div>
-                  <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
-                    Целевая аудитория <span className="text-rose-500">*</span>
-                  </label>
-                  <select
-                    value={formData.audience}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        audience: e.target.value as GuidebookAudience,
-                      })
-                    }
-                    className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] font-medium focus:outline-none focus:border-[#07626A]"
-                  >
-                    <option value="travelers">Для путешественниц (Travelers)</option>
-                    <option value="providers">Для бизнеса / CBT (Providers)</option>
-                  </select>
-                </div>
+                <CustomSelect
+                  label="Целевая аудитория"
+                  options={AUDIENCE_OPTIONS}
+                  value={formData.audience}
+                  onChange={(val) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      audience: val as GuidebookAudience,
+                    }))
+                  }
+                  required
+                />
 
-                {/* Category */}
-                <div>
-                  <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
-                    Категория <span className="text-rose-500">*</span>
-                  </label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        category: e.target.value as GuidebookCategory,
-                      })
-                    }
-                    className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] font-medium focus:outline-none focus:border-[#07626A]"
-                  >
-                    <option value="safety">Безопасность (Safety)</option>
-                    <option value="female_tips">Female-friendly советы</option>
-                    <option value="trekking">Треккинг и экипировка</option>
-                    <option value="standards">Стандарты сервиса CBT</option>
-                    <option value="infrastructure">Инфраструктура</option>
-                    <option value="emergency">Экстренная помощь</option>
-                  </select>
-                </div>
+                <CustomSelect
+                  label="Категория"
+                  options={CATEGORY_OPTIONS}
+                  value={formData.category}
+                  onChange={(val) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      category: val as GuidebookCategory,
+                    }))
+                  }
+                  required
+                />
               </div>
 
-              {/* Title Fields (3 languages) with Auto-translate */}
-              <div className="space-y-3 p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1]">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#0D0D0D] uppercase tracking-wider">
-                    Название статьи (RU / KG / EN)
-                  </span>
+              {/* I18n: Title */}
+              <I18nFieldEditor
+                label="Название статьи"
+                value={formData.title}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, title: val }))
+                }
+                placeholder={{
+                  ru: "Например: Безопасность на маршруте",
+                  kg: "Мисалы: Маршруттагы коопсуздук",
+                  en: "E.g.: Trail Safety Guidelines",
+                }}
+                required
+              />
 
-                  <button
-                    type="button"
-                    onClick={handleAutoTranslate}
-                    disabled={isTranslating}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[rgba(7,98,106,0.10)] text-[#07626A] text-[11px] font-bold hover:bg-[rgba(7,98,106,0.18)] transition-colors cursor-pointer"
-                  >
-                    {isTranslating ? (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    ) : (
-                      <Sparkles className="w-3.5 h-3.5" />
-                    )}
-                    <span>Автоперевод (KG / EN)</span>
-                  </button>
-                </div>
+              {/* I18n: Short Description */}
+              <I18nFieldEditor
+                label="Краткое описание для карточки"
+                value={formData.shortDescription}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, shortDescription: val }))
+                }
+                isTextarea
+                rows={2}
+                placeholder={{
+                  ru: "Краткая суть рекомендации...",
+                  kg: "Кыскача сүрөттөмөсү...",
+                  en: "Brief description for the preview card...",
+                }}
+                required
+              />
 
-                <div>
-                  <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                    Русский (RU) <span className="text-rose-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title.ru}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        title: { ...formData.title, ru: e.target.value },
-                      })
-                    }
-                    placeholder="Например: Безопасность на маршруте"
-                    className="w-full h-10 px-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                  />
-                </div>
+              {/* I18n: Badge Text */}
+              <I18nFieldEditor
+                label="Текст бейджа карточки"
+                value={formData.badgeText}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, badgeText: val }))
+                }
+                placeholder={{
+                  ru: "Например: Приоритет №1 / Рекомендация",
+                  kg: "Мисалы: №1 Артыкчылык / Сунуш",
+                  en: "E.g.: Priority #1 / Guideline",
+                }}
+              />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                      Кыргызча (KG)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.title.kg}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          title: { ...formData.title, kg: e.target.value },
-                        })
-                      }
-                      placeholder="Маршруттагы коопсуздук"
-                      className="w-full h-10 px-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                      English (EN)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.title.en}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          title: { ...formData.title, en: e.target.value },
-                        })
-                      }
-                      placeholder="Trail Safety Standards"
-                      className="w-full h-10 px-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Short Description Fields */}
-              <div className="space-y-3 p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1]">
-                <span className="text-xs font-bold text-[#0D0D0D] uppercase tracking-wider block">
-                  Краткое описание статьи
-                </span>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                    Русский (RU) <span className="text-rose-500">*</span>
-                  </label>
-                  <textarea
-                    rows={2}
-                    required
-                    value={formData.shortDescription.ru}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        shortDescription: {
-                          ...formData.shortDescription,
-                          ru: e.target.value,
-                        },
-                      })
-                    }
-                    placeholder="Краткая суть рекомендации для карточки..."
-                    className="w-full p-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                      Кыргызча (KG)
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={formData.shortDescription.kg}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          shortDescription: {
-                            ...formData.shortDescription,
-                            kg: e.target.value,
-                          },
-                        })
-                      }
-                      placeholder="Кыскача сүрөттөмө..."
-                      className="w-full p-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                      English (EN)
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={formData.shortDescription.en}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          shortDescription: {
-                            ...formData.shortDescription,
-                            en: e.target.value,
-                          },
-                        })
-                      }
-                      placeholder="Short summary for the card..."
-                      className="w-full p-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Detailed Points (каждый пункт с новой строки) */}
-              <div className="space-y-3 p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1]">
-                <div>
-                  <span className="text-xs font-bold text-[#0D0D0D] uppercase tracking-wider block">
-                    Подробные пункты рекомендации (каждый с новой строки)
-                  </span>
-                  <span className="text-[11px] text-[#0D0D0D]/50">
-                    Отображаются внутри модального окна при клике на карточку
-                  </span>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                    Пункты на русском (RU)
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={formData.detailsRu}
-                    onChange={(e) =>
-                      setFormData({ ...formData, detailsRu: e.target.value })
-                    }
-                    placeholder="Пункт 1&#10;Пункт 2&#10;Пункт 3"
-                    className="w-full p-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                      Пункты на кыргызском (KG)
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={formData.detailsKg}
-                      onChange={(e) =>
-                        setFormData({ ...formData, detailsKg: e.target.value })
-                      }
-                      placeholder="1-пункт&#10;2-пункт"
-                      className="w-full p-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-[#0D0D0D]/60 mb-1">
-                      Пункты на английском (EN)
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={formData.detailsEn}
-                      onChange={(e) =>
-                        setFormData({ ...formData, detailsEn: e.target.value })
-                      }
-                      placeholder="Point 1&#10;Point 2"
-                      className="w-full p-3 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] focus:outline-none focus:border-[#07626A]"
-                    />
-                  </div>
-                </div>
-              </div>
+              {/* I18n: Detailed Points */}
+              <I18nFieldEditor
+                label="Подробные пункты (каждый с новой строки)"
+                value={formData.details}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, details: val }))
+                }
+                isTextarea
+                rows={5}
+                placeholder={{
+                  ru: "Пункт 1\nПункт 2\nПункт 3",
+                  kg: "1-пункт\n2-пункт\n3-пункт",
+                  en: "Point 1\nPoint 2\nPoint 3",
+                }}
+              />
 
               {/* Submit Buttons */}
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E1E1E1]">
