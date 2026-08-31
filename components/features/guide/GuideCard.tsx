@@ -55,7 +55,7 @@ export const GuideCard: React.FC<{ guide: AdminGuideItem | GuideItem }> = ({ gui
     (guide as AdminGuideItem).groupSize || dict.guides.groupSize;
 
   return (
-    <div className="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-[#E5E7EB] hover:shadow-md transition-shadow duration-200">
+    <div className="flex flex-col justify-between overflow-hidden rounded-2xl bg-white border border-[#E5E7EB] hover:border-[rgba(7,98,106,0.30)] transition-colors duration-200">
       {/* Guide Photo with Certified Badge */}
       <div className="relative w-full aspect-[16/9.5] bg-gray-100 overflow-hidden">
         <Image

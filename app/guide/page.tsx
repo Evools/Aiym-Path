@@ -5,7 +5,9 @@ import { BookOpen } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { InnerPageBanner } from "@/components/ui/InnerPageBanner";
 import { GuidebookSection } from "@/components/features/guide/GuidebookSection";
+import { DosAndDontsSection } from "@/components/features/guide/DosAndDontsSection";
 import { EquipmentChecklistSection } from "@/components/features/guide/EquipmentChecklistSection";
+import { DownloadableResourcesSection } from "@/components/features/guide/DownloadableResourcesSection";
 import { EmergencySafetyBanner } from "@/components/features/guide/EmergencySafetyBanner";
 
 export default function GuidePage() {
@@ -28,10 +30,16 @@ export default function GuidePage() {
       {/* 2. Main Guidebook Section with Audience Tabs & Recommendations Grid */}
       <GuidebookSection />
 
-      {/* 3. Interactive Mountain Equipment Checklist */}
+      {/* 3. Official Do's and Don'ts (Приложение A ТЗ) */}
+      <DosAndDontsSection />
+
+      {/* 4. Interactive Mountain Equipment Checklist */}
       <EquipmentChecklistSection />
 
-      {/* 4. Emergency Contacts & Safety Hotlines */}
+      {/* 5. Downloadable Official PDF Guides (Приложение B ТЗ) */}
+      <DownloadableResourcesSection />
+
+      {/* 6. Emergency Contacts & Safety Hotlines (Приложение B ТЗ) */}
       <EmergencySafetyBanner />
     </div>
   );

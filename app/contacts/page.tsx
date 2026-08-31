@@ -117,17 +117,17 @@ export default function ContactsPage() {
                     </div>
                     <div className="min-w-0">
                       <a
-                        href="mailto:hello@tumar-project.kg"
+                        href="mailto:info@aiympath.kg"
                         className="text-xs font-bold text-[#0D0D0D] hover:text-[#07626A] transition-colors truncate block"
                       >
-                        hello@tumar-project.kg
+                        info@aiympath.kg
                       </a>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => handleCopy("hello@tumar-project.kg", "email")}
+                    onClick={() => handleCopy("info@aiympath.kg", "email")}
                     title="Скопировать email"
                     className="p-1.5 rounded-lg text-[#0D0D0D]/50 hover:text-[#07626A] hover:bg-white transition-colors shrink-0 cursor-pointer"
                   >
@@ -147,17 +147,17 @@ export default function ContactsPage() {
                     </div>
                     <div className="min-w-0">
                       <a
-                        href="tel:+996700000000"
+                        href="tel:+996700000001"
                         className="text-xs font-bold text-[#0D0D0D] hover:text-[#07626A] transition-colors block"
                       >
-                        +996 700 000 000
+                        +996 700 000 001
                       </a>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => handleCopy("+996 700 000 000", "phone")}
+                    onClick={() => handleCopy("+996 700 000 001", "phone")}
                     title="Скопировать телефон"
                     className="p-1.5 rounded-lg text-[#0D0D0D]/50 hover:text-[#07626A] hover:bg-white transition-colors shrink-0 cursor-pointer"
                   >
@@ -179,8 +179,81 @@ export default function ContactsPage() {
                       г. Бишкек, Кыргызская Республика
                     </p>
                     <p className="text-[11px] text-[#0D0D0D]/60 mt-0.5">
-                      Точный адрес офиса уточняйте по почте
+                      Фонд Ага Хана (AKF) / MSDSP Кыргызстан • Программа GESI
                     </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Emergency Contacts Card (Приложение B ТЗ) */}
+              <div className="p-5 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] flex flex-col gap-3">
+                <div className="flex items-center justify-between pb-2 border-b border-[#E1E1E1]">
+                  <span className="text-xs font-bold text-[#0D0D0D] uppercase tracking-wider">
+                    Экстренные службы Кыргызстана
+                  </span>
+                  <span className="text-[10px] font-extrabold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">
+                    24/7 SOS
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <a
+                    href="tel:112"
+                    className="p-2.5 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] flex items-center justify-between transition-colors"
+                  >
+                    <div>
+                      <span className="font-bold text-[#0D0D0D] block">112</span>
+                      <span className="text-[10px] text-[#0D0D0D]/60">МЧС (Все службы)</span>
+                    </div>
+                    <Phone className="w-3.5 h-3.5 text-[#07626A]" />
+                  </a>
+
+                  <a
+                    href="tel:102"
+                    className="p-2.5 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] flex items-center justify-between transition-colors"
+                  >
+                    <div>
+                      <span className="font-bold text-[#0D0D0D] block">102</span>
+                      <span className="text-[10px] text-[#0D0D0D]/60">Полиция</span>
+                    </div>
+                    <Phone className="w-3.5 h-3.5 text-[#07626A]" />
+                  </a>
+
+                  <a
+                    href="tel:103"
+                    className="p-2.5 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] flex items-center justify-between transition-colors"
+                  >
+                    <div>
+                      <span className="font-bold text-[#0D0D0D] block">103</span>
+                      <span className="text-[10px] text-[#0D0D0D]/60">Скорая помощь</span>
+                    </div>
+                    <Phone className="w-3.5 h-3.5 text-[#07626A]" />
+                  </a>
+
+                  <a
+                    href="tel:117"
+                    className="p-2.5 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] flex items-center justify-between transition-colors"
+                  >
+                    <div>
+                      <span className="font-bold text-[#0D0D0D] block">117</span>
+                      <span className="text-[10px] text-[#0D0D0D]/60">Линия доверия</span>
+                    </div>
+                    <Phone className="w-3.5 h-3.5 text-[#07626A]" />
+                  </a>
+                </div>
+
+                <div className="pt-2 border-t border-[#E1E1E1] flex flex-col gap-1 text-[11px]">
+                  <div className="flex items-center justify-between text-[#0D0D0D]/75">
+                    <span>Кризисный центр «Сезим»:</span>
+                    <a href="tel:+996312661592" className="font-bold text-[#07626A] hover:underline">
+                      +996 312 66-15-92
+                    </a>
+                  </div>
+                  <div className="flex items-center justify-between text-[#0D0D0D]/75">
+                    <span>Туристическая милиция:</span>
+                    <a href="tel:+996705009102" className="font-bold text-[#07626A] hover:underline">
+                      +996 705 00 91 02
+                    </a>
                   </div>
                 </div>
               </div>
@@ -465,7 +538,7 @@ export default function ContactsPage() {
             <div className="flex flex-col gap-2.5">
               {/* Email Card */}
               <a
-                href="mailto:hello@tumar-project.kg"
+                href="mailto:info@aiympath.kg"
                 className="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -480,7 +553,7 @@ export default function ContactsPage() {
                       Электронная почта
                     </span>
                     <span className="text-xs sm:text-sm font-bold text-[#0D0D0D] group-hover:text-[#07626A] transition-colors truncate block">
-                      hello@tumar-project.kg
+                      info@aiympath.kg
                     </span>
                   </div>
                 </div>
@@ -493,7 +566,7 @@ export default function ContactsPage() {
 
               {/* Phone Card */}
               <a
-                href="tel:+996700000000"
+                href="tel:+996700000001"
                 className="flex items-center justify-between p-3.5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors group cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -508,7 +581,7 @@ export default function ContactsPage() {
                       Прямой телефон
                     </span>
                     <span className="text-xs sm:text-sm font-bold text-[#0D0D0D] group-hover:text-[#07626A] transition-colors block">
-                      +996 700 000 000
+                      +996 700 000 001
                     </span>
                   </div>
                 </div>

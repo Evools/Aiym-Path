@@ -7,7 +7,7 @@ import { ShieldCheck, Phone, Mail, MapPin, ArrowUpRight, ArrowUp } from "lucide-
 import { useLanguage } from "@/context/LanguageContext";
 
 export const Footer: React.FC = () => {
-  const { dict } = useLanguage();
+  const { language, dict } = useLanguage();
   const pathname = usePathname();
 
   if (pathname?.startsWith("/admin")) {
@@ -145,8 +145,19 @@ export const Footer: React.FC = () => {
 
         </div>
 
+        {/* Official GESI / AKF Project Disclaimer */}
+        <div className="pt-6 pb-2 border-t border-gray-100">
+          <p className="text-[11px] text-gray-400 leading-relaxed text-center sm:text-left">
+            {language === "kg"
+              ? "Бул сайт Кыргызстандагы Ага Хан фондунун колдоосу менен түзүлгөн. Мазмуну Aiym Path программасынын гана жоопкерчилигинде жана фонддун көз карашын чагылдырбайт."
+              : language === "en"
+              ? "This website was created with the support of the Aga Khan Foundation in Kyrgyzstan. The content is the sole responsibility of the Aiym Path program and does not necessarily reflect the views of the Foundation."
+              : "Этот сайт создан при поддержке фонда Ага Хан в Кыргызстане. Содержание является исключительной ответственностью программы Aiym Path и не отражает взгляды фонда."}
+          </p>
+        </div>
+
         {/* Bottom Copyright & Back-to-Top Bar */}
-        <div className="pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+        <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
           <p className="text-center sm:text-left">{dict.footer.copyright}</p>
           
           <div className="flex items-center gap-6">
