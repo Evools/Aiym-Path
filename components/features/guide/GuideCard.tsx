@@ -62,6 +62,7 @@ export const GuideCard: React.FC<{ guide: AdminGuideItem | GuideItem }> = ({ gui
           src={guide.image || "/images/guides/guide-2.jpg"}
           alt={guide.name}
           fill
+          unoptimized
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
           className="object-cover object-center"
         />

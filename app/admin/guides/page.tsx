@@ -125,6 +125,16 @@ export default function AdminGuidesPage() {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isModalOpen) {
+        setIsModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen]);
+
   const openCreateModal = () => {
     setEditingGuide(null);
     setName("");
@@ -432,10 +442,16 @@ export default function AdminGuidesPage() {
 
       {/* Extra-Wide Modal Dialog */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-150">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-5xl w-full max-h-[92vh] flex flex-col border border-[#E1E1E1] shadow-2xl animate-in zoom-in-95 duration-150 my-auto">
+        <div
+          onClick={() => setIsModalOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0D0D0D]/60 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-150 cursor-pointer"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] flex flex-col border border-[#E1E1E1] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150 my-auto cursor-default"
+          >
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-[#E1E1E1] shrink-0">
+            <div className="flex items-center justify-between p-6 sm:px-8 border-b border-[#E1E1E1] shrink-0 bg-white">
               <div>
                 <h3 className="text-lg font-bold text-[#0D0D0D]">
                   {editingGuide ? "Редактирование профиля специалиста" : "Новый женский гид / Агентство"}
@@ -455,7 +471,7 @@ export default function AdminGuidesPage() {
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleSave} className="flex-1 overflow-y-auto pr-1.5 pt-5 pb-28 flex flex-col gap-6">
+            <form id="guide-form" onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 sm:px-8 flex flex-col gap-6">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Left Column: Personal info, Photo, Verification (5 cols) */}
                 <div className="lg:col-span-5 flex flex-col gap-4">
@@ -721,26 +737,27 @@ export default function AdminGuidesPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Modal Actions Footer */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E1E1E1] shrink-0 mt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl border border-[#E1E1E1] bg-white hover:bg-[#F3F3F3] text-xs font-bold text-[#0D0D0D] transition-colors cursor-pointer"
-                >
-                  Отмена
-                </button>
-
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
-                >
-                  <Save className="w-4 h-4" />
-                  <span>{editingGuide ? "Сохранить изменения" : "Добавить в базу"}</span>
-                </button>
-              </div>
             </form>
+
+            {/* Modal Actions Footer (Fixed at bottom) */}
+            <div className="p-4 sm:px-8 border-t border-[#E1E1E1] bg-[#FAFBFB] flex items-center justify-end gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="px-5 py-2.5 rounded-xl border border-[#E1E1E1] bg-white hover:bg-[#F3F3F3] text-xs font-bold text-[#0D0D0D] transition-colors cursor-pointer"
+              >
+                Отмена
+              </button>
+
+              <button
+                type="submit"
+                form="guide-form"
+                className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+              >
+                <Save className="w-4 h-4" />
+                <span>{editingGuide ? "Сохранить изменения" : "Добавить в базу"}</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

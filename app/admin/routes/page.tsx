@@ -154,6 +154,7 @@ export default function AdminRoutesPage() {
                           src={route.imageUrl}
                           alt={route.title.ru}
                           fill
+                          unoptimized
                           className="object-cover"
                         />
                       ) : (

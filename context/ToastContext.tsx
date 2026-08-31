@@ -192,8 +192,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
 
       {/* Custom Confirm Modal Dialog */}
       {confirmState && confirmState.isOpen && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full border border-[#E1E1E1] shadow-2xl flex flex-col gap-5 animate-in zoom-in-95 duration-200">
+        <div
+          onClick={() => handleConfirmClose(false)}
+          className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-[#0D0D0D]/60 backdrop-blur-xs animate-in fade-in cursor-pointer"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full border border-[#E1E1E1] shadow-2xl flex flex-col gap-5 animate-in zoom-in-95 duration-200 cursor-default"
+          >
             <div className="flex items-start gap-4">
               <div
                 className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
