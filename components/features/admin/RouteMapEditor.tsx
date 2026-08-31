@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, memo } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import {
@@ -50,17 +50,30 @@ const PRESET_LOCATIONS = [
   { name: "Перевал Теке-Тор", coords: [42.5025, 74.5211] as [number, number] },
 ];
 
-export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
+const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
   coordinates,
   onChangeCoordinates,
   center = [42.5644, 74.4823],
   onDistanceCalculated,
   onMetricsCalculated,
 }) => {
+  const toast = useToast();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const trailLayerRef = useRef<L.FeatureGroup | null>(null);
   const searchMarkerRef = useRef<L.Marker | null>(null);
+
+  // Stable refs for callbacks to prevent unnecessary effect triggers
+  const onChangeCoordsRef = useRef(onChangeCoordinates);
+  onChangeCoordsRef.current = onChangeCoordinates;
+
+  const onMetricsCalcRef = useRef(onMetricsCalculated);
+  onMetricsCalcRef.current = onMetricsCalculated;
+
+  const onDistCalcRef = useRef(onDistanceCalculated);
+  onDistCalcRef.current = onDistanceCalculated;
+
+  const initialCenterRef = useRef(center);
 
   // Editor mode: 'smart' (Waypoints A -> Pass -> B with OSRM) or 'manual' (point by point)
   const [editorMode, setEditorMode] = useState<"smart" | "manual">("smart");
@@ -93,13 +106,13 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
     return { distanceKm, durationHours, elevationGainMeters };
   }, []);
 
-  // Initialize Leaflet Map
+  // Initialize Leaflet Map ONCE on mount
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (mapInstanceRef.current) return;
 
     const map = L.map(mapContainerRef.current, {
-      center: center,
+      center: initialCenterRef.current,
       zoom: 13,
       zoomControl: false,
       attributionControl: false,
@@ -117,7 +130,7 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, [center]);
+  }, []); // Run ONCE on mount, preventing map destruction on parent re-renders!
 
   // Request OSRM walking route between key waypoints
   const buildSmartRoute = async (waypoints: [number, number][]) => {
@@ -143,12 +156,12 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
         const durationHours = Number(Math.max(0.5, distKm / 3.0).toFixed(1));
         const elevationGainMeters = Math.round(distKm * 65);
 
-        onChangeCoordinates(detailedCoords);
-        if (onDistanceCalculated) {
-          onDistanceCalculated(distKm);
+        onChangeCoordsRef.current(detailedCoords);
+        if (onDistCalcRef.current) {
+          onDistCalcRef.current(distKm);
         }
-        if (onMetricsCalculated) {
-          onMetricsCalculated({
+        if (onMetricsCalcRef.current) {
+          onMetricsCalcRef.current({
             distanceKm: distKm,
             durationHours,
             elevationGainMeters,
@@ -163,16 +176,16 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
         }
       } else {
         // Fallback: connect points directly
-        onChangeCoordinates(waypoints);
+        onChangeCoordsRef.current(waypoints);
         const metrics = calculateMetrics(waypoints);
-        if (onMetricsCalculated) onMetricsCalculated(metrics);
+        if (onMetricsCalcRef.current) onMetricsCalcRef.current(metrics);
         setRouteErrorMsg("Пешеходная тропа не найдена в базе OSM, точки соединены напрямую.");
       }
     } catch {
       // Fallback on network error
-      onChangeCoordinates(waypoints);
+      onChangeCoordsRef.current(waypoints);
       const metrics = calculateMetrics(waypoints);
-      if (onMetricsCalculated) onMetricsCalculated(metrics);
+      if (onMetricsCalcRef.current) onMetricsCalcRef.current(metrics);
       setRouteErrorMsg("Не удалось связаться с сервисом маршрутизации. Точки соединены напрямую.");
     } finally {
       setIsRouting(false);
@@ -192,25 +205,26 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
       ];
 
       if (editorMode === "smart") {
-        const nextWaypoints = [...smartWaypoints, newPt];
-        setSmartWaypoints(nextWaypoints);
-        if (nextWaypoints.length >= 2) {
-          buildSmartRoute(nextWaypoints);
-        } else {
-          // Just start point set
-          onChangeCoordinates([newPt]);
-          setRouteSuccessMsg("Точка А (Старт) установлена. Кликните вторую точку для финиша/перевала.");
-        }
+        setSmartWaypoints((prev) => {
+          const next = [...prev, newPt];
+          if (next.length >= 2) {
+            buildSmartRoute(next);
+          } else {
+            onChangeCoordsRef.current([newPt]);
+            setRouteSuccessMsg("Точка А (Старт) установлена. Кликните вторую точку для финиша/перевала.");
+          }
+          return next;
+        });
       } else {
         // Manual mode
         const nextCoords = [...coordinates, newPt];
-        onChangeCoordinates(nextCoords);
+        onChangeCoordsRef.current(nextCoords);
         const metrics = calculateMetrics(nextCoords);
-        if (onDistanceCalculated) onDistanceCalculated(metrics.distanceKm);
-        if (onMetricsCalculated) onMetricsCalculated(metrics);
+        if (onDistCalcRef.current) onDistCalcRef.current(metrics.distanceKm);
+        if (onMetricsCalcRef.current) onMetricsCalcRef.current(metrics);
       }
     });
-  }, [editorMode, smartWaypoints, coordinates, onChangeCoordinates, onDistanceCalculated, onMetricsCalculated, calculateMetrics]);
+  }, [editorMode, coordinates, calculateMetrics]);
 
   // Redraw Trail & Markers
   useEffect(() => {
@@ -249,7 +263,7 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
         })
       );
 
-      // If in smart mode, render waypoint badges for intermediate passes/waypoints
+      // Intermediate waypoints for smart mode
       if (smartWaypoints.length > 2) {
         for (let i = 1; i < smartWaypoints.length - 1; i++) {
           const wp = smartWaypoints[i];
@@ -272,7 +286,7 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
         }
       }
 
-      // Intermediate small dots for manual mode
+      // Small dots for manual mode
       if (editorMode === "manual" && coordinates.length > 2) {
         for (let i = 1; i < coordinates.length - 1; i++) {
           const pt = coordinates[i];
@@ -360,8 +374,6 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
     }
   };
 
-  const toast = useToast();
-
   const handleClear = async () => {
     const isConfirmed = await toast.confirm({
       title: "Сбросить карту?",
@@ -372,7 +384,7 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
     });
 
     if (isConfirmed) {
-      onChangeCoordinates([]);
+      onChangeCoordsRef.current([]);
       setSmartWaypoints([]);
       setRouteSuccessMsg(null);
       setRouteErrorMsg(null);
@@ -386,7 +398,7 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
     if (editorMode === "smart") {
       if (smartWaypoints.length <= 1) {
         setSmartWaypoints([]);
-        onChangeCoordinates([]);
+        onChangeCoordsRef.current([]);
       } else {
         const next = smartWaypoints.slice(0, -1);
         setSmartWaypoints(next);
@@ -395,10 +407,10 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
     } else {
       if (coordinates.length === 0) return;
       const next = coordinates.slice(0, -1);
-      onChangeCoordinates(next);
+      onChangeCoordsRef.current(next);
       const metrics = calculateMetrics(next);
-      if (onDistanceCalculated) onDistanceCalculated(metrics.distanceKm);
-      if (onMetricsCalculated) onMetricsCalculated(metrics);
+      if (onDistCalcRef.current) onDistCalcRef.current(metrics.distanceKm);
+      if (onMetricsCalcRef.current) onMetricsCalcRef.current(metrics);
     }
   };
 
@@ -604,3 +616,5 @@ export const RouteMapEditor: React.FC<RouteMapEditorProps> = ({
     </div>
   );
 };
+
+export const RouteMapEditor = memo(RouteMapEditorComponent);

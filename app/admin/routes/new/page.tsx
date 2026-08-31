@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -59,6 +59,19 @@ export default function CreateRoutePage() {
       prev.includes(id) ? prev.filter((gId) => gId !== id) : [...prev, id]
     );
   };
+
+  const handleMetricsCalculated = useCallback(
+    (m: { distanceKm: number; durationHours: number; elevationGainMeters: number }) => {
+      setDistanceKm(m.distanceKm);
+      setDurationHours(m.durationHours);
+      setElevationGainMeters(m.elevationGainMeters);
+    },
+    []
+  );
+
+  const handleDistanceCalculated = useCallback((dist: number) => {
+    setDistanceKm(dist);
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -267,19 +280,9 @@ export default function CreateRoutePage() {
         <RouteMapEditorWrapper
           coordinates={coordinates}
           onChangeCoordinates={setCoordinates}
-          onDistanceCalculated={(dist) => setDistanceKm(dist)}
-          onMetricsCalculated={(m) => {
-            setDistanceKm(m.distanceKm);
-            setDurationHours(m.durationHours);
-            setElevationGainMeters(m.elevationGainMeters);
-          }}
-          center={
-            region === "ala-archa"
-              ? [42.5644, 74.4823]
-              : region === "alamedin"
-              ? [42.6318, 74.6727]
-              : [42.6389, 74.6281]
-          }
+          onDistanceCalculated={handleDistanceCalculated}
+          onMetricsCalculated={handleMetricsCalculated}
+          center={coordinates[0]}
         />
       </div>
 

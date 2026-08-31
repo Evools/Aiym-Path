@@ -31,8 +31,9 @@ interface RouteMapEditorWrapperProps {
   onMetricsCalculated?: (metrics: RouteMetrics) => void;
 }
 
-export const RouteMapEditorWrapper: React.FC<RouteMapEditorWrapperProps> = (
-  props
-) => {
-  return <DynamicRouteMapEditor {...props} />;
-};
+export const RouteMapEditorWrapper = React.memo(
+  (props: RouteMapEditorWrapperProps) => {
+    return <DynamicRouteMapEditor {...props} />;
+  }
+);
+RouteMapEditorWrapper.displayName = "RouteMapEditorWrapper";
