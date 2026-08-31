@@ -252,13 +252,13 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
         };
 
         currentRoute.pois.forEach((poi) => {
-          const poiColor = poiColorMap[poi.type] || "#4F46E5";
+          const poiColor = poiColorMap[poi.type] || "#07626A";
           const poiName = poi.name[language] || poi.name.ru;
           const poiIcon = L.divIcon({
             className: "trail-poi-marker",
             html: `
               <div style="background-color: ${poiColor}; color: #FFFFFF; padding: 4px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; border: 2px solid #FFFFFF; box-shadow: 0 4px 8px rgba(0,0,0,0.25); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;">
-                <span>${poiName}${poi.altitudeMeters ? ` (${poi.altitudeMeters}м)` : ""}</span>
+                <span>${poiName}</span>
               </div>
             `,
             iconSize: [110, 26],
@@ -267,8 +267,8 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
 
           const poiMarker = L.marker([poi.lat, poi.lng], { icon: poiIcon });
           poiMarker.bindTooltip(
-            `<b>${poiName}</b>${poi.altitudeMeters ? `<br/>Высота: ${poi.altitudeMeters} м` : ""}`,
-            { direction: "top" }
+            `<div style="text-align:left;"><div style="font-weight:700; color:#0D0D0D; font-size:12px;">${poiName}</div><div style="color:#07626A; font-weight:600; font-size:10px; margin-top:2px;">Ориентир маршрута</div></div>`,
+            { direction: "top", offset: [0, -6] }
           );
           activeTrailLayer.addLayer(poiMarker);
         });

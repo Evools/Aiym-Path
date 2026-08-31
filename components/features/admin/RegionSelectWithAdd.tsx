@@ -70,10 +70,12 @@ export const RegionSelectWithAdd: React.FC<RegionSelectWithAddProps> = ({
         body: JSON.stringify({ text: newRegionRu }),
       });
       const data = await res.json();
-      if (data.translations) {
-        setNewRegionKg(data.translations.kg || newRegionRu);
-        setNewRegionEn(data.translations.en || newRegionRu);
+      if (data.success || data.en || data.kg) {
+        setNewRegionKg(data.kg || newRegionRu);
+        setNewRegionEn(data.en || newRegionRu);
         toast.success("Автоперевод выполнен");
+      } else {
+        toast.error("Не удалось выполнить автоперевод");
       }
     } catch {
       toast.error("Не удалось выполнить автоперевод");

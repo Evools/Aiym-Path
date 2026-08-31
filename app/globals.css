@@ -48,3 +48,30 @@ body {
 .button-pulse {
   animation: buttonPulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
 }
+
+/* Leaflet Custom Tooltip Styles */
+.leaflet-tooltip {
+  background: #FFFFFF !important;
+  color: #0D0D0D !important;
+  border: 1px solid #E1E1E1 !important;
+  border-radius: 12px !important;
+  padding: 6px 10px !important;
+  font-family: var(--font-sans) !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  font-weight: 500 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+}
+
+.leaflet-tooltip-top:before {
+  border-top-color: #FFFFFF !important;
+}
+.leaflet-tooltip-bottom:before {
+  border-bottom-color: #FFFFFF !important;
+}
+.leaflet-tooltip-left:before {
+  border-left-color: #FFFFFF !important;
+}
+.leaflet-tooltip-right:before {
+  border-right-color: #FFFFFF !important;
+}

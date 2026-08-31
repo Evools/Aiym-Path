@@ -175,7 +175,6 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
   const [poiNameRu, setPoiNameRu] = useState("");
   const [poiNameKg, setPoiNameKg] = useState("");
   const [poiNameEn, setPoiNameEn] = useState("");
-  const [poiAltitude, setPoiAltitude] = useState<string>("");
   const [isTranslatingPOI, setIsTranslatingPOI] = useState(false);
 
   // Calculate distance & elevation
@@ -208,14 +207,12 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
         setPoiNameRu(existingPoi.name.ru || "");
         setPoiNameKg(existingPoi.name.kg || "");
         setPoiNameEn(existingPoi.name.en || "");
-        setPoiAltitude(existingPoi.altitudeMeters ? String(existingPoi.altitudeMeters) : "");
       } else {
         setEditingPOIId(null);
         setPoiType("pass");
         setPoiNameRu("");
         setPoiNameKg("");
         setPoiNameEn("");
-        setPoiAltitude("");
       }
 
       setIsPOIModalOpen(true);
@@ -429,9 +426,9 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
 
         pointMarker.bindTooltip(
           attachedPoi
-            ? `<b>${attachedPoi.name.ru}</b><br/>${POI_TYPE_CONFIG[attachedPoi.type]?.label || ""}<br/><span style="color:#4F46E5;font-weight:bold;">Кликните для изменения ориентира</span>`
-            : `<b>${label}</b> (${pt[0]}, ${pt[1]})<br/><span style="color:#07626A;font-weight:bold;">Кликните, чтобы назначить перевалом / ориентиром</span>`,
-          { direction: "top" }
+            ? `<div style="text-align:left;"><div style="font-weight:700; color:#0D0D0D; font-size:12px;">${attachedPoi.name.ru}</div><div style="color:#07626A; font-weight:600; font-size:10px; margin-top:2px;">${POI_TYPE_CONFIG[attachedPoi.type]?.label || ""}</div><div style="color:#666666; font-size:9px; margin-top:2px;">Кликните для изменения</div></div>`
+            : `<div style="text-align:left;"><div style="font-weight:700; color:#0D0D0D; font-size:11px;">${label}</div><div style="color:#07626A; font-weight:600; font-size:10px; margin-top:2px;">Кликните, чтобы назначить ориентиром</div></div>`,
+          { direction: "top", offset: [0, -6] }
         );
 
         trailLayer.addLayer(pointMarker);
@@ -453,7 +450,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
         html: `
           <div style="background-color: ${cfg.bg}; color: ${cfg.text}; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 800; border: 2px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; cursor: pointer;">
             ${cfg.icon}
-            <span>${poi.name.ru}${poi.altitudeMeters ? ` (${poi.altitudeMeters}м)` : ""}</span>
+            <span>${poi.name.ru}</span>
           </div>
         `,
         iconSize: [120, 26],
@@ -467,8 +464,8 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
       });
 
       marker.bindTooltip(
-        `<b>${poi.name.ru}</b><br/>${cfg.label}${poi.altitudeMeters ? ` • ${poi.altitudeMeters} м` : ""}<br/><span style="color:#4F46E5;font-weight:bold;">Кликните для редактирования</span>`,
-        { direction: "top" }
+        `<div style="text-align:left;"><div style="font-weight:700; color:#0D0D0D; font-size:12px;">${poi.name.ru}</div><div style="color:#07626A; font-weight:600; font-size:10px; margin-top:2px;">${cfg.label}</div><div style="color:#666666; font-size:9px; margin-top:2px;">Кликните для редактирования</div></div>`,
+        { direction: "top", offset: [0, -6] }
       );
       poisLayer.addLayer(marker);
     });
@@ -485,10 +482,12 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
         body: JSON.stringify({ text: poiNameRu }),
       });
       const data = await res.json();
-      if (data.translations) {
-        setPoiNameKg(data.translations.kg || poiNameRu);
-        setPoiNameEn(data.translations.en || poiNameRu);
+      if (data.success || data.en || data.kg) {
+        setPoiNameKg(data.kg || poiNameRu);
+        setPoiNameEn(data.en || poiNameRu);
         toast.success("Автоперевод выполнен");
+      } else {
+        toast.error("Не удалось получить перевод");
       }
     } catch {
       toast.error("Не удалось выполнить перевод");
@@ -514,7 +513,6 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
       type: poiType,
       lat: poiCoords[0],
       lng: poiCoords[1],
-      altitudeMeters: poiAltitude ? parseInt(poiAltitude, 10) : undefined,
     };
 
     let nextPois: RoutePOI[];
@@ -897,7 +895,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
                         {poi.name.ru}
                       </h5>
                       <p className="text-[10px] text-[#0D0D0D]/60 mt-0.5">
-                        {cfg.label} {poi.altitudeMeters ? `• ${poi.altitudeMeters} м` : ""}
+                        {cfg.label}
                       </p>
                       <span className="font-mono text-[9px] text-[#07626A] bg-[#07626A]/5 px-1.5 py-0.5 rounded">
                         {poi.lat}, {poi.lng}
@@ -936,7 +934,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-[#E1E1E1]">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-2xl bg-[#4F46E5]/10 text-[#4F46E5] flex items-center justify-center">
+                <div className="w-9 h-9 rounded-2xl bg-[rgba(7,98,106,0.08)] text-[#07626A] border border-[rgba(7,98,106,0.15)] flex items-center justify-center">
                   <Tag className="w-4 h-4" />
                 </div>
                 <div>
@@ -979,6 +977,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
                     ] as const
                   ).map((item) => {
                     const isSelected = poiType === item.type;
+                    const IconComp = item.icon;
 
                     return (
                       <button
@@ -987,10 +986,11 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
                         onClick={() => setPoiType(item.type)}
                         className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer text-left ${
                           isSelected
-                            ? "bg-[#4F46E5] text-white border-[#4F46E5] shadow-xs"
-                            : "bg-[#FAFBFB] text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[#4F46E5]"
+                            ? "bg-[#07626A] text-white border-[#07626A] shadow-xs"
+                            : "bg-white text-[#0D0D0D]/80 border-[#E1E1E1] hover:border-[rgba(7,98,106,0.40)] hover:bg-[#FAFBFB]"
                         }`}
                       >
+                        <IconComp className="w-3.5 h-3.5 shrink-0" />
                         <span className="truncate">{item.label}</span>
                       </button>
                     );
@@ -1008,7 +1008,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
                     type="button"
                     onClick={handleAutoTranslatePOI}
                     disabled={isTranslatingPOI || !poiNameRu.trim()}
-                    className="inline-flex items-center gap-1 text-[10px] font-bold text-[#07626A] bg-[#07626A]/10 hover:bg-[#07626A]/15 px-2 py-0.5 rounded-md cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-1 text-[10px] font-bold text-[#07626A] bg-[rgba(7,98,106,0.08)] hover:bg-[rgba(7,98,106,0.14)] px-2 py-0.5 rounded-md cursor-pointer disabled:opacity-50"
                   >
                     {isTranslatingPOI ? (
                       <Loader2 className="w-3 h-3 animate-spin" />
@@ -1025,7 +1025,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
                   value={poiNameRu}
                   onChange={(e) => setPoiNameRu(e.target.value)}
                   placeholder="Например: Перевал Теке-Тор или Водопад Ак-Сай"
-                  className="w-full h-10 px-3 rounded-xl border border-[#E1E1E1] text-xs font-bold text-[#0D0D0D] focus:border-[#4F46E5] focus:outline-none mb-2"
+                  className="w-full h-10 px-3 rounded-xl border border-[#E1E1E1] bg-white text-xs font-bold text-[#0D0D0D] focus:border-[#07626A] focus:outline-none mb-2"
                 />
 
                 <div className="grid grid-cols-2 gap-2">
@@ -1034,30 +1034,16 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
                     value={poiNameKg}
                     onChange={(e) => setPoiNameKg(e.target.value)}
                     placeholder="Кыргызча"
-                    className="w-full h-9 px-2.5 text-xs rounded-lg border border-[#E1E1E1] bg-[#FAFBFB] text-[#0D0D0D] focus:border-[#4F46E5] focus:outline-none"
+                    className="w-full h-9 px-2.5 text-xs rounded-lg border border-[#E1E1E1] bg-[#FAFBFB] text-[#0D0D0D] focus:border-[#07626A] focus:outline-none"
                   />
                   <input
                     type="text"
                     value={poiNameEn}
                     onChange={(e) => setPoiNameEn(e.target.value)}
                     placeholder="English"
-                    className="w-full h-9 px-2.5 text-xs rounded-lg border border-[#E1E1E1] bg-[#FAFBFB] text-[#0D0D0D] focus:border-[#4F46E5] focus:outline-none"
+                    className="w-full h-9 px-2.5 text-xs rounded-lg border border-[#E1E1E1] bg-[#FAFBFB] text-[#0D0D0D] focus:border-[#07626A] focus:outline-none"
                   />
                 </div>
-              </div>
-
-              {/* Altitude (Optional) */}
-              <div>
-                <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
-                  Высота над уровнем моря (метры, опционально)
-                </label>
-                <input
-                  type="number"
-                  value={poiAltitude}
-                  onChange={(e) => setPoiAltitude(e.target.value)}
-                  placeholder="Например: 3300"
-                  className="w-full h-10 px-3 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-bold text-[#0D0D0D] focus:border-[#4F46E5] focus:outline-none"
-                />
               </div>
 
               {/* Action Buttons */}
