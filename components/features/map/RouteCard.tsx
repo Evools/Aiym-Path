@@ -43,17 +43,21 @@ export const RouteCard: React.FC<RouteCardProps> = ({
     hard: { ru: "Высокая сложность", kg: "Татаал", en: "Difficult", color: "#D9383A" },
   };
 
-  const regionLabels = {
+  const regionLabels: Record<string, { ru: string; kg: string; en: string }> = {
     "ala-archa": { ru: "Ущелье Ала-Арча", kg: "Ала-Арча капчыгайы", en: "Ala-Archa Gorge" },
     alamedin: { ru: "Ущелье Аламедин", kg: "Аламүдүн капчыгайы", en: "Alamedin Gorge" },
     chunkurchak: { ru: "Плато Чункурчак", kg: "Чүңкүрчак платосу", en: "Chunkurchak Plateau" },
+    kegety: { ru: "Кегети и Кёль-Тор", kg: "Кегети жана Көл-Төр", en: "Kegety & Kol-Tor" },
+    karakol: { ru: "Каракол и Джеты-Огуз", kg: "Каракол жана Жети-Өгүз", en: "Karakol & Jeti-Oguz" },
+    "issyk-ata": { ru: "Ысык-Ата", kg: "Ысык-Ата", en: "Issyk-Ata" },
+    "song-kul": { ru: "Озеро Сон-Көл", kg: "Соң-Көл көлү", en: "Song-Kul Lake" },
   };
 
   const currentDiff = difficultyLabels[route.difficulty];
   const diffName = currentDiff[language] || currentDiff.ru;
   const regionName = regionLabels[route.region]
     ? regionLabels[route.region][language] || regionLabels[route.region].ru
-    : "";
+    : route.region;
 
   const guides: AssignedGuide[] =
     route.assignedGuides && route.assignedGuides.length > 0

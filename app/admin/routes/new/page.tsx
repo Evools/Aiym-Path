@@ -22,6 +22,7 @@ import { RouteItem, RouteRegion, AssignedGuide } from "@/types/route.types";
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
 import { RouteMapEditorWrapper } from "@/components/features/admin/RouteMapEditorWrapper";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { RegionSelectWithAdd } from "@/components/features/admin/RegionSelectWithAdd";
 import { useToast } from "@/context/ToastContext";
 
 export default function CreateRoutePage() {
@@ -216,15 +217,10 @@ export default function CreateRoutePage() {
           </div>
 
           <div className="lg:col-span-4 flex flex-col gap-4">
-            <CustomSelect
+            <RegionSelectWithAdd
               label="Регион / Ущелье"
               value={region}
-              onChange={(val) => setRegion(val as RouteRegion)}
-              options={[
-                { value: "ala-archa", label: "Ала-Арча (Ala-Archa)", sublabel: "Национальный парк" },
-                { value: "alamedin", label: "Аламедин (Alamedin)", sublabel: "Ущелье и водопады" },
-                { value: "chunkurchak", label: "Чункурчак (Chunkurchak)", sublabel: "Горные панорамы" },
-              ]}
+              onChange={setRegion}
             />
 
             <div>

@@ -157,10 +157,79 @@ const DEFAULT_LOCATIONS: AdminLocationItem[] = [
   },
 ];
 
+export interface AdminRegionItem {
+  id: string;
+  label: {
+    ru: string;
+    kg: string;
+    en: string;
+  };
+}
+
+export const DEFAULT_REGIONS: AdminRegionItem[] = [
+  {
+    id: "ala-archa",
+    label: {
+      ru: "Ущелье Ала-Арча",
+      kg: "Ала-Арча капчыгайы",
+      en: "Ala-Archa Gorge",
+    },
+  },
+  {
+    id: "alamedin",
+    label: {
+      ru: "Ущелье Аламедин",
+      kg: "Аламүдүн капчыгайы",
+      en: "Alamedin Gorge",
+    },
+  },
+  {
+    id: "chunkurchak",
+    label: {
+      ru: "Ущелье Чункурчак",
+      kg: "Чүңкүрчак капчыгайы",
+      en: "Chunkurchak Gorge",
+    },
+  },
+  {
+    id: "kegety",
+    label: {
+      ru: "Кегети и Кёль-Тор",
+      kg: "Кегети жана Көл-Төр",
+      en: "Kegety & Kol-Tor",
+    },
+  },
+  {
+    id: "karakol",
+    label: {
+      ru: "Каракол и Джеты-Огуз",
+      kg: "Каракол жана Жети-Өгүз",
+      en: "Karakol & Jeti-Oguz",
+    },
+  },
+  {
+    id: "issyk-ata",
+    label: {
+      ru: "Ысык-Ата (Тёплые Ключи)",
+      kg: "Ысык-Ата",
+      en: "Issyk-Ata",
+    },
+  },
+  {
+    id: "song-kul",
+    label: {
+      ru: "Озеро Сон-Көл",
+      kg: "Соң-Көл көлү",
+      en: "Song-Kul Lake",
+    },
+  },
+];
+
 const STORAGE_KEYS = {
   ROUTES: "aiym_path_routes_v1",
   GUIDES: "aiym_path_guides_v1",
   LOCATIONS: "aiym_path_locations_v1",
+  REGIONS: "aiym_path_regions_v1",
 };
 
 export const AdminStorageService = {
@@ -268,11 +337,45 @@ export const AdminStorageService = {
     localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(locations));
   },
 
+  // --- REGIONS ---
+  getRegions(): AdminRegionItem[] {
+    if (typeof window === "undefined") return DEFAULT_REGIONS;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.REGIONS);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(DEFAULT_REGIONS));
+      return DEFAULT_REGIONS;
+    } catch {
+      return DEFAULT_REGIONS;
+    }
+  },
+
+  saveRegion(region: AdminRegionItem): void {
+    if (typeof window === "undefined") return;
+    const regions = this.getRegions();
+    const existingIndex = regions.findIndex((r) => r.id === region.id);
+    if (existingIndex >= 0) {
+      regions[existingIndex] = region;
+    } else {
+      regions.push(region);
+    }
+    localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
+  },
+
+  deleteRegion(id: string): void {
+    if (typeof window === "undefined") return;
+    const regions = this.getRegions().filter((r) => r.id !== id);
+    localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
+  },
+
   // Reset to default seed data
   resetAll(): void {
     if (typeof window === "undefined") return;
     localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(ROUTES_DATA));
     localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(DEFAULT_GUIDES));
     localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(DEFAULT_LOCATIONS));
+    localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(DEFAULT_REGIONS));
   },
 };

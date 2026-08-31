@@ -15,18 +15,23 @@ import {
   Footprints,
   Users,
 } from "lucide-react";
-import { AdminStorageService } from "@/lib/services/admin-storage.service";
+import {
+  AdminStorageService,
+  AdminRegionItem,
+} from "@/lib/services/admin-storage.service";
 import { RouteItem, RouteFilterRegion } from "@/types/route.types";
 import { useToast } from "@/context/ToastContext";
 
 export default function AdminRoutesPage() {
   const toast = useToast();
   const [routes, setRoutes] = useState<RouteItem[]>([]);
+  const [regions, setRegions] = useState<AdminRegionItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<RouteFilterRegion>("all");
 
   useEffect(() => {
     setRoutes(AdminStorageService.getRoutes());
+    setRegions(AdminStorageService.getRegions());
   }, []);
 
   const handleDelete = async (id: string, title: string) => {
@@ -92,13 +97,19 @@ export default function AdminRoutesPage() {
         </div>
 
         {/* Region Filter Chips */}
-        <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto">
-          {[
-            { id: "all", label: "Все регионы" },
-            { id: "ala-archa", label: "Ала-Арча" },
-            { id: "alamedin", label: "Аламедин" },
-            { id: "chunkurchak", label: "Чункурчак" },
-          ].map((tab) => {
+        <div className="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto no-scrollbar">
+          <button
+            type="button"
+            onClick={() => setSelectedRegion("all")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer shrink-0 border ${
+              selectedRegion === "all"
+                ? "bg-[#07626A] text-white border-[#07626A]"
+                : "bg-white text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[#07626A]"
+            }`}
+          >
+            Все регионы
+          </button>
+          {regions.map((tab) => {
             const isSelected = selectedRegion === tab.id;
             return (
               <button
@@ -111,7 +122,7 @@ export default function AdminRoutesPage() {
                     : "bg-white text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[#07626A]"
                 }`}
               >
-                {tab.label}
+                {tab.label.ru}
               </button>
             );
           })}
@@ -166,8 +177,8 @@ export default function AdminRoutesPage() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="px-2 py-0.5 rounded-md bg-[rgba(7,98,106,0.10)] text-[#07626A] text-[10px] font-bold uppercase">
-                          {route.region}
+                        <span className="px-2 py-0.5 rounded-md bg-[rgba(7,98,106,0.10)] text-[#07626A] text-[10px] font-bold uppercase truncate max-w-[140px]">
+                          {regions.find((r) => r.id === route.region)?.label.ru || route.region}
                         </span>
                         <span className="text-[10px] text-[#0D0D0D]/50 font-bold uppercase">
                           {route.difficulty}

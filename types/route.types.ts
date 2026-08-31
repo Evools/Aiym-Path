@@ -1,6 +1,15 @@
 export type RouteDifficulty = "easy" | "medium" | "hard";
-export type RouteRegion = "ala-archa" | "alamedin" | "chunkurchak";
-export type RouteFilterRegion = "all" | RouteRegion;
+export type RouteRegion = string;
+export type RouteFilterRegion = "all" | string;
+
+export interface RegionItem {
+  id: string;
+  label: {
+    ru: string;
+    kg: string;
+    en: string;
+  };
+}
 
 export interface RoutePOI {
   id: string;
