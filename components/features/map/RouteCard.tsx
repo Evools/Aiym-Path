@@ -3,6 +3,7 @@
 import React from "react";
 import { RouteItem } from "@/types/route.types";
 import { useLanguage } from "@/context/LanguageContext";
+import { Footprints } from "lucide-react";
 
 interface RouteCardProps {
   route: RouteItem;
@@ -32,6 +33,12 @@ export const RouteCard: React.FC<RouteCardProps> = ({
     en: "Female Guide Available",
   };
 
+  const actionLabel = {
+    ru: "Проложить пеший маршрут",
+    kg: "Жөө маршрут түзүү",
+    en: "Build Walking Route",
+  };
+
   return (
     <div
       onClick={() => onSelect(route)}
@@ -41,10 +48,17 @@ export const RouteCard: React.FC<RouteCardProps> = ({
           : "border-[#E1E1E1] hover:border-[#07626A]"
       }`}
     >
-      {/* Title */}
-      <h3 className="text-base sm:text-lg font-bold text-[#0D0D0D] leading-snug">
-        {title}
-      </h3>
+      {/* Top Title & Route Action */}
+      <div className="w-full flex items-center justify-between gap-3">
+        <h3 className="text-base sm:text-lg font-bold text-[#0D0D0D] leading-snug">
+          {title}
+        </h3>
+
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#07626A] shrink-0">
+          <Footprints className="w-3.5 h-3.5" />
+          <span>{actionLabel[language] || actionLabel.ru}</span>
+        </div>
+      </div>
 
       {/* Description */}
       <p className="text-sm text-[#0D0D0D]/75 leading-relaxed font-normal">

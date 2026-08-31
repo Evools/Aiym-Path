@@ -11,7 +11,7 @@ const DynamicLeafletMap = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="w-full h-[420px] sm:h-[500px] rounded-2xl sm:rounded-3xl flex items-center justify-center border border-[#E1E1E1]"
+        className="w-full h-[580px] sm:h-[660px] lg:h-[720px] rounded-2xl sm:rounded-3xl flex items-center justify-center border border-[#E1E1E1]"
         style={{ backgroundColor: "rgba(7, 98, 106, 0.05)" }}
       >
         <span className="text-sm font-medium text-[#07626A]">
