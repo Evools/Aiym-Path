@@ -261,11 +261,11 @@ export default function ContactsPage() {
                       </p>
                     </div>
 
-                    {/* Subtle Info Icon Trigger */}
+                    {/* Subtle Info Icon Trigger with ripple pulse */}
                     <button
                       type="button"
                       onClick={() => setShowUnavailableModal(true)}
-                      className="p-2 rounded-xl text-[#0D0D0D]/50 hover:text-[#07626A] hover:bg-[#F3F3F3] border border-transparent hover:border-[#E1E1E1] transition-colors cursor-pointer shrink-0"
+                      className="p-2 rounded-xl text-[#07626A] bg-white hover:bg-[#F3F3F3] border border-[#E1E1E1] hover:border-[#07626A] transition-colors cursor-pointer shrink-0 button-pulse"
                       title="Информация о форме"
                     >
                       <AlertCircle className="w-4 h-4 text-[#07626A]" />
