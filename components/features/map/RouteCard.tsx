@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { RouteItem, AssignedGuide } from "@/types/route.types";
 import { useLanguage } from "@/context/LanguageContext";
@@ -13,6 +13,9 @@ import {
   Phone,
   MessageCircle,
   Users,
+  ShieldAlert,
+  X,
+  ChevronDown,
 } from "lucide-react";
 
 interface RouteCardProps {
@@ -60,7 +63,25 @@ export const RouteCard: React.FC<RouteCardProps> = ({
       : [];
 
   const [activeGuideIdx, setActiveGuideIdx] = useState<number>(0);
+  const [showSafetyPopover, setShowSafetyPopover] = useState<boolean>(false);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+
   const activeGuide = guides[activeGuideIdx] || guides[0] || null;
+
+  // Close popover when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        setShowSafetyPopover(false);
+      }
+    };
+    if (showSafetyPopover) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSafetyPopover]);
 
   return (
     <div
@@ -98,16 +119,58 @@ export const RouteCard: React.FC<RouteCardProps> = ({
           </div>
         </div>
 
-        {/* Content Box with Exact Standard Padding */}
+        {/* Content Box */}
         <div className="p-6 sm:p-8 flex flex-col gap-4">
-          {/* Title & Region */}
-          <div>
-            <span className="text-xs font-bold uppercase text-[#07626A] tracking-wide block mb-1">
-              {regionName}
-            </span>
-            <h3 className="text-lg sm:text-xl font-bold text-[#0D0D0D] leading-snug">
-              {title}
-            </h3>
+          {/* Header Row: Title & Interactive Safety Popover Pill */}
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <span className="text-xs font-bold uppercase text-[#07626A] tracking-wide block mb-1">
+                {regionName}
+              </span>
+              <h3 className="text-lg sm:text-xl font-bold text-[#0D0D0D] leading-snug">
+                {title}
+              </h3>
+            </div>
+
+            {/* Interactive Safety Advice Trigger */}
+            <div className="relative shrink-0" ref={popoverRef}>
+              <button
+                type="button"
+                onClick={() => setShowSafetyPopover((prev) => !prev)}
+                className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-semibold transition-colors cursor-pointer border ${
+                  showSafetyPopover
+                    ? "bg-[#07626A] text-white border-[#07626A]"
+                    : "bg-[#F0F2F2] text-[#07626A] border-[#E1E1E1] hover:border-[#07626A]"
+                }`}
+                title="Памятка безопасности"
+              >
+                <ShieldAlert className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Безопасность</span>
+                <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showSafetyPopover ? "rotate-180" : ""}`} />
+              </button>
+
+              {/* Popover Card */}
+              {showSafetyPopover && (
+                <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 p-4 rounded-2xl bg-white border border-[#E1E1E1] z-20 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase text-[#07626A] flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>Совет безопасности</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowSafetyPopover(false)}
+                      className="p-1 rounded-md text-[#0D0D0D]/50 hover:text-[#0D0D0D] hover:bg-[#F0F2F2] transition-colors cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <p className="text-xs text-[#0D0D0D]/85 leading-relaxed font-normal">
+                    Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой, а не поодиночке.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Description */}
@@ -115,7 +178,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({
             {description}
           </p>
 
-          {/* Key Metrics Strip (Distance, Walking Time, Elevation Gain) */}
+          {/* Key Metrics Strip */}
           <div className="grid grid-cols-3 gap-2.5 text-center">
             <div
               className="p-3 rounded-xl border border-[#E1E1E1] flex flex-col items-center justify-center"
@@ -157,7 +220,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({
             </div>
           </div>
 
-          {/* Assigned Female Guides Section */}
+          {/* Attached Verified Female Guides Section */}
           {guides.length > 0 && activeGuide && (
             <div className="p-4 rounded-2xl bg-[#F0F2F2] border border-[#E1E1E1] flex flex-col gap-3">
               <div className="flex items-center justify-between">

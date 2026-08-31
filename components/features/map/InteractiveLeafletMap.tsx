@@ -7,7 +7,6 @@ import "leaflet/dist/leaflet.css";
 import { RouteItem, RouteRegion, AssignedGuide } from "@/types/route.types";
 import { useLanguage } from "@/context/LanguageContext";
 import {
-  RotateCcw,
   Footprints,
   MapPin,
   Clock,
@@ -22,6 +21,8 @@ import {
   MessageCircle,
   Users,
   X,
+  ShieldAlert,
+  ChevronDown,
 } from "lucide-react";
 
 interface BasecampHub {
@@ -98,6 +99,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
   const [selectedBasecamp, setSelectedBasecamp] = useState<BasecampHub | null>(null);
   const [activeRoute, setActiveRoute] = useState<RouteItem | null>(null);
   const [selectedGuideIndex, setSelectedGuideIndex] = useState<number>(0);
+  const [showSafetyModal, setShowSafetyModal] = useState<boolean>(false);
   const [isLocating, setIsLocating] = useState(false);
 
   // 1. Initialize Leaflet Map without default top-left zoom controls
@@ -142,6 +144,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     const currentRoute = routes.find((r) => r.id === selectedRouteId) || null;
     setActiveRoute(currentRoute);
     setSelectedGuideIndex(0);
+    setShowSafetyModal(false);
 
     // Filter Basecamps by selected region
     const visibleBasecamps =
@@ -424,9 +427,19 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
               <span>Назад к маршрутам</span>
             </button>
 
-            <span className="text-[11px] font-bold uppercase text-[#07626A]">
-              Пеший маршрут
-            </span>
+            {/* Interactive Safety Trigger Button */}
+            <button
+              type="button"
+              onClick={() => setShowSafetyModal((prev) => !prev)}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
+                showSafetyModal
+                  ? "bg-[#07626A] text-white border-[#07626A]"
+                  : "bg-white text-[#07626A] border-[#E1E1E1] hover:border-[#07626A]"
+              }`}
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Совет</span>
+            </button>
           </div>
 
           <div>
@@ -434,6 +447,21 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
               {activeTitle}
             </h4>
           </div>
+
+          {/* Expandable Safety Guidance Notice */}
+          {showSafetyModal && (
+            <div className="p-3 rounded-xl border border-[#07626A]/20 bg-[#F0F2F2] flex items-start gap-2.5 animate-in fade-in duration-150">
+              <ShieldCheck className="w-4 h-4 text-[#07626A] shrink-0 mt-0.5" />
+              <div className="text-xs">
+                <span className="font-bold text-[#07626A] block mb-0.5">
+                  Совет безопасности Aiym Path:
+                </span>
+                <p className="text-[#0D0D0D]/85 leading-relaxed">
+                  Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой, а не поодиночке.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Checkpoints A -> B */}
           <div className="p-3 rounded-xl bg-[#F0F2F2] border border-[#E1E1E1] space-y-2 text-xs">
@@ -447,7 +475,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
             </div>
 
             <div className="border-l-2 border-dashed border-[#07626A]/40 ml-2.5 pl-4 py-0.5 text-[11px] text-[#0D0D0D]/70">
-              Пешая тропа ({activeRoute.distanceKm} км)
+              Пешая горная тропа ({activeRoute.distanceKm} км)
             </div>
 
             <div className="flex items-center gap-2.5">
@@ -502,7 +530,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
             </div>
           </div>
 
-          {/* Attached Female Guides Section (Supports Single or Multiple Guides) */}
+          {/* Attached Female Guides Section */}
           {guides.length > 0 && currentGuide && (
             <div className="p-3.5 rounded-xl bg-[#F0F2F2] border border-[#E1E1E1] flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
@@ -582,7 +610,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                   className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors cursor-pointer"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
-                  <span>Написать в WhatsApp</span>
+                  <span>WhatsApp</span>
                 </a>
 
                 <a
