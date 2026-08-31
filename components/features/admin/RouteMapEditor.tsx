@@ -42,10 +42,9 @@ interface SearchResult {
 
 const PRESET_LOCATIONS = [
   { name: "Альплагерь Ала-Арча", coords: [42.5644, 74.4823] as [number, number] },
-  { name: "Водопад Ак-Сай", coords: [42.5372, 74.4988] as [number, number] },
   { name: "Хижина Рацека", coords: [42.5186, 74.5298] as [number, number] },
-  { name: "Тёплые Ключи (Аламедин)", coords: [42.6318, 74.6727] as [number, number] },
-  { name: "Чункурчак (Супара)", coords: [42.6389, 74.6281] as [number, number] },
+  { name: "Водопад Ак-Сай", coords: [42.5350, 74.5020] as [number, number] },
+  { name: "Ущелье Чункурчак", coords: [42.6389, 74.6281] as [number, number] },
   { name: "Озеро Кель-Тор", coords: [42.5417, 75.1432] as [number, number] },
   { name: "Перевал Теке-Тор", coords: [42.5025, 74.5211] as [number, number] },
 ];
@@ -75,8 +74,8 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
 
   const initialCenterRef = useRef(center);
 
-  // Editor mode: 'smart' (Waypoints A -> Pass -> B with OSRM) or 'manual' (point by point)
-  const [editorMode, setEditorMode] = useState<"smart" | "manual">("smart");
+  // Editor mode: 'manual' (precise point-by-point) or 'smart' (auto-route)
+  const [editorMode, setEditorMode] = useState<"manual" | "smart">("manual");
   const [smartWaypoints, setSmartWaypoints] = useState<[number, number][]>([]);
   const [isRouting, setIsRouting] = useState(false);
   const [routeSuccessMsg, setRouteSuccessMsg] = useState<string | null>(null);
@@ -448,7 +447,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
 
         {/* Search Results Dropdown */}
         {showSearchDropdown && searchResults.length > 0 && (
-          <div className="absolute left-0 right-0 top-12 z-50 p-2 rounded-2xl bg-white border border-[#E1E1E1] shadow-xl space-y-1">
+          <div className="absolute left-0 right-0 top-14 z-50 p-2.5 rounded-2xl bg-white border border-[#E1E1E1] shadow-2xl space-y-1">
             {searchResults.map((res) => (
               <button
                 key={res.place_id}
@@ -456,9 +455,9 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
                 onClick={() =>
                   handleSelectLocation(parseFloat(res.lat), parseFloat(res.lon), res.display_name.split(",")[0])
                 }
-                className="w-full text-left p-2.5 rounded-xl hover:bg-[#F0F2F2] transition-colors text-xs text-[#0D0D0D] flex items-center gap-2 cursor-pointer"
+                className="w-full text-left p-3 rounded-xl hover:bg-[#F0F2F2] transition-colors text-xs text-[#0D0D0D] flex items-center gap-2.5 cursor-pointer"
               >
-                <MapPin className="w-3.5 h-3.5 text-[#07626A] shrink-0" />
+                <MapPin className="w-4 h-4 text-[#07626A] shrink-0" />
                 <span className="truncate">{res.display_name}</span>
               </button>
             ))}
@@ -466,7 +465,7 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
         )}
       </div>
 
-      {/* 2. Quick Preset Locations */}
+      {/* 2. Quick Presets */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
         <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#0D0D0D]/50 shrink-0">
           Популярные базы:
@@ -484,60 +483,77 @@ const RouteMapEditorComponent: React.FC<RouteMapEditorProps> = ({
       </div>
 
       {/* 3. Mode Switcher Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded-2xl bg-[#F0F2F2] border border-[#E1E1E1]">
-        {/* Modes */}
-        <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => setEditorMode("smart")}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              editorMode === "smart"
-                ? "bg-[#07626A] text-white shadow-xs"
-                : "bg-white text-[#0D0D0D]/70 hover:text-[#0D0D0D]"
-            }`}
-          >
-            <Zap className="w-3.5 h-3.5" />
-            <span>Умный маршрут (Старт → Перевал → Финиш)</span>
-          </button>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2.5 rounded-2xl bg-[#F0F2F2] border border-[#E1E1E1]">
+          {/* Modes */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                setEditorMode("manual");
+                setRouteSuccessMsg(null);
+                setRouteErrorMsg(null);
+              }}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                editorMode === "manual"
+                  ? "bg-[#07626A] text-white shadow-xs"
+                  : "bg-white text-[#0D0D0D]/70 hover:text-[#0D0D0D]"
+              }`}
+            >
+              <PenTool className="w-3.5 h-3.5" />
+              <span>Точно по клику (Без смещений)</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setEditorMode("manual")}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              editorMode === "manual"
-                ? "bg-[#07626A] text-white shadow-xs"
-                : "bg-white text-[#0D0D0D]/70 hover:text-[#0D0D0D]"
-            }`}
-          >
-            <PenTool className="w-3.5 h-3.5" />
-            <span>Пошагово</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditorMode("smart");
+                setRouteSuccessMsg(null);
+                setRouteErrorMsg(null);
+              }}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                editorMode === "smart"
+                  ? "bg-[#07626A] text-white shadow-xs"
+                  : "bg-white text-[#0D0D0D]/70 hover:text-[#0D0D0D]"
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>Авто-привязка к тропам OSM</span>
+            </button>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleUndo}
+              disabled={coordinates.length === 0}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] text-xs font-bold text-[#0D0D0D] disabled:opacity-40 transition-colors cursor-pointer"
+              title="Отменить шаг"
+            >
+              <Undo className="w-3.5 h-3.5" />
+              <span>Отменить</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={coordinates.length === 0}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#E1E1E1] hover:border-rose-500 hover:text-rose-600 text-xs font-bold text-[#0D0D0D] disabled:opacity-40 transition-colors cursor-pointer"
+              title="Очистить карту"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Сбросить</span>
+            </button>
+          </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleUndo}
-            disabled={coordinates.length === 0}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] text-xs font-bold text-[#0D0D0D] disabled:opacity-40 transition-colors cursor-pointer"
-            title="Отменить шаг"
-          >
-            <Undo className="w-3.5 h-3.5" />
-            <span>Отменить</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleClear}
-            disabled={coordinates.length === 0}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-[#E1E1E1] hover:border-rose-500 hover:text-rose-600 text-xs font-bold text-[#0D0D0D] disabled:opacity-40 transition-colors cursor-pointer"
-            title="Очистить карту"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-            <span>Сбросить</span>
-          </button>
-        </div>
+        {/* Mode Explanatory Hint */}
+        <p className="text-[11px] text-[#0D0D0D]/60 px-1 font-medium">
+          {editorMode === "manual"
+            ? "🎯 Точный режим: кликайте на карту — каждая точка фиксируется ровно там, где вы нажали, образуя непрерывную нить маршрута."
+            : "⚡ Режим авто-троп: ставите ключевые точки (старт, перевал, финиш), и система ищет известные тропы OpenStreetMap между ними."}
+        </p>
       </div>
 
       {/* 4. Status Notification Alerts */}

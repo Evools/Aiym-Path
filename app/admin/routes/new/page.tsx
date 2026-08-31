@@ -33,18 +33,14 @@ export default function CreateRoutePage() {
   const [description, setDescription] = useState({ ru: "", kg: "", en: "" });
   const [region, setRegion] = useState<RouteRegion>("ala-archa");
   const [difficulty, setDifficulty] = useState<RouteItem["difficulty"]>("medium");
-  const [distanceKm, setDistanceKm] = useState<number>(5.5);
-  const [durationHours, setDurationHours] = useState<number>(3.0);
-  const [elevationGainMeters, setElevationGainMeters] = useState<number>(350);
+  const [distanceKm, setDistanceKm] = useState<number>(0);
+  const [durationHours, setDurationHours] = useState<number>(0);
+  const [elevationGainMeters, setElevationGainMeters] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState<string>(
     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
   );
   const [selectedGuideIds, setSelectedGuideIds] = useState<string[]>([]);
-  const [coordinates, setCoordinates] = useState<[number, number][]>([
-    [42.5644, 74.4823],
-    [42.568, 74.487],
-    [42.572, 74.492],
-  ]);
+  const [coordinates, setCoordinates] = useState<[number, number][]>([]);
 
   useEffect(() => {
     const guides = AdminStorageService.getGuides();
