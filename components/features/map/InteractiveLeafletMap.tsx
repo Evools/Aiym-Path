@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -96,16 +96,28 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
   const { language } = useLanguage();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
-  const basecampsGroupRef = useRef<L.FeatureGroup | null>(null);
-  const activeTrailLayerRef = useRef<L.FeatureGroup | null>(null);
+  const basecampsLayerRef = useRef<L.FeatureGroup | null>(null);
+  const trailsLayerRef = useRef<L.FeatureGroup | null>(null);
+  const userLocationLayerRef = useRef<L.FeatureGroup | null>(null);
+  const prevSelectionRef = useRef<{ region: string; routeId: string | null }>({
+    region: "",
+    routeId: null,
+  });
 
+  const [isMapReady, setIsMapReady] = useState<boolean>(false);
   const [selectedBasecamp, setSelectedBasecamp] = useState<BasecampHub | null>(null);
-  const [activeRoute, setActiveRoute] = useState<RouteItem | null>(null);
+
+  const activeRoute = useMemo(
+    () => (selectedRouteId ? routes.find((r) => r.id === selectedRouteId) || null : null),
+    [selectedRouteId, routes]
+  );
+  const [collapsedRouteId, setCollapsedRouteId] = useState<string | null>(null);
+  const isCardCollapsed = Boolean(selectedRouteId && collapsedRouteId === selectedRouteId);
+
   const [selectedGuideIndex, setSelectedGuideIndex] = useState<number>(0);
   const [showSafetyModal, setShowSafetyModal] = useState<boolean>(false);
   const [isLocating, setIsLocating] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isCardCollapsed, setIsCardCollapsed] = useState(false);
 
   // 1. Initialize Leaflet Map
   useEffect(() => {
@@ -124,16 +136,24 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
       maxZoom: 19,
     }).addTo(map);
 
-    const basecampsGroup = L.featureGroup().addTo(map);
-    const activeTrailLayer = L.featureGroup().addTo(map);
+    const basecampsLayer = L.featureGroup().addTo(map);
+    const trailsLayer = L.featureGroup().addTo(map);
+    const userLocationLayer = L.featureGroup().addTo(map);
 
-    basecampsGroupRef.current = basecampsGroup;
-    activeTrailLayerRef.current = activeTrailLayer;
+    basecampsLayerRef.current = basecampsLayer;
+    trailsLayerRef.current = trailsLayer;
+    userLocationLayerRef.current = userLocationLayer;
     mapInstanceRef.current = map;
+    setIsMapReady(true);
+
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
 
     return () => {
       map.remove();
       mapInstanceRef.current = null;
+      setIsMapReady(false);
     };
   }, []);
 
@@ -166,75 +186,53 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     });
   }, []);
 
-  // 2. Render Basecamps & Active Route
+  // 2. Render Basecamp Hubs, Paths & Smooth Camera Navigation
   useEffect(() => {
     const map = mapInstanceRef.current;
-    const basecampsGroup = basecampsGroupRef.current;
-    const activeTrailLayer = activeTrailLayerRef.current;
+    const basecampsLayer = basecampsLayerRef.current;
+    const trailsLayer = trailsLayerRef.current;
 
-    if (!map || !basecampsGroup || !activeTrailLayer) return;
+    if (!map || !basecampsLayer || !trailsLayer || !isMapReady) return;
 
-    basecampsGroup.clearLayers();
-    activeTrailLayer.clearLayers();
+    basecampsLayer.clearLayers();
+    trailsLayer.clearLayers();
 
-    // Determine active route
-    const currentRoute = selectedRouteId
-      ? routes.find((r) => r.id === selectedRouteId) || null
-      : null;
-    setActiveRoute(currentRoute);
-
-    // If a route is active, don't collapse card by default
-    if (currentRoute) {
-      setIsCardCollapsed(false);
-    }
-
-    // Filter Basecamps based on selected region
+    const currentRoute = activeRoute;
     const visibleBasecamps =
       selectedRegion === "all"
         ? BASECAMPS
         : BASECAMPS.filter((b) => b.region === selectedRegion);
 
-    visibleBasecamps.forEach((basecamp) => {
-      const campName = basecamp.name[language] || basecamp.name.ru;
-      const count = basecamp.routeIds.length;
+    const routesInRegion =
+      selectedRegion === "all"
+        ? routes
+        : routes.filter((r) => r.region === selectedRegion);
 
-      const basecampIcon = L.divIcon({
-        className: "custom-basecamp-pin",
-        html: `
-          <div style="background-color: #07626A; color: #FFFFFF; padding: 6px 12px; border-radius: 9999px; font-size: 11px; font-weight: 700; border: 2px solid #FFFFFF; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
-            <span>${campName}</span>
-            <span style="background-color: rgba(255,255,255,0.25); padding: 1px 6px; border-radius: 9999px; font-size: 10px;">${count}</span>
-          </div>
-        `,
-        iconSize: [160, 32],
-        iconAnchor: [80, 16],
-      });
+    const selectionChanged =
+      prevSelectionRef.current.region !== selectedRegion ||
+      prevSelectionRef.current.routeId !== selectedRouteId;
 
-      const marker = L.marker([basecamp.lat, basecamp.lng], {
-        icon: basecampIcon,
-      });
-
-      marker.on("click", (e) => {
-        L.DomEvent.stopPropagation(e);
-        setSelectedBasecamp(basecamp);
-        onSelectRoute("");
-      });
-
-      basecampsGroup.addLayer(marker);
-    });
-
-    // If a route is selected: Draw detailed trail
+    // If a specific route is selected: Draw clean path with start A and finish B
     if (currentRoute && currentRoute.coordinates && currentRoute.coordinates.length > 0) {
       const points = currentRoute.coordinates;
-      const polyline = L.polyline(points, {
-        color: "#07626A",
-        weight: 5,
-        opacity: 0.9,
+
+      // Thin white outline for contrast on map terrain
+      L.polyline(points, {
+        color: "#FFFFFF",
+        weight: 4.5,
+        opacity: 0.6,
         lineCap: "round",
         lineJoin: "round",
-        dashArray: "1, 9",
-      }).addTo(activeTrailLayer);
+      }).addTo(trailsLayer);
+
+      // Neat, thin main path line
+      const polyline = L.polyline(points, {
+        color: "#07626A",
+        weight: 2.8,
+        opacity: 0.95,
+        lineCap: "round",
+        lineJoin: "round",
+      }).addTo(trailsLayer);
 
       const startPt = points[0];
       const finishPt = points[points.length - 1];
@@ -243,69 +241,103 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
       const startIcon = L.divIcon({
         className: "trail-marker-start",
         html: `
-          <div style="background-color: #07626A; color: #FFFFFF; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; border: 2.5px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+          <div style="background-color: #07626A; color: #FFFFFF; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10px; border: 1.5px solid #FFFFFF; box-shadow: 0 2px 6px rgba(0,0,0,0.25);">
             A
           </div>
         `,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
+        iconSize: [22, 22],
+        iconAnchor: [11, 11],
       });
-      L.marker(startPt, { icon: startIcon }).addTo(activeTrailLayer);
+      L.marker(startPt, { icon: startIcon }).addTo(trailsLayer);
 
       // Finish Marker (B)
       const finishIcon = L.divIcon({
         className: "trail-marker-finish",
         html: `
-          <div style="background-color: #0D0D0D; color: #FFFFFF; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; border: 2.5px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+          <div style="background-color: #0D0D0D; color: #FFFFFF; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10px; border: 1.5px solid #FFFFFF; box-shadow: 0 2px 6px rgba(0,0,0,0.25);">
             B
           </div>
         `,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
+        iconSize: [22, 22],
+        iconAnchor: [11, 11],
       });
-      L.marker(finishPt, { icon: finishIcon }).addTo(activeTrailLayer);
+      L.marker(finishPt, { icon: finishIcon }).addTo(trailsLayer);
 
-      // Route POIs (Passes, Waterfalls, Huts, Viewpoints)
-      if (currentRoute.pois && currentRoute.pois.length > 0) {
-        const poiColorMap: Record<string, string> = {
-          pass: "#07626A",
-          waterfall: "#0284C7",
-          viewpoint: "#D97706",
-          camp: "#059669",
-          caution: "#DC2626",
-          rescue: "#DC2626",
-          guesthouse: "#07626A",
-          service: "#334155",
-        };
-
-        currentRoute.pois.forEach((poi) => {
-          const poiColor = poiColorMap[poi.type] || "#07626A";
-          const poiName = poi.name[language] || poi.name.ru;
-          const poiIcon = L.divIcon({
-            className: "trail-poi-marker",
-            html: `
-              <div style="background-color: ${poiColor}; color: #FFFFFF; padding: 4px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; border: 2px solid #FFFFFF; box-shadow: 0 4px 8px rgba(0,0,0,0.25); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;">
-                <span>${poiName}</span>
-              </div>
-            `,
-            iconSize: [110, 26],
-            iconAnchor: [55, 13],
-          });
-
-          const poiMarker = L.marker([poi.lat, poi.lng], { icon: poiIcon });
-          poiMarker.bindTooltip(
-            `<div style="text-align:left;"><div style="font-weight:700; color:#0D0D0D; font-size:12px;">${poiName}</div><div style="color:#07626A; font-weight:600; font-size:10px; margin-top:2px;">Ориентир маршрута</div></div>`,
-            { direction: "top", offset: [0, -6] }
-          );
-          activeTrailLayer.addLayer(poiMarker);
+      // Smoothly fly to the route bounds
+      if (selectionChanged) {
+        map.flyToBounds(polyline.getBounds(), {
+          padding: [60, 60],
+          maxZoom: 14,
+          duration: 1.0,
         });
       }
+    } else {
+      // Overview mode: Render Basecamp Hubs & Clean Trail Paths
+      visibleBasecamps.forEach((basecamp) => {
+        const campName = basecamp.name[language] || basecamp.name.ru;
+        const count = basecamp.routeIds.length;
 
-      map.fitBounds(polyline.getBounds(), { padding: [60, 60], maxZoom: 14 });
+        const basecampIcon = L.divIcon({
+          className: "custom-basecamp-pin",
+          html: `
+            <div style="background-color: #07626A; color: #FFFFFF; padding: 6px 12px; border-radius: 9999px; font-size: 11px; font-weight: 700; border: 2px solid #FFFFFF; box-shadow: 0 4px 12px rgba(0,0,0,0.25); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+              <span>${campName}</span>
+              <span style="background-color: rgba(255,255,255,0.25); padding: 1px 6px; border-radius: 9999px; font-size: 10px;">${count}</span>
+            </div>
+          `,
+          iconSize: [160, 32],
+          iconAnchor: [80, 16],
+        });
+
+        const marker = L.marker([basecamp.lat, basecamp.lng], {
+          icon: basecampIcon,
+        });
+
+        marker.on("click", (e) => {
+          L.DomEvent.stopPropagation(e);
+          setSelectedBasecamp(basecamp);
+          onSelectRoute("");
+        });
+
+        basecampsLayer.addLayer(marker);
+      });
+
+      // Fly map to the bounds of the selected region or all regions
+      if (selectionChanged) {
+        const regionBounds = L.latLngBounds([]);
+
+        routesInRegion.forEach((r) => {
+          if (r.coordinates && r.coordinates.length > 0) {
+            r.coordinates.forEach((pt) => regionBounds.extend(pt));
+          } else if (r.centerCoordinates) {
+            regionBounds.extend(r.centerCoordinates);
+          }
+        });
+
+        visibleBasecamps.forEach((b) => {
+          regionBounds.extend([b.lat, b.lng]);
+        });
+
+        if (regionBounds.isValid()) {
+          map.flyToBounds(regionBounds, {
+            padding: [55, 55],
+            maxZoom: selectedRegion === "all" ? 11 : 13,
+            duration: 1.0,
+          });
+        } else if (selectedRegion === "all") {
+          map.flyTo([42.58, 74.56], 11, { duration: 1.0 });
+        }
+      }
     }
-  }, [routes, selectedRegion, selectedRouteId, language, onSelectRoute]);
 
-  // Handle choosing a trail from the basecamp popup
+    prevSelectionRef.current = {
+      region: selectedRegion,
+      routeId: selectedRouteId,
+    };
+  }, [routes, selectedRegion, selectedRouteId, activeRoute, language, onSelectRoute, isMapReady]);
+
+  // Handle selecting a route from the basecamp popup
   const handleSelectRouteFromBasecamp = (routeId: string) => {
     setSelectedBasecamp(null);
     onSelectRoute(routeId);
@@ -336,26 +368,77 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     mapInstanceRef.current?.zoomOut();
   };
 
-  // Locate User GPS
+  // Locate User GPS & render current location marker
   const handleLocateMe = () => {
     if (!navigator.geolocation) {
-      alert("Геолокация не поддерживается");
+      alert("Геолокация не поддерживается вашим браузером");
       return;
     }
     setIsLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setIsLocating(false);
-        const { latitude, longitude } = pos.coords;
+        const { latitude, longitude, accuracy } = pos.coords;
         const map = mapInstanceRef.current;
-        if (map) {
-          map.flyTo([latitude, longitude], 13);
+        const userLayer = userLocationLayerRef.current;
+        if (!map) return;
+
+        if (userLayer) {
+          userLayer.clearLayers();
+
+          // Translucent accuracy circle
+          L.circle([latitude, longitude], {
+            radius: Math.max(accuracy || 25, 20),
+            color: "#0284C7",
+            fillColor: "#0284C7",
+            fillOpacity: 0.12,
+            weight: 1.5,
+          }).addTo(userLayer);
+
+          // Pulsing user location marker
+          const userPinIcon = L.divIcon({
+            className: "user-gps-location-pin",
+            html: `
+              <div style="position: relative; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                <div style="position: absolute; width: 24px; height: 24px; border-radius: 50%; background-color: #0284C7; opacity: 0.45; animation: gpsPulse 2s infinite ease-out;"></div>
+                <div style="width: 14px; height: 14px; border-radius: 50%; background-color: #0284C7; border: 2.5px solid #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.35); position: relative; z-index: 2;"></div>
+              </div>
+              <style>
+                @keyframes gpsPulse {
+                  0% { transform: scale(0.7); opacity: 0.8; }
+                  70% { transform: scale(2.4); opacity: 0; }
+                  100% { transform: scale(2.4); opacity: 0; }
+                }
+              </style>
+            `,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12],
+          });
+
+          const userMarker = L.marker([latitude, longitude], {
+            icon: userPinIcon,
+            zIndexOffset: 1000,
+          }).addTo(userLayer);
+
+          userMarker
+            .bindTooltip(
+              `<div style="text-align:center; font-weight:700; color:#0284C7; font-size:11px;">Вы здесь</div>`,
+              { permanent: false, direction: "top", offset: [0, -10] }
+            )
+            .openTooltip();
+        }
+
+        map.flyTo([latitude, longitude], 14, { duration: 1.2 });
+      },
+      (err) => {
+        setIsLocating(false);
+        if (err.code === 1) {
+          alert("Доступ к геолокации запрещен в браузере. Разрешите доступ к геопозиции в настройках сайта.");
+        } else {
+          alert("Не удалось определить координаты GPS");
         }
       },
-      () => {
-        setIsLocating(false);
-        alert("Не удалось определить координаты GPS");
-      }
+      { enableHighAccuracy: true, timeout: 10000 }
     );
   };
 
@@ -501,7 +584,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
         </div>
       )}
 
-      {/* 2. Active Route Navigation & Attached Guides Panel (Mobile Bottom Sheet / Desktop Overlay) */}
+      {/* 2. Active Route Navigation & Full Information Panel (Mobile Bottom Sheet / Desktop Overlay) */}
       {activeRoute && (
         <div className="fixed sm:absolute bottom-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-auto sm:bottom-auto sm:w-[380px] z-30 p-4 sm:p-5 rounded-2xl bg-white border border-[#E1E1E1] shadow-2xl flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-3 duration-200 max-h-[80vh] overflow-y-auto">
           {/* Header with Clear Back Action and Mobile Collapse Toggle */}
@@ -533,7 +616,11 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
               {/* Mobile Collapse/Expand Button */}
               <button
                 type="button"
-                onClick={() => setIsCardCollapsed((prev) => !prev)}
+                onClick={() =>
+                  setCollapsedRouteId((prev) =>
+                    prev === selectedRouteId ? null : (selectedRouteId ?? null)
+                  )
+                }
                 className="p-1.5 rounded-lg bg-[#F0F2F2] hover:bg-[#E1E1E1] text-[#0D0D0D]/70 transition-colors cursor-pointer sm:hidden"
                 title={isCardCollapsed ? "Развернуть детали" : "Свернуть карточку"}
               >
@@ -560,6 +647,13 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
           {/* Full content when not collapsed */}
           {!isCardCollapsed && (
             <>
+              {/* Route Description */}
+              {activeRoute.description && (
+                <div className="p-3 rounded-xl bg-[#F0F2F2] border border-[#E1E1E1] text-xs text-[#0D0D0D]/80 leading-relaxed">
+                  <p>{activeRoute.description[language] || activeRoute.description.ru}</p>
+                </div>
+              )}
+
               {/* Expandable Safety Guidance Notice */}
               {showSafetyModal && (
                 <div className="p-3 rounded-xl border border-[#07626A]/20 bg-[#F0F2F2] flex items-start gap-2.5 animate-in fade-in duration-150">
@@ -582,7 +676,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                     A
                   </span>
                   <span className="font-semibold text-[#0D0D0D]">
-                    Старт: {activeRoute.pois?.[0]?.name.ru || "База отдыха"}
+                    Старт: {activeRoute.pois?.[0]?.name[language] || activeRoute.pois?.[0]?.name.ru || "База отдыха"}
                   </span>
                 </div>
 
@@ -740,7 +834,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
         </div>
       )}
 
-      {/* 3. Top Helper prompt when no basecamp or route is active (Hidden on small mobile to keep map 100% visible) */}
+      {/* Helper prompt when no route or basecamp is active */}
       {!selectedBasecamp && !activeRoute && (
         <div className="hidden sm:flex absolute top-4 left-4 z-10 px-4 py-2.5 rounded-xl bg-white border border-[#E1E1E1] shadow-sm items-center gap-2 pointer-events-none">
           <Footprints className="w-4 h-4 text-[#07626A]" />
