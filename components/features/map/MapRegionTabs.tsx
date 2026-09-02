@@ -27,7 +27,20 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   useEffect(() => {
-    setAllRegions(AdminStorageService.getRegions());
+    const loadRegions = () => {
+      setAllRegions(AdminStorageService.getRegions());
+    };
+    loadRegions();
+
+    window.addEventListener("aiym_storage_updated", loadRegions);
+    window.addEventListener("storage", loadRegions);
+    window.addEventListener("focus", loadRegions);
+
+    return () => {
+      window.removeEventListener("aiym_storage_updated", loadRegions);
+      window.removeEventListener("storage", loadRegions);
+      window.removeEventListener("focus", loadRegions);
+    };
   }, []);
 
   // Filter only regions that actually have routes

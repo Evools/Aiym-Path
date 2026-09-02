@@ -1,8 +1,6 @@
-import { RouteItem, AssignedGuide } from "@/types/route.types";
-import { ProjectLocation } from "@/types/location.types";
+import { RouteItem } from "@/types/route.types";
 import { GuidebookItem } from "@/types/guidebook.types";
 import { ROUTES_DATA } from "@/data/routes.data";
-import { INITIAL_LOCATIONS } from "@/data/locations.data";
 import { GUIDEBOOK_ITEMS } from "@/data/guidebook.data";
 
 export interface AdminGuideItem {
@@ -346,6 +344,12 @@ const STORAGE_KEYS = {
   CONTACTS: "aiym_path_contacts_v1",
 };
 
+function notifyStorageChange() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("aiym_storage_updated"));
+  }
+}
+
 export const AdminStorageService = {
   // --- ROUTES ---
   getRoutes(): RouteItem[] {
@@ -377,12 +381,14 @@ export const AdminStorageService = {
       routes.unshift(route);
     }
     localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(routes));
+    notifyStorageChange();
   },
 
   deleteRoute(id: string): void {
     if (typeof window === "undefined") return;
     const routes = this.getRoutes().filter((r) => r.id !== id);
     localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(routes));
+    notifyStorageChange();
   },
 
   // --- GUIDES ---
@@ -410,12 +416,14 @@ export const AdminStorageService = {
       guides.unshift(guide);
     }
     localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(guides));
+    notifyStorageChange();
   },
 
   deleteGuide(id: string): void {
     if (typeof window === "undefined") return;
     const guides = this.getGuides().filter((g) => g.id !== id);
     localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(guides));
+    notifyStorageChange();
   },
 
   // --- LOCATIONS & HOTELS ---
@@ -443,12 +451,14 @@ export const AdminStorageService = {
       locations.unshift(loc);
     }
     localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(locations));
+    notifyStorageChange();
   },
 
   deleteLocation(id: string): void {
     if (typeof window === "undefined") return;
     const locations = this.getLocations().filter((l) => l.id !== id);
     localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(locations));
+    notifyStorageChange();
   },
 
   // --- REGIONS ---
@@ -476,12 +486,14 @@ export const AdminStorageService = {
       regions.push(region);
     }
     localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
+    notifyStorageChange();
   },
 
   deleteRegion(id: string): void {
     if (typeof window === "undefined") return;
     const regions = this.getRegions().filter((r) => r.id !== id);
     localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
+    notifyStorageChange();
   },
 
   // --- GUIDEBOOK ITEMS ---
@@ -540,6 +552,7 @@ export const AdminStorageService = {
   saveContacts(contacts: AdminProjectContacts): void {
     if (typeof window === "undefined") return;
     localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+    notifyStorageChange();
   },
 
   // Reset to default seed data
@@ -551,5 +564,6 @@ export const AdminStorageService = {
     localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(DEFAULT_REGIONS));
     localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(GUIDEBOOK_ITEMS));
     localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(DEFAULT_CONTACTS));
+    notifyStorageChange();
   },
 };

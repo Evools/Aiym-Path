@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { RouteFilterRegion, RouteItem } from "@/types/route.types";
-import { AdminStorageService } from "@/lib/services/admin-storage.service";
+import { AdminStorageService, AdminLocationItem } from "@/lib/services/admin-storage.service";
 import { MapRegionTabs } from "./MapRegionTabs";
 import { InteractiveMapWrapper } from "./InteractiveMapWrapper";
 import { MapLegend } from "./MapLegend";
@@ -10,12 +10,27 @@ import { RoutesListSection } from "./RoutesListSection";
 
 export const MapExplorerSection: React.FC = () => {
   const [routesData, setRoutesData] = useState<RouteItem[]>([]);
+  const [locationsData, setLocationsData] = useState<AdminLocationItem[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<RouteFilterRegion>("all");
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setRoutesData(AdminStorageService.getRoutes());
+    const loadAll = () => {
+      setRoutesData(AdminStorageService.getRoutes());
+      setLocationsData(AdminStorageService.getLocations());
+    };
+    loadAll();
+
+    window.addEventListener("aiym_storage_updated", loadAll);
+    window.addEventListener("storage", loadAll);
+    window.addEventListener("focus", loadAll);
+
+    return () => {
+      window.removeEventListener("aiym_storage_updated", loadAll);
+      window.removeEventListener("storage", loadAll);
+      window.removeEventListener("focus", loadAll);
+    };
   }, []);
 
   const filteredRoutes = useMemo(() => {
@@ -55,6 +70,7 @@ export const MapExplorerSection: React.FC = () => {
         <div ref={mapContainerRef}>
           <InteractiveMapWrapper
             routes={filteredRoutes}
+            locations={locationsData}
             selectedRegion={selectedRegion}
             selectedRouteId={selectedRouteId}
             onSelectRoute={(id) => setSelectedRouteId((prev) => (prev === id ? null : id))}

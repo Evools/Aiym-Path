@@ -3,6 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { RouteItem, RouteFilterRegion } from "@/types/route.types";
+import { AdminLocationItem } from "@/lib/services/admin-storage.service";
 
 const DynamicLeafletMap = dynamic(
   () =>
@@ -24,6 +25,7 @@ const DynamicLeafletMap = dynamic(
 
 interface InteractiveMapWrapperProps {
   routes: RouteItem[];
+  locations?: AdminLocationItem[];
   selectedRegion: RouteFilterRegion;
   selectedRouteId: string | null;
   onSelectRoute: (id: string) => void;

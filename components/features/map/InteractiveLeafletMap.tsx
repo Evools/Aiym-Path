@@ -5,6 +5,7 @@ import Image from "next/image";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { RouteItem, RouteRegion, RouteFilterRegion, AssignedGuide } from "@/types/route.types";
+import { AdminLocationItem } from "@/lib/services/admin-storage.service";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   Footprints,
@@ -28,6 +29,20 @@ import {
   Minimize2,
 } from "lucide-react";
 
+function getDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 interface BasecampHub {
   id: string;
   name: {
@@ -41,7 +56,7 @@ interface BasecampHub {
   routeIds: string[];
 }
 
-const BASECAMPS: BasecampHub[] = [
+const SEED_BASECAMPS: BasecampHub[] = [
   {
     id: "hub-alplager",
     name: {
@@ -82,6 +97,7 @@ const BASECAMPS: BasecampHub[] = [
 
 interface InteractiveLeafletMapProps {
   routes: RouteItem[];
+  locations?: AdminLocationItem[];
   selectedRegion: RouteFilterRegion;
   selectedRouteId: string | null;
   onSelectRoute: (id: string) => void;
@@ -89,6 +105,7 @@ interface InteractiveLeafletMapProps {
 
 export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
   routes,
+  locations = [],
   selectedRegion,
   selectedRouteId,
   onSelectRoute,
@@ -106,6 +123,71 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
 
   const [isMapReady, setIsMapReady] = useState<boolean>(false);
   const [selectedBasecamp, setSelectedBasecamp] = useState<BasecampHub | null>(null);
+
+  // Dynamic Basecamps & Trailheads computed from real admin routes and locations
+  const allBasecamps: BasecampHub[] = useMemo(() => {
+    const hubsMap = new Map<string, BasecampHub>();
+
+    // 1. Seed basecamps
+    SEED_BASECAMPS.forEach((b) => {
+      hubsMap.set(b.id, {
+        ...b,
+        routeIds: [],
+      });
+    });
+
+    // 2. Admin locations
+    if (locations && locations.length > 0) {
+      locations.forEach((loc) => {
+        if (loc.coordinates && loc.coordinates.length === 2) {
+          if (!hubsMap.has(loc.id)) {
+            hubsMap.set(loc.id, {
+              id: loc.id,
+              name: loc.title,
+              region: "ala-archa",
+              lat: loc.coordinates[0],
+              lng: loc.coordinates[1],
+              routeIds: [],
+            });
+          }
+        }
+      });
+    }
+
+    // 3. Match each route to a nearby hub (< 3km) or create a trailhead hub
+    routes.forEach((route) => {
+      const startPt = route.pois?.[0]
+        ? [route.pois[0].lat, route.pois[0].lng]
+        : route.coordinates?.[0] || route.centerCoordinates;
+
+      if (!startPt || startPt.length < 2) return;
+      const [startLat, startLng] = startPt;
+
+      let matchedHub: BasecampHub | null = null;
+      for (const hub of hubsMap.values()) {
+        const distKm = getDistanceKm(hub.lat, hub.lng, startLat, startLng);
+        if (distKm < 3.0) {
+          hub.routeIds.push(route.id);
+          matchedHub = hub;
+          break;
+        }
+      }
+
+      if (!matchedHub) {
+        const hubId = `hub-${route.id}`;
+        hubsMap.set(hubId, {
+          id: hubId,
+          name: route.title,
+          region: route.region,
+          lat: startLat,
+          lng: startLng,
+          routeIds: [route.id],
+        });
+      }
+    });
+
+    return Array.from(hubsMap.values()).filter((h) => h.routeIds.length > 0);
+  }, [routes, locations]);
 
   const activeRoute = useMemo(
     () => (selectedRouteId ? routes.find((r) => r.id === selectedRouteId) || null : null),
@@ -200,8 +282,8 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     const currentRoute = activeRoute;
     const visibleBasecamps =
       selectedRegion === "all"
-        ? BASECAMPS
-        : BASECAMPS.filter((b) => b.region === selectedRegion);
+        ? allBasecamps
+        : allBasecamps.filter((b) => b.region === selectedRegion);
 
     const routesInRegion =
       selectedRegion === "all"
@@ -274,7 +356,10 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     } else {
       // Overview mode: Render Basecamp Hubs & Clean Trail Paths
       visibleBasecamps.forEach((basecamp) => {
-        const campName = basecamp.name[language] || basecamp.name.ru;
+        const campName =
+          typeof basecamp.name === "object"
+            ? basecamp.name[language] || basecamp.name.ru || "База"
+            : String(basecamp.name);
         const count = basecamp.routeIds.length;
 
         const basecampIcon = L.divIcon({
@@ -296,8 +381,12 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
 
         marker.on("click", (e) => {
           L.DomEvent.stopPropagation(e);
-          setSelectedBasecamp(basecamp);
-          onSelectRoute("");
+          if (basecamp.routeIds.length === 1) {
+            onSelectRoute(basecamp.routeIds[0]);
+          } else {
+            setSelectedBasecamp(basecamp);
+            onSelectRoute("");
+          }
         });
 
         basecampsLayer.addLayer(marker);
@@ -335,7 +424,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
       region: selectedRegion,
       routeId: selectedRouteId,
     };
-  }, [routes, selectedRegion, selectedRouteId, activeRoute, language, onSelectRoute, isMapReady]);
+  }, [routes, selectedRegion, selectedRouteId, activeRoute, language, onSelectRoute, isMapReady, allBasecamps]);
 
   // Handle selecting a route from the basecamp popup
   const handleSelectRouteFromBasecamp = (routeId: string) => {
@@ -345,11 +434,11 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
 
   const handleBackToRoutes = () => {
     const parentBasecamp = activeRoute
-      ? BASECAMPS.find((b) => b.routeIds.includes(activeRoute.id)) || null
+      ? allBasecamps.find((b) => b.routeIds.includes(activeRoute.id)) || null
       : null;
 
     onSelectRoute("");
-    if (parentBasecamp) {
+    if (parentBasecamp && parentBasecamp.routeIds.length > 1) {
       setSelectedBasecamp(parentBasecamp);
     } else {
       setSelectedBasecamp(null);
