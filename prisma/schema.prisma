@@ -1,0 +1,145 @@
+// Prisma Schema for Aiym Path (Female-Friendly Tourism Platform)
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Region {
+  id      String @id
+  labelRu String
+  labelKg String
+  labelEn String
+}
+
+model Route {
+  id                 String     @id
+  regionId           String
+  titleRu            String
+  titleKg            String
+  titleEn            String
+  descRu             String
+  descKg             String
+  descEn             String
+  difficulty         String     @default("easy")
+  distanceKm         Float      @default(0.0)
+  durationHours      Float      @default(0.0)
+  hasFemaleGuide     Boolean    @default(false)
+  elevationGainMeters Int       @default(0)
+  centerLat          Float      @default(0.0)
+  centerLng          Float      @default(0.0)
+  coordinates        Json       // Array of [lat, lng]
+  imageUrl           String?
+  assignedGuides     Json?      // Array of AssignedGuide objects
+  pois               RoutePOI[]
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+}
+
+model RoutePOI {
+  id             String  @id
+  routeId        String?
+  nameRu         String
+  nameKg         String
+  nameEn         String
+  type           String  @default("viewpoint")
+  lat            Float
+  lng            Float
+  altitudeMeters Int?
+  descRu         String?
+  descKg         String?
+  descEn         String?
+  route          Route?  @relation(fields: [routeId], references: [id], onDelete: Cascade)
+}
+
+model Guide {
+  id                  String   @id
+  name                String
+  category            String   @default("guide") // "guide" | "agency"
+  roleRu              String
+  roleKg              String
+  roleEn              String
+  image               String
+  phone               String
+  email               String?
+  experienceYears     Int      @default(1)
+  languages           String[]
+  locations           String[]
+  groupSize           String   @default("1–8 человек")
+  skillsFirstAid      Boolean  @default(false)
+  skillsMountaineer   Boolean  @default(false)
+  skillsMountainGuide Boolean  @default(false)
+  isFemale            Boolean  @default(true)
+  isVerified          Boolean  @default(true)
+  rating              Float    @default(5.0)
+  routesCount         Int      @default(0)
+  bioRu               String?
+  bioKg               String?
+  bioEn               String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Location {
+  id                 String   @id
+  key                String?
+  titleRu            String
+  titleKg            String
+  titleEn            String
+  descRu             String
+  descKg             String
+  descEn             String
+  type               String   @default("hotel") // "hotel" | "camp" | "hub" | "location"
+  image              String
+  lat                Float
+  lng                Float
+  phone              String?
+  amenities          String[]
+  difficulty         String?
+  distanceKm         Float?
+  elevationGainMeters Int?
+  hasFemaleGuide     Boolean  @default(false)
+  hasEmergencyPoints Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model GuidebookItem {
+  id             String   @id
+  audience       String   // "travelers" | "providers"
+  category       String   // "safety" | "female_tips" | "trekking" ...
+  iconName       String   // "ShieldCheck", etc.
+  titleRu        String
+  titleKg        String
+  titleEn        String
+  shortDescRu    String
+  shortDescKg    String
+  shortDescEn    String
+  detailsRu      String[]
+  detailsKg      String[]
+  detailsEn      String[]
+  badgeTextRu    String?
+  badgeTextKg    String?
+  badgeTextEn    String?
+  actionType     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model ProjectContact {
+  id                String   @id @default("main")
+  email             String
+  phone             String
+  addressRu         String
+  addressKg         String
+  addressEn         String
+  workingHoursRu    String
+  workingHoursKg    String
+  workingHoursEn    String
+  emergencyContacts Json     // Array of AdminEmergencyContact
+  updatedAt         DateTime @updatedAt
+}

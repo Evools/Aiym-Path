@@ -188,7 +188,7 @@ export const DEFAULT_CONTACTS: AdminProjectContacts = {
   ],
 };
 
-const DEFAULT_GUIDES: AdminGuideItem[] = [
+export const DEFAULT_GUIDES: AdminGuideItem[] = [
   {
     id: "guide-aisuluu",
     name: "Айсулуу Жумабекова",
@@ -260,7 +260,7 @@ const DEFAULT_GUIDES: AdminGuideItem[] = [
   },
 ];
 
-const DEFAULT_LOCATIONS: AdminLocationItem[] = [
+export const DEFAULT_LOCATIONS: AdminLocationItem[] = [
   {
     id: "loc-chunkurchak-resort",
     title: {
@@ -350,7 +350,38 @@ function notifyStorageChange() {
   }
 }
 
+// Background sync from Database / API to cache
+async function syncFromApi<T>(endpoint: string, storageKey: string): Promise<T | null> {
+  try {
+    const res = await fetch(endpoint);
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem(storageKey, JSON.stringify(json.data));
+          notifyStorageChange();
+        }
+        return json.data as T;
+      }
+    }
+  } catch (err) {
+    console.warn(`Sync failed for ${endpoint}:`, err);
+  }
+  return null;
+}
+
 export const AdminStorageService = {
+  // Initialize sync from API
+  initSync(): void {
+    if (typeof window === "undefined") return;
+    syncFromApi("/api/routes", STORAGE_KEYS.ROUTES);
+    syncFromApi("/api/guides", STORAGE_KEYS.GUIDES);
+    syncFromApi("/api/locations", STORAGE_KEYS.LOCATIONS);
+    syncFromApi("/api/regions", STORAGE_KEYS.REGIONS);
+    syncFromApi("/api/guidebook", STORAGE_KEYS.GUIDEBOOK);
+    syncFromApi("/api/contacts", STORAGE_KEYS.CONTACTS);
+  },
+
   // --- ROUTES ---
   getRoutes(): RouteItem[] {
     if (typeof window === "undefined") return ROUTES_DATA;
@@ -359,11 +390,16 @@ export const AdminStorageService = {
       if (stored) {
         return JSON.parse(stored);
       }
-      localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(ROUTES_DATA));
+      syncFromApi<RouteItem[]>("/api/routes", STORAGE_KEYS.ROUTES);
       return ROUTES_DATA;
     } catch {
       return ROUTES_DATA;
     }
+  },
+
+  async fetchRoutes(): Promise<RouteItem[]> {
+    const data = await syncFromApi<RouteItem[]>("/api/routes", STORAGE_KEYS.ROUTES);
+    return data || this.getRoutes();
   },
 
   getRouteById(id: string): RouteItem | null {
@@ -371,24 +407,44 @@ export const AdminStorageService = {
     return routes.find((r) => r.id === id) || null;
   },
 
-  saveRoute(route: RouteItem): void {
-    if (typeof window === "undefined") return;
-    const routes = this.getRoutes();
-    const existingIndex = routes.findIndex((r) => r.id === route.id);
-    if (existingIndex >= 0) {
-      routes[existingIndex] = route;
-    } else {
-      routes.unshift(route);
+  async saveRoute(route: RouteItem): Promise<void> {
+    if (typeof window !== "undefined") {
+      const routes = this.getRoutes();
+      const existingIndex = routes.findIndex((r) => r.id === route.id);
+      if (existingIndex >= 0) {
+        routes[existingIndex] = route;
+      } else {
+        routes.unshift(route);
+      }
+      localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(routes));
+      notifyStorageChange();
     }
-    localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(routes));
-    notifyStorageChange();
+
+    try {
+      await fetch(`/api/routes/${route.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(route),
+      });
+    } catch (err) {
+      console.error("Failed to persist route to DB:", err);
+    }
   },
 
-  deleteRoute(id: string): void {
-    if (typeof window === "undefined") return;
-    const routes = this.getRoutes().filter((r) => r.id !== id);
-    localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(routes));
-    notifyStorageChange();
+  async deleteRoute(id: string): Promise<void> {
+    if (typeof window !== "undefined") {
+      const routes = this.getRoutes().filter((r) => r.id !== id);
+      localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(routes));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch(`/api/routes/${id}`, {
+        method: "DELETE",
+      });
+    } catch (err) {
+      console.error("Failed to delete route from DB:", err);
+    }
   },
 
   // --- GUIDES ---
@@ -399,31 +455,56 @@ export const AdminStorageService = {
       if (stored) {
         return JSON.parse(stored);
       }
-      localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(DEFAULT_GUIDES));
+      syncFromApi<AdminGuideItem[]>("/api/guides", STORAGE_KEYS.GUIDES);
       return DEFAULT_GUIDES;
     } catch {
       return DEFAULT_GUIDES;
     }
   },
 
-  saveGuide(guide: AdminGuideItem): void {
-    if (typeof window === "undefined") return;
-    const guides = this.getGuides();
-    const existingIndex = guides.findIndex((g) => g.id === guide.id);
-    if (existingIndex >= 0) {
-      guides[existingIndex] = guide;
-    } else {
-      guides.unshift(guide);
-    }
-    localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(guides));
-    notifyStorageChange();
+  async fetchGuides(): Promise<AdminGuideItem[]> {
+    const data = await syncFromApi<AdminGuideItem[]>("/api/guides", STORAGE_KEYS.GUIDES);
+    return data || this.getGuides();
   },
 
-  deleteGuide(id: string): void {
-    if (typeof window === "undefined") return;
-    const guides = this.getGuides().filter((g) => g.id !== id);
-    localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(guides));
-    notifyStorageChange();
+  async saveGuide(guide: AdminGuideItem): Promise<void> {
+    if (typeof window !== "undefined") {
+      const guides = this.getGuides();
+      const existingIndex = guides.findIndex((g) => g.id === guide.id);
+      if (existingIndex >= 0) {
+        guides[existingIndex] = guide;
+      } else {
+        guides.unshift(guide);
+      }
+      localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(guides));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch(`/api/guides/${guide.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(guide),
+      });
+    } catch (err) {
+      console.error("Failed to persist guide to DB:", err);
+    }
+  },
+
+  async deleteGuide(id: string): Promise<void> {
+    if (typeof window !== "undefined") {
+      const guides = this.getGuides().filter((g) => g.id !== id);
+      localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(guides));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch(`/api/guides/${id}`, {
+        method: "DELETE",
+      });
+    } catch (err) {
+      console.error("Failed to delete guide from DB:", err);
+    }
   },
 
   // --- LOCATIONS & HOTELS ---
@@ -434,31 +515,56 @@ export const AdminStorageService = {
       if (stored) {
         return JSON.parse(stored);
       }
-      localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(DEFAULT_LOCATIONS));
+      syncFromApi<AdminLocationItem[]>("/api/locations", STORAGE_KEYS.LOCATIONS);
       return DEFAULT_LOCATIONS;
     } catch {
       return DEFAULT_LOCATIONS;
     }
   },
 
-  saveLocation(loc: AdminLocationItem): void {
-    if (typeof window === "undefined") return;
-    const locations = this.getLocations();
-    const existingIndex = locations.findIndex((l) => l.id === loc.id);
-    if (existingIndex >= 0) {
-      locations[existingIndex] = loc;
-    } else {
-      locations.unshift(loc);
-    }
-    localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(locations));
-    notifyStorageChange();
+  async fetchLocations(): Promise<AdminLocationItem[]> {
+    const data = await syncFromApi<AdminLocationItem[]>("/api/locations", STORAGE_KEYS.LOCATIONS);
+    return data || this.getLocations();
   },
 
-  deleteLocation(id: string): void {
-    if (typeof window === "undefined") return;
-    const locations = this.getLocations().filter((l) => l.id !== id);
-    localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(locations));
-    notifyStorageChange();
+  async saveLocation(loc: AdminLocationItem): Promise<void> {
+    if (typeof window !== "undefined") {
+      const locations = this.getLocations();
+      const existingIndex = locations.findIndex((l) => l.id === loc.id);
+      if (existingIndex >= 0) {
+        locations[existingIndex] = loc;
+      } else {
+        locations.unshift(loc);
+      }
+      localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(locations));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch(`/api/locations/${loc.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loc),
+      });
+    } catch (err) {
+      console.error("Failed to persist location to DB:", err);
+    }
+  },
+
+  async deleteLocation(id: string): Promise<void> {
+    if (typeof window !== "undefined") {
+      const locations = this.getLocations().filter((l) => l.id !== id);
+      localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(locations));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch(`/api/locations/${id}`, {
+        method: "DELETE",
+      });
+    } catch (err) {
+      console.error("Failed to delete location from DB:", err);
+    }
   },
 
   // --- REGIONS ---
@@ -469,31 +575,56 @@ export const AdminStorageService = {
       if (stored) {
         return JSON.parse(stored);
       }
-      localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(DEFAULT_REGIONS));
+      syncFromApi<AdminRegionItem[]>("/api/regions", STORAGE_KEYS.REGIONS);
       return DEFAULT_REGIONS;
     } catch {
       return DEFAULT_REGIONS;
     }
   },
 
-  saveRegion(region: AdminRegionItem): void {
-    if (typeof window === "undefined") return;
-    const regions = this.getRegions();
-    const existingIndex = regions.findIndex((r) => r.id === region.id);
-    if (existingIndex >= 0) {
-      regions[existingIndex] = region;
-    } else {
-      regions.push(region);
-    }
-    localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
-    notifyStorageChange();
+  async fetchRegions(): Promise<AdminRegionItem[]> {
+    const data = await syncFromApi<AdminRegionItem[]>("/api/regions", STORAGE_KEYS.REGIONS);
+    return data || this.getRegions();
   },
 
-  deleteRegion(id: string): void {
-    if (typeof window === "undefined") return;
-    const regions = this.getRegions().filter((r) => r.id !== id);
-    localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
-    notifyStorageChange();
+  async saveRegion(region: AdminRegionItem): Promise<void> {
+    if (typeof window !== "undefined") {
+      const regions = this.getRegions();
+      const existingIndex = regions.findIndex((r) => r.id === region.id);
+      if (existingIndex >= 0) {
+        regions[existingIndex] = region;
+      } else {
+        regions.push(region);
+      }
+      localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch("/api/regions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(region),
+      });
+    } catch (err) {
+      console.error("Failed to persist region to DB:", err);
+    }
+  },
+
+  async deleteRegion(id: string): Promise<void> {
+    if (typeof window !== "undefined") {
+      const regions = this.getRegions().filter((r) => r.id !== id);
+      localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(regions));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch(`/api/regions/${id}`, {
+        method: "DELETE",
+      });
+    } catch (err) {
+      console.error("Failed to delete region from DB:", err);
+    }
   },
 
   // --- GUIDEBOOK ITEMS ---
@@ -504,11 +635,16 @@ export const AdminStorageService = {
       if (stored) {
         return JSON.parse(stored);
       }
-      localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(GUIDEBOOK_ITEMS));
+      syncFromApi<GuidebookItem[]>("/api/guidebook", STORAGE_KEYS.GUIDEBOOK);
       return GUIDEBOOK_ITEMS;
     } catch {
       return GUIDEBOOK_ITEMS;
     }
+  },
+
+  async fetchGuidebookItems(): Promise<GuidebookItem[]> {
+    const data = await syncFromApi<GuidebookItem[]>("/api/guidebook", STORAGE_KEYS.GUIDEBOOK);
+    return data || this.getGuidebookItems();
   },
 
   getGuidebookItemById(id: string): GuidebookItem | null {
@@ -516,22 +652,44 @@ export const AdminStorageService = {
     return items.find((i) => i.id === id) || null;
   },
 
-  saveGuidebookItem(item: GuidebookItem): void {
-    if (typeof window === "undefined") return;
-    const items = this.getGuidebookItems();
-    const existingIndex = items.findIndex((i) => i.id === item.id);
-    if (existingIndex >= 0) {
-      items[existingIndex] = item;
-    } else {
-      items.unshift(item);
+  async saveGuidebookItem(item: GuidebookItem): Promise<void> {
+    if (typeof window !== "undefined") {
+      const items = this.getGuidebookItems();
+      const existingIndex = items.findIndex((i) => i.id === item.id);
+      if (existingIndex >= 0) {
+        items[existingIndex] = item;
+      } else {
+        items.unshift(item);
+      }
+      localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(items));
+      notifyStorageChange();
     }
-    localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(items));
+
+    try {
+      await fetch(`/api/guidebook/${item.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
+    } catch (err) {
+      console.error("Failed to persist guidebook item to DB:", err);
+    }
   },
 
-  deleteGuidebookItem(id: string): void {
-    if (typeof window === "undefined") return;
-    const items = this.getGuidebookItems().filter((i) => i.id !== id);
-    localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(items));
+  async deleteGuidebookItem(id: string): Promise<void> {
+    if (typeof window !== "undefined") {
+      const items = this.getGuidebookItems().filter((i) => i.id !== id);
+      localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(items));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch(`/api/guidebook/${id}`, {
+        method: "DELETE",
+      });
+    } catch (err) {
+      console.error("Failed to delete guidebook item from DB:", err);
+    }
   },
 
   // --- PROJECT CONTACTS & EMERGENCY ---
@@ -542,28 +700,51 @@ export const AdminStorageService = {
       if (stored) {
         return JSON.parse(stored);
       }
-      localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(DEFAULT_CONTACTS));
+      syncFromApi<AdminProjectContacts>("/api/contacts", STORAGE_KEYS.CONTACTS);
       return DEFAULT_CONTACTS;
     } catch {
       return DEFAULT_CONTACTS;
     }
   },
 
-  saveContacts(contacts: AdminProjectContacts): void {
-    if (typeof window === "undefined") return;
-    localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
-    notifyStorageChange();
+  async fetchContacts(): Promise<AdminProjectContacts> {
+    const data = await syncFromApi<AdminProjectContacts>("/api/contacts", STORAGE_KEYS.CONTACTS);
+    return data || this.getContacts();
+  },
+
+  async saveContacts(contacts: AdminProjectContacts): Promise<void> {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+      notifyStorageChange();
+    }
+
+    try {
+      await fetch("/api/contacts", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contacts),
+      });
+    } catch (err) {
+      console.error("Failed to persist contacts to DB:", err);
+    }
   },
 
   // Reset to default seed data
-  resetAll(): void {
-    if (typeof window === "undefined") return;
-    localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(ROUTES_DATA));
-    localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(DEFAULT_GUIDES));
-    localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(DEFAULT_LOCATIONS));
-    localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(DEFAULT_REGIONS));
-    localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(GUIDEBOOK_ITEMS));
-    localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(DEFAULT_CONTACTS));
-    notifyStorageChange();
+  async resetAll(): Promise<void> {
+    try {
+      await fetch("/api/reset", { method: "POST" });
+    } catch (err) {
+      console.error("Reset API failed:", err);
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEYS.ROUTES, JSON.stringify(ROUTES_DATA));
+      localStorage.setItem(STORAGE_KEYS.GUIDES, JSON.stringify(DEFAULT_GUIDES));
+      localStorage.setItem(STORAGE_KEYS.LOCATIONS, JSON.stringify(DEFAULT_LOCATIONS));
+      localStorage.setItem(STORAGE_KEYS.REGIONS, JSON.stringify(DEFAULT_REGIONS));
+      localStorage.setItem(STORAGE_KEYS.GUIDEBOOK, JSON.stringify(GUIDEBOOK_ITEMS));
+      localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(DEFAULT_CONTACTS));
+      notifyStorageChange();
+    }
   },
 };
