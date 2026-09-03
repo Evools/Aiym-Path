@@ -42,9 +42,9 @@ export const ROUTES_DATA: RouteItem[] = [
       en: "Trail to Ratsek Hut",
     },
     description: {
-      ru: "Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой, а не поодиночке.",
-      kg: "Маршрутту ишенимдүү адамга билдирип, аба ырайын текшерип, аптечка алыңыз. Татаал тилкелерде жалгыз эмес, топ менен жүрүңүз.",
-      en: "Share your route with a trusted contact, check mountain weather forecasts, and pack a first-aid kit. Move in groups on steep terrain.",
+      ru: "Живописный высокогорный маршрут через сосновые рощи, реку Аксай и водопад к легендарной хижине Рацека с панорамой ледников.",
+      kg: "Карагай токою, Аксай дарыясы жана шаркыратма аркылуу Рацек алачыгына жана мөңгүлөргө баруучу кооз бийик тоо чыйыры.",
+      en: "Scenic alpine trail through pine groves, the Ak-Sai river and waterfall leading to the historic Ratsek Hut with views of glaciers.",
     },
     difficulty: "medium",
     distanceKm: 12,

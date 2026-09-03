@@ -95,6 +95,104 @@ const SEED_BASECAMPS: BasecampHub[] = [
   },
 ];
 
+const MAP_I18N = {
+  tipButton: {
+    ru: "Совет",
+    kg: "Кеңеш",
+    en: "Tip",
+  },
+  safetyTipTitle: {
+    ru: "Совет безопасности Aiym Path:",
+    kg: "Aiym Path коопсуздук кеңеши:",
+    en: "Aiym Path Safety Tip:",
+  },
+  safetyTipText: {
+    ru: "Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой.",
+    kg: "Маршрутту ишенимдүү адамга кабарлаңыз, аба ырайын текшериңиз жана дары кутусун жаныңызга алыңыз. Татаал жерлерде топ менен жүрүңүз.",
+    en: "Share your route with a trusted person, check the weather forecast and carry a first-aid kit. Travel in groups on challenging sections.",
+  },
+  backToRoutes: {
+    ru: "Назад к маршрутам",
+    kg: "Маршруттарга кайтуу",
+    en: "Back to trails",
+  },
+  basecampHubLabel: {
+    ru: "База отдыха / Хаб",
+    kg: "Эс алуу базасы / Хаб",
+    en: "Basecamp / Hub",
+  },
+  chooseTrailFromBasecamp: {
+    ru: "Выберите пеший маршрут от этой базы отдыха:",
+    kg: "Бул эс алуу базасынан жөө маршрутту тандаңыз:",
+    en: "Choose a hiking trail from this basecamp:",
+  },
+  checkpointStart: {
+    ru: "Старт",
+    kg: "Башталышы",
+    en: "Start",
+  },
+  hikingTrail: {
+    ru: "Пешая горная тропа",
+    kg: "Тоо чыйыры",
+    en: "Hiking trail",
+  },
+  checkpointFinish: {
+    ru: "Финиш",
+    kg: "Аягы",
+    en: "Finish",
+  },
+  distance: {
+    ru: "Дистанция",
+    kg: "Аралык",
+    en: "Distance",
+  },
+  time: {
+    ru: "Пешком",
+    kg: "Жөө басуу",
+    en: "Duration",
+  },
+  elevation: {
+    ru: "Набор",
+    kg: "Бийиктик",
+    en: "Elevation",
+  },
+  unitKm: {
+    ru: "км",
+    kg: "км",
+    en: "km",
+  },
+  unitHours: {
+    ru: "ч",
+    kg: "саат",
+    en: "h",
+  },
+  unitMeters: {
+    ru: "м",
+    kg: "м",
+    en: "m",
+  },
+  availableGuides: {
+    ru: "Доступные гиды",
+    kg: "Жеткиликтүү гиддер",
+    en: "Available guides",
+  },
+  leadGuide: {
+    ru: "Ответственный гид",
+    kg: "Жооптуу гид",
+    en: "Lead Guide",
+  },
+  yearsExperience: {
+    ru: "лет опыта",
+    kg: "жыл тажрыйба",
+    en: "yrs exp.",
+  },
+  mapEmptyPrompt: {
+    ru: "Нажмите на базу отдыха на карте или выберите маршрут из списка ниже",
+    kg: "Картадагы эс алуу базасын басыңыз же төмөнкү тизмеден маршрутту тандаңыз",
+    en: "Click a basecamp on the map or select a route from the list below",
+  },
+};
+
 interface InteractiveLeafletMapProps {
   routes: RouteItem[];
   locations?: AdminLocationItem[];
@@ -619,7 +717,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
           <div className="flex items-center justify-between gap-2">
             <div>
               <span className="text-[10px] font-bold uppercase text-[#07626A] block">
-                База отдыха / Хаб
+                {MAP_I18N.basecampHubLabel[language] || MAP_I18N.basecampHubLabel.ru}
               </span>
               <h4 className="text-sm sm:text-base font-bold text-[#0D0D0D]">
                 {selectedBasecamp.name[language] || selectedBasecamp.name.ru}
@@ -637,7 +735,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
           </div>
 
           <p className="text-xs text-[#0D0D0D]/70">
-            Выберите пеший маршрут от этой базы отдыха:
+            {MAP_I18N.chooseTrailFromBasecamp[language] || MAP_I18N.chooseTrailFromBasecamp.ru}
           </p>
 
           {/* List of Available Trails */}
@@ -659,7 +757,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                       {rTitle}
                     </h5>
                     <span className="text-[11px] text-[#0D0D0D]/60 mt-0.5 block">
-                      {r.distanceKm} км • ~{r.durationHours} ч • +{r.elevationGainMeters} м
+                      {r.distanceKm} {MAP_I18N.unitKm[language] || MAP_I18N.unitKm.ru} • ~{r.durationHours} {MAP_I18N.unitHours[language] || MAP_I18N.unitHours.ru} • +{r.elevationGainMeters} {MAP_I18N.unitMeters[language] || MAP_I18N.unitMeters.ru}
                     </span>
                   </div>
 
@@ -684,7 +782,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#F0F2F2] hover:bg-[#E1E1E1] text-[#07626A] text-xs font-bold transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Назад к маршрутам</span>
+              <span>{MAP_I18N.backToRoutes[language] || MAP_I18N.backToRoutes.ru}</span>
             </button>
 
             <div className="flex items-center gap-1.5">
@@ -699,7 +797,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                 }`}
               >
                 <ShieldAlert className="w-3.5 h-3.5" />
-                <span>Совет</span>
+                <span>{MAP_I18N.tipButton[language] || MAP_I18N.tipButton.ru}</span>
               </button>
 
               {/* Mobile Collapse/Expand Button */}
@@ -728,7 +826,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
             </h4>
             {isCardCollapsed && (
               <span className="text-[11px] text-[#07626A] font-semibold block mt-0.5">
-                {activeRoute.distanceKm} км • ~{activeRoute.durationHours} ч • +{activeRoute.elevationGainMeters} м
+                {activeRoute.distanceKm} {MAP_I18N.unitKm[language] || MAP_I18N.unitKm.ru} • ~{activeRoute.durationHours} {MAP_I18N.unitHours[language] || MAP_I18N.unitHours.ru} • +{activeRoute.elevationGainMeters} {MAP_I18N.unitMeters[language] || MAP_I18N.unitMeters.ru}
               </span>
             )}
           </div>
@@ -736,12 +834,6 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
           {/* Full content when not collapsed */}
           {!isCardCollapsed && (
             <>
-              {/* Route Description */}
-              {activeRoute.description && (
-                <div className="p-3 rounded-xl bg-[#F0F2F2] border border-[#E1E1E1] text-xs text-[#0D0D0D]/80 leading-relaxed">
-                  <p>{activeRoute.description[language] || activeRoute.description.ru}</p>
-                </div>
-              )}
 
               {/* Expandable Safety Guidance Notice */}
               {showSafetyModal && (
@@ -749,10 +841,10 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                   <ShieldCheck className="w-4 h-4 text-[#07626A] shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <span className="font-bold text-[#07626A] block mb-0.5">
-                      Совет безопасности Aiym Path:
+                      {MAP_I18N.safetyTipTitle[language] || MAP_I18N.safetyTipTitle.ru}
                     </span>
                     <p className="text-[#0D0D0D]/85 leading-relaxed">
-                      Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой.
+                      {MAP_I18N.safetyTipText[language] || MAP_I18N.safetyTipText.ru}
                     </p>
                   </div>
                 </div>
@@ -765,12 +857,12 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                     A
                   </span>
                   <span className="font-semibold text-[#0D0D0D]">
-                    Старт: {activeRoute.pois?.[0]?.name[language] || activeRoute.pois?.[0]?.name.ru || "База отдыха"}
+                    {MAP_I18N.checkpointStart[language] || MAP_I18N.checkpointStart.ru}: {activeRoute.pois?.[0]?.name[language] || activeRoute.pois?.[0]?.name.ru || (MAP_I18N.basecampHubLabel[language] || MAP_I18N.basecampHubLabel.ru)}
                   </span>
                 </div>
 
                 <div className="border-l-2 border-dashed border-[#07626A]/40 ml-2.5 pl-4 py-0.5 text-[11px] text-[#0D0D0D]/70">
-                  Пешая горная тропа ({activeRoute.distanceKm} км)
+                  {MAP_I18N.hikingTrail[language] || MAP_I18N.hikingTrail.ru} ({activeRoute.distanceKm} {MAP_I18N.unitKm[language] || MAP_I18N.unitKm.ru})
                 </div>
 
                 <div className="flex items-center gap-2.5">
@@ -778,7 +870,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                     B
                   </span>
                   <span className="font-semibold text-[#0D0D0D]">
-                    Финиш: {activeRoute.title[language] || activeRoute.title.ru}
+                    {MAP_I18N.checkpointFinish[language] || MAP_I18N.checkpointFinish.ru}: {activeRoute.title[language] || activeRoute.title.ru}
                   </span>
                 </div>
               </div>
@@ -791,10 +883,10 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                 >
                   <div className="flex items-center justify-center gap-1 text-[10px] text-[#0D0D0D]/60 font-medium mb-0.5">
                     <MapPin className="w-3 h-3 text-[#07626A]" />
-                    <span>Дистанция</span>
+                    <span>{MAP_I18N.distance[language] || MAP_I18N.distance.ru}</span>
                   </div>
                   <span className="text-xs sm:text-sm font-bold text-[#0D0D0D]">
-                    {activeRoute.distanceKm} км
+                    {activeRoute.distanceKm} {MAP_I18N.unitKm[language] || MAP_I18N.unitKm.ru}
                   </span>
                 </div>
 
@@ -804,10 +896,10 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                 >
                   <div className="flex items-center justify-center gap-1 text-[10px] text-[#0D0D0D]/60 font-medium mb-0.5">
                     <Clock className="w-3 h-3 text-[#07626A]" />
-                    <span>Пешком</span>
+                    <span>{MAP_I18N.time[language] || MAP_I18N.time.ru}</span>
                   </div>
                   <span className="text-xs sm:text-sm font-bold text-[#0D0D0D]">
-                    ~{activeRoute.durationHours} ч
+                    ~{activeRoute.durationHours} {MAP_I18N.unitHours[language] || MAP_I18N.unitHours.ru}
                   </span>
                 </div>
 
@@ -817,10 +909,10 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                 >
                   <div className="flex items-center justify-center gap-1 text-[10px] text-[#0D0D0D]/60 font-medium mb-0.5">
                     <TrendingUp className="w-3 h-3 text-[#07626A]" />
-                    <span>Набор</span>
+                    <span>{MAP_I18N.elevation[language] || MAP_I18N.elevation.ru}</span>
                   </div>
                   <span className="text-xs sm:text-sm font-bold text-[#0D0D0D]">
-                    +{activeRoute.elevationGainMeters} м
+                    +{activeRoute.elevationGainMeters} {MAP_I18N.unitMeters[language] || MAP_I18N.unitMeters.ru}
                   </span>
                 </div>
               </div>
@@ -833,17 +925,17 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                       {guides.length > 1 ? (
                         <>
                           <Users className="w-3.5 h-3.5" />
-                          <span>Доступные гиды ({guides.length})</span>
+                          <span>{MAP_I18N.availableGuides[language] || MAP_I18N.availableGuides.ru} ({guides.length})</span>
                         </>
                       ) : (
                         <>
                           <ShieldCheck className="w-3.5 h-3.5" />
-                          <span>Ответственный гид</span>
+                          <span>{MAP_I18N.leadGuide[language] || MAP_I18N.leadGuide.ru}</span>
                         </>
                       )}
                     </span>
                     <span className="text-[10px] font-semibold text-[#0D0D0D]/60">
-                      {currentGuide.experienceYears} лет опыта
+                      {currentGuide.experienceYears} {MAP_I18N.yearsExperience[language] || MAP_I18N.yearsExperience.ru}
                     </span>
                   </div>
 
@@ -928,7 +1020,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
         <div className="hidden sm:flex absolute top-4 left-4 z-10 px-4 py-2.5 rounded-xl bg-white border border-[#E1E1E1] shadow-sm items-center gap-2 pointer-events-none">
           <Footprints className="w-4 h-4 text-[#07626A]" />
           <span className="text-xs font-medium text-[#0D0D0D]">
-            Нажмите на базу отдыха на карте или выберите маршрут из списка ниже
+            {MAP_I18N.mapEmptyPrompt[language] || MAP_I18N.mapEmptyPrompt.ru}
           </span>
         </div>
       )}
