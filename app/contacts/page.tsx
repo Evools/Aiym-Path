@@ -96,10 +96,10 @@ export default function ContactsPage() {
       <section className="py-10 sm:py-14 lg:py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-            
+
             {/* Left Column: Compact Direct Contacts & Smooth FAQ (5 cols) */}
             <div className="lg:col-span-5 flex flex-col gap-4">
-              
+
               {/* Consolidated Compact Contact Card */}
               <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.25)] transition-colors flex flex-col gap-3.5">
                 {/* Header */}
@@ -207,11 +207,10 @@ export default function ContactsPage() {
                     return (
                       <div
                         key={idx}
-                        className={`rounded-2xl border bg-white overflow-hidden transition-colors duration-200 ${
-                          isOpen
-                            ? "border-[rgba(7,98,106,0.25)]"
-                            : "border-[#E1E1E1] hover:border-[rgba(7,98,106,0.20)]"
-                        }`}
+                        className={`rounded-2xl border bg-white overflow-hidden transition-colors duration-200 ${isOpen
+                          ? "border-[rgba(7,98,106,0.25)]"
+                          : "border-[#E1E1E1] hover:border-[rgba(7,98,106,0.20)]"
+                          }`}
                       >
                         <button
                           type="button"
@@ -220,9 +219,8 @@ export default function ContactsPage() {
                         >
                           <span>{faq.q}</span>
                           <div
-                            className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 ease-out ${
-                              isOpen ? "rotate-180 bg-[rgba(7,98,106,0.10)] text-[#07626A]" : "text-[#0D0D0D]/50"
-                            }`}
+                            className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 ease-out ${isOpen ? "rotate-180 bg-[rgba(7,98,106,0.10)] text-[#07626A]" : "text-[#0D0D0D]/50"
+                              }`}
                           >
                             <ChevronDown className="w-4 h-4" />
                           </div>
@@ -230,9 +228,8 @@ export default function ContactsPage() {
 
                         {/* Smooth Animated Height Grid */}
                         <div
-                          className={`grid transition-all duration-300 ease-in-out ${
-                            isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                          }`}
+                          className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                            }`}
                         >
                           <div className="overflow-hidden">
                             <div className="px-4 pb-4 pt-0">
@@ -253,9 +250,9 @@ export default function ContactsPage() {
             {/* Right Column: Contact Form (7 cols) */}
             <div className="lg:col-span-7">
               <div className="rounded-3xl border border-[#E1E1E1] bg-white p-6 sm:p-8 lg:p-9">
-                
+
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  
+
                   {/* Header of Form with Info Button */}
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -291,11 +288,10 @@ export default function ContactsPage() {
                             key={t.id}
                             type="button"
                             onClick={() => setSelectedTopic(t.id)}
-                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer border ${
-                              isSelected
-                                ? "bg-[#07626A] text-white border-[#07626A]"
-                                : "bg-[#F3F3F3] text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[rgba(7,98,106,0.20)]"
-                            }`}
+                            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer border ${isSelected
+                              ? "bg-[#07626A] text-white border-[#07626A]"
+                              : "bg-[#F3F3F3] text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[rgba(7,98,106,0.20)]"
+                              }`}
                           >
                             {t.label}
                           </button>
