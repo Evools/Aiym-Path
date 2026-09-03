@@ -22,6 +22,7 @@ export async function POST() {
     await prisma.region.deleteMany({});
     await prisma.guidebookItem.deleteMany({});
     await prisma.projectContact.deleteMany({});
+    await prisma.adminUser.deleteMany({});
 
     // 1. Seed Regions
     for (const reg of DEFAULT_REGIONS) {
@@ -187,6 +188,19 @@ export async function POST() {
         workingHoursKg: DEFAULT_CONTACTS.workingHours.kg,
         workingHoursEn: DEFAULT_CONTACTS.workingHours.en,
         emergencyContacts: DEFAULT_CONTACTS.emergencyContacts as object,
+      },
+    });
+
+    // 7. Seed Admin Users
+    const { hashPassword } = await import("@/lib/auth/password");
+    await prisma.adminUser.create({
+      data: {
+        id: "admin-main",
+        name: "Айым Администратор",
+        email: "admin@aiympath.kg",
+        password: hashPassword("admin"),
+        role: "Главный администратор",
+        avatar: "/images/guides/guide-2.jpg",
       },
     });
 

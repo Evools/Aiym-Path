@@ -56,7 +56,6 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, []);
 
   const login = async (email: string, pass: string): Promise<{ success: boolean; error?: string }> => {
-    // Demo validation: accepts admin@aiympath.kg (or admin) with password "admin" (or standard admin passwords)
     const cleanEmail = email.trim().toLowerCase();
     const cleanPass = pass.trim();
 
@@ -64,39 +63,34 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       return { success: false, error: "Заполните все поля для входа" };
     }
 
-    if (
-      (cleanEmail === "admin@aiympath.kg" || cleanEmail === "admin" || cleanEmail === "admin@tumar.kg") &&
-      (cleanPass === "admin" || cleanPass === "admin123" || cleanPass === "aiym2026")
-    ) {
-      const sessionUser: AdminUser = {
-        ...DEFAULT_ADMIN_USER,
-        email: cleanEmail.includes("@") ? cleanEmail : "admin@aiympath.kg",
-      };
-      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(sessionUser));
-      setUser(sessionUser);
-      setIsAuthenticated(true);
-      return { success: true };
-    }
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: cleanEmail, password: cleanPass }),
+      });
 
-    // Also allow any valid email + pass >= 4 chars for testing ease if specified
-    if (cleanEmail.includes("@") && cleanPass.length >= 4) {
-      const customUser: AdminUser = {
-        id: `admin-${Date.now()}`,
-        name: cleanEmail.split("@")[0],
-        email: cleanEmail,
-        role: "Редактор платформы",
-        avatar: "/images/guides/guide-3.jpg",
-      };
-      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(customUser));
-      setUser(customUser);
-      setIsAuthenticated(true);
-      return { success: true };
-    }
+      const data = await res.json();
 
-    return {
-      success: false,
-      error: "Неверный логин или пароль (Демо: admin@aiympath.kg / admin)",
-    };
+      if (res.ok && data.success && data.user) {
+        const sessionUser: AdminUser = data.user;
+        localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(sessionUser));
+        setUser(sessionUser);
+        setIsAuthenticated(true);
+        return { success: true };
+      }
+
+      return {
+        success: false,
+        error: data.error || "Неверный логин или пароль",
+      };
+    } catch (err) {
+      console.error("Auth error:", err);
+      return {
+        success: false,
+        error: "Ошибка подключения к базе данных",
+      };
+    }
   };
 
   const logout = () => {

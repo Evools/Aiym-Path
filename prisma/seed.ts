@@ -316,6 +316,27 @@ async function main() {
     },
   });
 
+  // 7. Seed Admin Users
+  console.log("Seeding Admin Users...");
+  const { hashPassword } = await import("../lib/auth/password");
+  await prisma.adminUser.upsert({
+    where: { email: "admin@aiympath.kg" },
+    update: {
+      name: "Айым Администратор",
+      password: hashPassword("admin"),
+      role: "Главный администратор",
+      avatar: "/images/guides/guide-2.jpg",
+    },
+    create: {
+      id: "admin-main",
+      name: "Айым Администратор",
+      email: "admin@aiympath.kg",
+      password: hashPassword("admin"),
+      role: "Главный администратор",
+      avatar: "/images/guides/guide-2.jpg",
+    },
+  });
+
   console.log("✅ Seeding completed successfully!");
 }
 

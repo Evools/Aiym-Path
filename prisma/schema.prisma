@@ -143,3 +143,15 @@ model ProjectContact {
   emergencyContacts Json     // Array of AdminEmergencyContact
   updatedAt         DateTime @updatedAt
 }
+
+model AdminUser {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String   // Salted hash
+  role      String   @default("Администратор")
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
