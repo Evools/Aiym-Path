@@ -122,6 +122,25 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  React.useEffect(() => {
+    if (confirmState?.isOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          handleConfirmClose(false);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [confirmState?.isOpen]);
+
   return (
     <ToastContext.Provider
       value={{

@@ -37,6 +37,25 @@ export default function ContactsPage() {
     loadContacts();
   }, []);
 
+  useEffect(() => {
+    if (showUnavailableModal) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setShowUnavailableModal(false);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [showUnavailableModal]);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",

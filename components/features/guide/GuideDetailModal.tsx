@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { X, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { GuidebookItem } from "@/types/guidebook.types";
 import { useLanguage } from "@/context/LanguageContext";
@@ -12,6 +12,25 @@ interface GuideDetailModalProps {
 
 export const GuideDetailModal: React.FC<GuideDetailModalProps> = ({ item, onClose }) => {
   const { language } = useLanguage();
+
+  useEffect(() => {
+    if (item) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [item, onClose]);
 
   if (!item) return null;
 
