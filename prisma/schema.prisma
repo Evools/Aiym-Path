@@ -66,17 +66,24 @@ model Guide {
   image               String
   phone               String
   email               String?
+  whatsapp            String?
+  telegram            String?
+  instagram           String?
+  priceRange          String?
   experienceYears     Int      @default(1)
   languages           String[]
   locations           String[]
+  specialties         String[] @default([])
   groupSize           String   @default("1–8 человек")
   skillsFirstAid      Boolean  @default(false)
   skillsMountaineer   Boolean  @default(false)
   skillsMountainGuide Boolean  @default(false)
+  badges              Json?    // Array of { id, icon, labelRu, labelKg, labelEn }
   isFemale            Boolean  @default(true)
   isVerified          Boolean  @default(true)
   rating              Float    @default(5.0)
   routesCount         Int      @default(0)
+  reviewsCount        Int      @default(12)
   bioRu               String?
   bioKg               String?
   bioEn               String?

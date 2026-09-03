@@ -36,6 +36,55 @@ async function main() {
   // 2. Seed Guides
   console.log("Seeding Guides...");
   for (const guide of DEFAULT_GUIDES) {
+    const defaultBadges = [
+      {
+        id: "firstAid",
+        icon: "HeartPulse",
+        label: {
+          ru: "Первая медицинская помощь (WFR)",
+          kg: "Биринчи медициналык жардам",
+          en: "Wilderness First Aid",
+        },
+      },
+      {
+        id: "mountainGuide",
+        icon: "Mountain",
+        label: {
+          ru: "Горный гид (KMGA/IFMGA)",
+          kg: "Тоо гиди",
+          en: "Certified Mountain Guide",
+        },
+      },
+      {
+        id: "femaleSafe",
+        icon: "ShieldCheck",
+        label: {
+          ru: "Female-Friendly Стандарт",
+          kg: "Аялдар үчүн коопсуз коштоо",
+          en: "Female-Friendly Standard",
+        },
+      },
+      {
+        id: "navigation",
+        icon: "Compass",
+        label: {
+          ru: "GPS-навигация и треки",
+          kg: "GPS-навигация",
+          en: "Navigation & Topography",
+        },
+      },
+    ];
+
+    const defaultSpecialties = [
+      "Пешие походы (Hiking)",
+      "Однодневные туры",
+      "Женские соло-группы",
+      "Фототуры & Дрон",
+    ];
+
+    const defaultBioRu =
+      "Профессионально вожу женские группы и индивидуальных путешественниц по ущельям Тянь-Шаня. Особое внимание уделяю безопасности, комфорту и теплой атмосфере в горах.";
+
     await prisma.guide.upsert({
       where: { id: guide.id },
       update: {
@@ -46,15 +95,25 @@ async function main() {
         roleEn: guide.role.en,
         image: guide.image,
         phone: guide.phone,
+        whatsapp: guide.phone,
+        telegram: "@aiym_guide",
+        priceRange: "от 3 500 сом / день",
         experienceYears: guide.experienceYears,
         languages: guide.languages,
         locations: guide.locations,
+        specialties: defaultSpecialties,
         groupSize: guide.groupSize,
         skillsFirstAid: guide.skills.firstAid,
         skillsMountaineer: guide.skills.mountaineer,
         skillsMountainGuide: guide.skills.mountainGuide,
+        badges: defaultBadges,
         isFemale: guide.isFemale,
         isVerified: guide.isVerified,
+        rating: 4.9,
+        reviewsCount: 18,
+        bioRu: defaultBioRu,
+        bioKg: "Тянь-Шань капчыгайларына аялдар топторун жана жеке саякатчыларды профессионалдык деңгээлде алып барам.",
+        bioEn: "Professional mountain guide leading female groups across Tien Shan mountains with strong safety standards.",
       },
       create: {
         id: guide.id,
@@ -65,15 +124,25 @@ async function main() {
         roleEn: guide.role.en,
         image: guide.image,
         phone: guide.phone,
+        whatsapp: guide.phone,
+        telegram: "@aiym_guide",
+        priceRange: "от 3 500 сом / день",
         experienceYears: guide.experienceYears,
         languages: guide.languages,
         locations: guide.locations,
+        specialties: defaultSpecialties,
         groupSize: guide.groupSize,
         skillsFirstAid: guide.skills.firstAid,
         skillsMountaineer: guide.skills.mountaineer,
         skillsMountainGuide: guide.skills.mountainGuide,
+        badges: defaultBadges,
         isFemale: guide.isFemale,
         isVerified: guide.isVerified,
+        rating: 4.9,
+        reviewsCount: 18,
+        bioRu: defaultBioRu,
+        bioKg: "Тянь-Шань капчыгайларына аялдар топторун жана жеке саякатчыларды профессионалдык деңгээлде алып барам.",
+        bioEn: "Professional mountain guide leading female groups across Tien Shan mountains with strong safety standards.",
       },
     });
   }

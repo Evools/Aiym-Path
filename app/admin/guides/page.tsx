@@ -19,15 +19,22 @@ import {
   FileText,
   UserCheck,
   Sparkles,
+  MessageSquare,
+  Send,
+  DollarSign,
+  Star,
 } from "lucide-react";
 import {
   AdminStorageService,
   AdminGuideItem,
+  AdminGuideBadge,
 } from "@/lib/services/admin-storage.service";
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
 import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { CustomMultiSelect, MultiSelectOption } from "@/components/ui/CustomMultiSelect";
+import { GuideBadgeSelector } from "@/components/features/admin/GuideBadgeSelector";
+import { getBadgeIconComponent } from "@/lib/constants/guide-badges";
 import { useToast } from "@/context/ToastContext";
 
 const LANGUAGE_OPTIONS: MultiSelectOption[] = [
@@ -83,6 +90,19 @@ const POPULAR_LOCATIONS = [
   "Ош",
 ];
 
+const SPECIALTY_PRESETS = [
+  "Пешие походы (Hiking)",
+  "Восхождения (Climbing)",
+  "Конные туры",
+  "Однодневные туры",
+  "Многодневный треккинг",
+  "Фототуры & Дрон",
+  "Экотуры & Ботаника",
+  "Этно-туры & Культура",
+  "4x4 Внедорожные туры",
+  "Женские соло-группы",
+];
+
 const DEFAULT_AVATARS = [
   "/images/guides/guide-2.jpg",
   "/images/guides/guide-3.jpg",
@@ -104,6 +124,10 @@ export default function AdminGuidesPage() {
   const [role, setRole] = useState({ ru: "", kg: "", en: "" });
   const [image, setImage] = useState("");
   const [phone, setPhone] = useState("+996 700 000 000");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [telegram, setTelegram] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [priceRange, setPriceRange] = useState("от 3 500 сом / день");
   const [experienceYears, setExperienceYears] = useState<number | string>(5);
   const [groupSize, setGroupSize] = useState("1–8 человек");
   const [locations, setLocations] = useState<string[]>(["Бишкек", "Ала-Арча"]);
@@ -112,11 +136,17 @@ export default function AdminGuidesPage() {
     "Русский",
     "English",
   ]);
+  const [specialties, setSpecialties] = useState<string[]>([
+    "Пешие походы (Hiking)",
+    "Однодневные туры",
+  ]);
+  const [badges, setBadges] = useState<AdminGuideBadge[]>([]);
   const [skills, setSkills] = useState({
     firstAid: true,
     mountaineer: true,
     mountainGuide: true,
   });
+  const [bio, setBio] = useState({ ru: "", kg: "", en: "" });
   const [isFemale, setIsFemale] = useState(true);
   const [isVerified, setIsVerified] = useState(true);
 
@@ -145,20 +175,59 @@ export default function AdminGuidesPage() {
     setName("");
     setCategory("guide");
     setRole({
-      ru: "Горный гид и спасатель",
-      kg: "Тоо гиди жана куткаруучу",
-      en: "Mountain Guide & First Responder",
+      ru: "Горный гид и инструктор по безопасности",
+      kg: "Тоо гиди жана коопсуздук инструктору",
+      en: "Mountain Guide & Trekking Safety Lead",
     });
     setImage("/images/guides/guide-2.jpg");
     setPhone("+996 701 112 233");
+    setWhatsapp("+996 701 112 233");
+    setTelegram("@aiym_guide");
+    setInstagram("");
+    setPriceRange("от 3 500 сом / день");
     setExperienceYears(5);
     setGroupSize("1–8 человек");
     setLocations(["Бишкек", "Ала-Арча", "Чункурчак"]);
     setSelectedLanguages(["Кыргызча", "Русский", "English"]);
+    setSpecialties(["Пешие походы (Hiking)", "Женские соло-группы"]);
+    setBadges([
+      {
+        id: "firstAid",
+        icon: "HeartPulse",
+        label: {
+          ru: "Первая медицинская помощь (WFR)",
+          kg: "Биринчи медициналык жардам",
+          en: "Wilderness First Aid",
+        },
+      },
+      {
+        id: "mountainGuide",
+        icon: "Mountain",
+        label: {
+          ru: "Горный гид (KMGA)",
+          kg: "Тоо гиди",
+          en: "Certified Mountain Guide",
+        },
+      },
+      {
+        id: "femaleSafe",
+        icon: "ShieldCheck",
+        label: {
+          ru: "Female-Friendly Стандарт",
+          kg: "Аялдар үчүн коопсуз коштоо",
+          en: "Female-Friendly Standard",
+        },
+      },
+    ]);
     setSkills({
       firstAid: true,
       mountaineer: true,
       mountainGuide: true,
+    });
+    setBio({
+      ru: "Профессионально вожу женские группы и индивидуальных путешественниц по ущельям Тянь-Шаня. Особое внимание уделяю безопасности, комфорту и теплой атмосфере в горах.",
+      kg: "Тянь-Шань капчыгайларына аялдар топторун жана жеке саякатчыларды профессионалдык деңгээлде алып барам. Коопсуздукка жана тоодогу жагымдуу маанайга өзгөчө көңүл бурам.",
+      en: "Professional guide leading female groups and solo travelers across Tien Shan mountains with strong focus on wilderness safety, comfort, and inspiring experience.",
     });
     setIsFemale(true);
     setIsVerified(true);
@@ -176,6 +245,10 @@ export default function AdminGuidesPage() {
     });
     setImage(guide.image);
     setPhone(guide.phone || "+996 700 000 000");
+    setWhatsapp(guide.whatsapp || guide.phone || "");
+    setTelegram(guide.telegram || "");
+    setInstagram(guide.instagram || "");
+    setPriceRange(guide.priceRange || "от 3 500 сом / день");
     setExperienceYears(guide.experienceYears || 3);
     setGroupSize(guide.groupSize || "1–8 человек");
     setLocations(guide.locations && guide.locations.length > 0 ? guide.locations : ["Бишкек", "Ала-Арча"]);
@@ -184,11 +257,24 @@ export default function AdminGuidesPage() {
         ? guide.languages
         : ["Русский", "English"]
     );
+    setSpecialties(
+      guide.specialties && guide.specialties.length > 0
+        ? guide.specialties
+        : ["Пешие походы (Hiking)"]
+    );
+    setBadges(guide.badges || []);
     setSkills(
       guide.skills || {
         firstAid: true,
         mountaineer: true,
         mountainGuide: true,
+      }
+    );
+    setBio(
+      guide.bio || {
+        ru: "",
+        kg: "",
+        en: "",
       }
     );
     setIsFemale(guide.isFemale !== undefined ? guide.isFemale : true);
@@ -205,6 +291,12 @@ export default function AdminGuidesPage() {
   const handleToggleQuickLocation = (loc: string) => {
     setLocations((prev) =>
       prev.includes(loc) ? prev.filter((l) => l !== loc) : [...prev, loc]
+    );
+  };
+
+  const handleToggleSpecialty = (spec: string) => {
+    setSpecialties((prev) =>
+      prev.includes(spec) ? prev.filter((s) => s !== spec) : [...prev, spec]
     );
   };
 
@@ -231,19 +323,32 @@ export default function AdminGuidesPage() {
       },
       image: image || "/images/guides/guide-2.jpg",
       phone: phone || "+996 700 000 000",
+      whatsapp: whatsapp.trim() || undefined,
+      telegram: telegram.trim() || undefined,
+      instagram: instagram.trim() || undefined,
+      priceRange: priceRange.trim() || undefined,
       experienceYears: Number(experienceYears) || 1,
       groupSize: groupSize || "1–8 человек",
       locations: locations.length > 0 ? locations : ["Бишкек"],
       languages:
         selectedLanguages.length > 0 ? selectedLanguages : ["Русский", "English"],
+      specialties,
+      badges,
       skills,
+      bio,
       isFemale,
       isVerified,
+      rating: editingGuide?.rating ?? 5.0,
+      reviewsCount: editingGuide?.reviewsCount ?? 14,
     };
 
     await AdminStorageService.saveGuide(guideData);
     await loadGuides();
-    toast.success(editingGuide ? `Профиль «${name}» обновлен в базе данных` : `Специалист «${name}» успешно сохранен в базе данных`);
+    toast.success(
+      editingGuide
+        ? `Профиль «${name}» обновлен в базе данных`
+        : `Специалист «${name}» успешно сохранен в базе данных`
+    );
     setIsModalOpen(false);
   };
 
@@ -272,7 +377,7 @@ export default function AdminGuidesPage() {
             Гиды и агентства (Female Guides CMS)
           </h1>
           <p className="text-xs sm:text-sm text-[#0D0D0D]/65 mt-1">
-            Управление профилями проверенных женщин-гидов, локациями сопровождения и сертификатами.
+            Управление профилями проверенных женщин-гидов, компетенциями с иконками, турами и прямыми контактами.
           </p>
         </div>
 
@@ -290,7 +395,7 @@ export default function AdminGuidesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {!isMounted ? (
           <div className="col-span-full p-12 text-center text-xs font-bold text-[#0D0D0D]/40">
-            Загрузка списка специалистов...
+            Загрузка списка специалистов из базы данных...
           </div>
         ) : guides.length === 0 ? (
           <div className="col-span-full p-12 text-center rounded-3xl bg-white border border-[#E1E1E1]">
@@ -305,102 +410,99 @@ export default function AdminGuidesPage() {
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold"
             >
               <Plus className="w-4 h-4" />
-              <span>Создать профиль</span>
+              <span>Создать первого гида</span>
             </button>
           </div>
         ) : (
           guides.map((guide) => {
+            const roleRu = typeof guide.role === "object" ? guide.role.ru : guide.role;
+            const badgesCount = guide.badges?.length || 0;
+
             return (
               <div
                 key={guide.id}
-                className="p-6 rounded-3xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between gap-5 shadow-2xs"
+                className="rounded-3xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.35)] shadow-xs hover:shadow-md transition-all p-5 flex flex-col justify-between gap-4"
               >
                 <div>
-                  {/* Photo & Main Info */}
+                  {/* Top Row: Avatar & Badges */}
                   <div className="flex items-start gap-4">
-                    <div className="relative w-16 h-16 rounded-2xl bg-[#F3F3F3] overflow-hidden shrink-0 border border-[#E1E1E1]">
+                    <div className="relative w-16 h-16 rounded-2xl overflow-hidden shrink-0 border border-[#E1E1E1] bg-gray-100">
                       <Image
                         src={guide.image || "/images/guides/guide-2.jpg"}
                         alt={guide.name}
                         fill
+                        unoptimized
                         className="object-cover"
                       />
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className="px-2 py-0.5 rounded-md bg-[rgba(7,98,106,0.10)] text-[#07626A] text-[10px] font-bold uppercase">
-                          {guide.category === "agency" ? "Агентство" : "Гид"}
-                        </span>
-
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         {guide.isVerified && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[rgba(7,98,106,0.10)] text-[#07626A] text-[10px] font-extrabold uppercase">
                             <ShieldCheck className="w-3 h-3" />
-                            <span>Проверено</span>
+                            <span>Certified</span>
+                          </span>
+                        )}
+
+                        {guide.isFemale && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 text-[10px] font-bold">
+                            <span>Female Guide</span>
+                          </span>
+                        )}
+
+                        {badgesCount > 0 && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[10px] font-bold">
+                            <Sparkles className="w-3 h-3 text-amber-500" />
+                            <span>{badgesCount} иконок</span>
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-base font-bold text-[#0D0D0D] truncate">
+                      <h3 className="text-base font-bold text-[#0D0D0D] mt-1 truncate">
                         {guide.name}
                       </h3>
-                      <p className="text-xs text-[#0D0D0D]/65 line-clamp-1 mt-0.5 font-medium">
-                        {guide.role.ru}
+                      <p className="text-xs text-[#07626A] font-medium truncate">
+                        {roleRu}
                       </p>
                     </div>
                   </div>
 
-                  {/* Location Pills */}
-                  {guide.locations && guide.locations.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-3.5">
-                      {guide.locations.map((loc, idx) => (
+                  {/* Badges Preview Row */}
+                  {guide.badges && guide.badges.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-3 pt-2.5 border-t border-[#E1E1E1]/60">
+                      {guide.badges.slice(0, 4).map((b) => (
                         <span
-                          key={idx}
-                          className="px-2.5 py-0.5 rounded-lg bg-[#F0F2F2] text-[11px] font-medium text-[#0D0D0D]/80 flex items-center gap-1"
+                          key={b.id}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#F0F4F4] text-[#07626A] text-[10.5px] font-semibold"
+                          title={b.label.ru}
                         >
-                          <MapPin className="w-3 h-3 text-[#07626A]" />
-                          <span>{loc}</span>
+                          {getBadgeIconComponent(b.icon, "w-3 h-3")}
+                          <span className="truncate max-w-[110px]">{b.label.ru}</span>
                         </span>
                       ))}
+                      {guide.badges.length > 4 && (
+                        <span className="text-[10px] font-bold text-gray-400 self-center">
+                          +{guide.badges.length - 4}
+                        </span>
+                      )}
                     </div>
                   )}
 
-                  {/* Skills badges */}
-                  <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-[#E1E1E1]">
-                    {guide.skills?.firstAid && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#EAF4F4] text-[#07626A] text-[10px] font-bold">
-                        <FileText className="w-3 h-3" />
-                        <span>Первая помощь</span>
-                      </span>
-                    )}
-                    {guide.skills?.mountaineer && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#EAF4F4] text-[#07626A] text-[10px] font-bold">
-                        <Mountain className="w-3 h-3" />
-                        <span>Альпинизм</span>
-                      </span>
-                    )}
-                    {guide.skills?.mountainGuide && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#EAF4F4] text-[#07626A] text-[10px] font-bold">
-                        <Award className="w-3 h-3" />
-                        <span>Лицензия гида</span>
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Languages & Experience */}
-                  <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-[#E1E1E1] text-xs">
+                  {/* Metadata Grid */}
+                  <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-[#E1E1E1] text-xs text-[#0D0D0D]/70">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[#0D0D0D]/50 block mb-0.5">
-                        Языки
+                        Локации
                       </span>
-                      <span className="font-bold text-[#0D0D0D] line-clamp-1">
-                        {guide.languages?.join(", ") || "Русский, English"}
+                      <span className="font-semibold text-[#0D0D0D] truncate block">
+                        {guide.locations?.join(", ") || "Бишкек"}
                       </span>
                     </div>
 
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[#0D0D0D]/50 block mb-0.5">
-                        Опыт
+                        Опыт & Группа
                       </span>
                       <span className="font-bold text-[#0D0D0D]">
                         {guide.experienceYears} лет • {guide.groupSize || "1–8 чел"}
@@ -411,13 +513,15 @@ export default function AdminGuidesPage() {
 
                 {/* Footer Actions */}
                 <div className="flex items-center justify-between pt-3 border-t border-[#E1E1E1]">
-                  <a
-                    href={`tel:${guide.phone?.replace(/\s+/g, "")}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#07626A] hover:underline"
-                  >
-                    <Phone className="w-3.5 h-3.5" />
-                    <span>{guide.phone}</span>
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={`tel:${guide.phone?.replace(/\s+/g, "")}`}
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#07626A] hover:underline"
+                    >
+                      <Phone className="w-3.5 h-3.5" />
+                      <span>{guide.phone}</span>
+                    </a>
+                  </div>
 
                   <div className="flex items-center gap-2">
                     <button
@@ -445,7 +549,7 @@ export default function AdminGuidesPage() {
         )}
       </div>
 
-      {/* Extra-Wide Modal Dialog */}
+      {/* Scalable Modal Dialog */}
       {isModalOpen && (
         <div
           onClick={() => setIsModalOpen(false)}
@@ -459,10 +563,12 @@ export default function AdminGuidesPage() {
             <div className="flex items-center justify-between p-6 sm:px-8 border-b border-[#E1E1E1] shrink-0 bg-white">
               <div>
                 <h3 className="text-lg font-bold text-[#0D0D0D]">
-                  {editingGuide ? "Редактирование профиля специалиста" : "Новый женский гид / Агентство"}
+                  {editingGuide
+                    ? "Редактирование профиля специалиста"
+                    : "Новый женский гид / Агентство"}
                 </h3>
                 <p className="text-xs text-[#0D0D0D]/60 mt-0.5">
-                  Заполните личные данные, локации, квалификацию и специализацию на 3 языках.
+                  Настройка компетенций, иконок, сертификатов, цен и контактов в базе данных.
                 </p>
               </div>
 
@@ -476,7 +582,11 @@ export default function AdminGuidesPage() {
             </div>
 
             {/* Modal Form */}
-            <form id="guide-form" onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 sm:px-8 flex flex-col gap-6">
+            <form
+              id="guide-form"
+              onSubmit={handleSave}
+              className="flex-1 overflow-y-auto p-6 sm:px-8 flex flex-col gap-6"
+            >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Left Column: Personal info, Photo, Verification (5 cols) */}
                 <div className="lg:col-span-5 flex flex-col gap-4">
@@ -501,8 +611,16 @@ export default function AdminGuidesPage() {
                     value={category}
                     onChange={(val) => setCategory(val as "guide" | "agency")}
                     options={[
-                      { value: "guide", label: "Индивидуальный женский гид", sublabel: "Персональное сопровождение" },
-                      { value: "agency", label: "Туристическое агентство / Женский клуб", sublabel: "Групповые туры и комьюнити" },
+                      {
+                        value: "guide",
+                        label: "Индивидуальный женский гид",
+                        sublabel: "Персональное сопровождение",
+                      },
+                      {
+                        value: "agency",
+                        label: "Туристическое агентство / Женский клуб",
+                        sublabel: "Групповые туры и комьюнити",
+                      },
                     ]}
                   />
 
@@ -533,18 +651,22 @@ export default function AdminGuidesPage() {
                             onClick={() => setImage(av)}
                             className="relative w-8 h-8 rounded-lg overflow-hidden border border-[#E1E1E1] hover:border-[#07626A] shrink-0 cursor-pointer"
                           >
-                            <img src={av} alt="avatar" className="w-full h-full object-cover" />
+                            <img
+                              src={av}
+                              alt="avatar"
+                              className="w-full h-full object-cover"
+                            />
                           </button>
                         ))}
                       </div>
                     </div>
                   </div>
 
-                  {/* Phone / WhatsApp & Experience */}
+                  {/* Contacts & Price Row */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
-                        Телефон / WhatsApp
+                        Телефон
                       </label>
                       <input
                         type="tel"
@@ -556,6 +678,50 @@ export default function AdminGuidesPage() {
                       />
                     </div>
 
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
+                        WhatsApp (номер)
+                      </label>
+                      <input
+                        type="tel"
+                        value={whatsapp}
+                        onChange={(e) => setWhatsapp(e.target.value)}
+                        placeholder="+996 700 123 456"
+                        className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-medium text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
+                        Telegram (@username)
+                      </label>
+                      <input
+                        type="text"
+                        value={telegram}
+                        onChange={(e) => setTelegram(e.target.value)}
+                        placeholder="@username"
+                        className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-medium text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
+                        Стоимость услуг
+                      </label>
+                      <input
+                        type="text"
+                        value={priceRange}
+                        onChange={(e) => setPriceRange(e.target.value)}
+                        placeholder="от 3 500 сом / день"
+                        className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-medium text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Experience & Group Size */}
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
                         Опыт работы (лет)
@@ -570,26 +736,25 @@ export default function AdminGuidesPage() {
                         className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-bold text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A]"
                       />
                     </div>
-                  </div>
 
-                  {/* Group Size */}
-                  <div>
-                    <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
-                      Размер группы
-                    </label>
-                    <input
-                      type="text"
-                      value={groupSize}
-                      onChange={(e) => setGroupSize(e.target.value)}
-                      placeholder="Например: 1–8 человек или Индивидуально"
-                      className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-medium text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A]"
-                    />
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#0D0D0D]/70 uppercase tracking-wider mb-1.5">
+                        Размер группы
+                      </label>
+                      <input
+                        type="text"
+                        value={groupSize}
+                        onChange={(e) => setGroupSize(e.target.value)}
+                        placeholder="1–8 человек"
+                        className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-medium text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A]"
+                      />
+                    </div>
                   </div>
 
                   {/* Trust Badges */}
-                  <div className="p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] flex flex-col gap-3 mt-1">
+                  <div className="p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] flex flex-col gap-3">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-[#0D0D0D]/60">
-                      Бейджи и безопасность
+                      Статусы доверия
                     </span>
 
                     <CustomCheckbox
@@ -603,12 +768,12 @@ export default function AdminGuidesPage() {
                       checked={isVerified}
                       onChange={setIsVerified}
                       label="Верифицированный профиль (Certified)"
-                      description="Проверены документы, паспорт и опыт командой Aiym Path"
+                      description="Проверены документы и опыт командой Aiym Path"
                     />
                   </div>
                 </div>
 
-                {/* Right Column: Role (i18n), Locations, Languages, Skills (7 cols) */}
+                {/* Right Column: Role (i18n), Badges/Icons, Specialties, Bio (7 cols) */}
                 <div className="lg:col-span-7 flex flex-col gap-5">
                   {/* 1. Multilingual Role / Specialization */}
                   <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1] flex flex-col gap-3">
@@ -618,14 +783,49 @@ export default function AdminGuidesPage() {
                       value={role}
                       onChange={setRole}
                       placeholder={{
-                        ru: "Например: Лицензированный горный гид и инструктор",
-                        kg: "Мисалы: Лицензияланган тоо гиди жана инструктор",
-                        en: "E.g. Certified Mountain Guide & Trekking Instructor",
+                        ru: "Например: Лицензированный горный гид и спасатель",
+                        kg: "Мисалы: Лицензияланган тоо гиди жана куткаруучу",
+                        en: "E.g. Certified Mountain Guide & First Responder",
                       }}
                     />
                   </div>
 
-                  {/* 2. Locations / Regions */}
+                  {/* 2. Scalable Badge & Icon Selector */}
+                  <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1]">
+                    <GuideBadgeSelector
+                      selectedBadges={badges}
+                      onChange={setBadges}
+                    />
+                  </div>
+
+                  {/* 3. Tour Specialties Chips */}
+                  <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1] space-y-3">
+                    <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider">
+                      Направления туров и форматы
+                    </label>
+
+                    <div className="flex flex-wrap gap-2">
+                      {SPECIALTY_PRESETS.map((spec) => {
+                        const isSelected = specialties.includes(spec);
+                        return (
+                          <button
+                            key={spec}
+                            type="button"
+                            onClick={() => handleToggleSpecialty(spec)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                              isSelected
+                                ? "bg-[#07626A] text-white border-[#07626A] shadow-xs"
+                                : "bg-[#FAFBFB] text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[#07626A]"
+                            }`}
+                          >
+                            {spec}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 4. Locations Multi-Select */}
                   <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1] flex flex-col gap-3">
                     <label className="text-xs font-bold text-[#0D0D0D] uppercase tracking-wider">
                       Локации и регионы сопровождения
@@ -668,7 +868,7 @@ export default function AdminGuidesPage() {
                     </div>
                   </div>
 
-                  {/* 3. Languages Multi-Select */}
+                  {/* 5. Languages Multi-Select */}
                   <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1] flex flex-col gap-3">
                     <label className="text-xs font-bold text-[#0D0D0D] uppercase tracking-wider">
                       Языки общения и туров
@@ -711,34 +911,20 @@ export default function AdminGuidesPage() {
                     </div>
                   </div>
 
-                  {/* 4. Skills & Certifications */}
-                  <div className="p-5 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] flex flex-col gap-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#0D0D0D]">
-                      Сертификации и квалификации гида
-                    </span>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      <CustomCheckbox
-                        checked={skills.firstAid}
-                        onChange={(checked) => setSkills((s) => ({ ...s, firstAid: checked }))}
-                        label="Первая помощь"
-                        description="WFA / CPR сертификат"
-                      />
-
-                      <CustomCheckbox
-                        checked={skills.mountaineer}
-                        onChange={(checked) => setSkills((s) => ({ ...s, mountaineer: checked }))}
-                        label="Альпинизм"
-                        description="Скалы и ледники"
-                      />
-
-                      <CustomCheckbox
-                        checked={skills.mountainGuide}
-                        onChange={(checked) => setSkills((s) => ({ ...s, mountainGuide: checked }))}
-                        label="Лицензия гида"
-                        description="Гос. сертификация"
-                      />
-                    </div>
+                  {/* 6. Bio / Philosophy Editor */}
+                  <div className="p-5 rounded-2xl bg-white border border-[#E1E1E1]">
+                    <I18nFieldEditor
+                      label="О себе / Философия сопровождения"
+                      isTextarea
+                      rows={3}
+                      value={bio}
+                      onChange={setBio}
+                      placeholder={{
+                        ru: "Расскажите об опыте, маршрутах и подходе к безопасности...",
+                        kg: "Тажрыйбаңыз, каттамдар жана коопсуздукка болгон мамилеңиз тууралуу айтып бериңиз...",
+                        en: "Describe your guiding experience, favorite trails, and safety approach...",
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -760,7 +946,9 @@ export default function AdminGuidesPage() {
                 className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
               >
                 <Save className="w-4 h-4" />
-                <span>{editingGuide ? "Сохранить изменения" : "Добавить в базу"}</span>
+                <span>
+                  {editingGuide ? "Сохранить изменения" : "Добавить в базу"}
+                </span>
               </button>
             </div>
           </div>

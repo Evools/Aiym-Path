@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { X, CheckCircle2, Phone } from "lucide-react";
+import { X, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { GuidebookItem } from "@/types/guidebook.types";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -11,107 +11,83 @@ interface GuideDetailModalProps {
 }
 
 export const GuideDetailModal: React.FC<GuideDetailModalProps> = ({ item, onClose }) => {
-  const { language, dict } = useLanguage();
+  const { language } = useLanguage();
 
   if (!item) return null;
 
   const title = item.title[language] || item.title.ru;
-  const shortDesc = item.shortDescription[language] || item.shortDescription.ru;
-  const details = item.details[language] || item.details.ru;
-  const badge = item.badgeText ? item.badgeText[language] || item.badgeText.ru : null;
+  const description = item.shortDescription[language] || item.shortDescription.ru;
+  const details = (item.details && item.details[language]) || item.details?.ru || [];
+  const badgeText = item.badgeText ? (item.badgeText[language] || item.badgeText.ru) : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-      {/* Backdrop */}
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs overflow-y-auto animate-in fade-in duration-200"
+    >
       <div
-        className="fixed inset-0 bg-[#0D0D0D]/60 transition-opacity"
-        onClick={onClose}
-      />
-
-      {/* Modal Card */}
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl border border-[#E1E1E1] p-6 sm:p-8 z-10 my-8 overflow-hidden">
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 border border-[#E1E1E1] shadow-2xl animate-in zoom-in-95 duration-150 my-auto flex flex-col gap-5 relative"
+      >
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close"
-          className="absolute top-5 right-5 w-9 h-9 rounded-xl text-[#07626A] flex items-center justify-center transition-colors cursor-pointer"
-          style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
+          className="absolute top-5 right-5 p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+          title="Закрыть"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Top Header */}
-        <div className="mb-6 pr-8">
-          {badge && (
-            <span
-              className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-[#07626A] mb-3"
-              style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
-            >
-              {badge}
-            </span>
-          )}
-          <h2 className="text-xl sm:text-2xl font-bold text-[#0D0D0D] leading-snug">
-            {title}
-          </h2>
-          <p className="text-sm text-[#0D0D0D]/75 mt-2 leading-relaxed">
-            {shortDesc}
-          </p>
-        </div>
+        {/* Header */}
+        <div className="flex items-start gap-3.5 pr-8">
+          <div
+            className="w-11 h-11 rounded-2xl flex items-center justify-center text-[#07626A] shrink-0 border border-[rgba(7,98,106,0.15)]"
+            style={{ backgroundColor: "rgba(7, 98, 106, 0.08)" }}
+          >
+            <ShieldCheck className="w-6 h-6" />
+          </div>
 
-        {/* Detailed Points */}
-        <div className="mb-8">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-[#0D0D0D]/50 mb-4">
-            {language === "kg"
-              ? "Негизги сунуштар жана эрежелер"
-              : language === "en"
-              ? "Key Guidelines & Rules"
-              : "Ключевые рекомендации и правила"}
-          </h4>
-
-          <div className="space-y-3">
-            {details.map((point, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-3.5 p-3.5 rounded-xl border border-[#E1E1E1]"
-                style={{ backgroundColor: "rgba(7, 98, 106, 0.05)" }}
-              >
-                <div
-                  className="w-6 h-6 rounded-lg text-[#07626A] flex items-center justify-center shrink-0 mt-0.5"
-                  style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
-                >
-                  <CheckCircle2 className="w-4 h-4" />
-                </div>
-                <p className="text-sm text-[#0D0D0D] leading-relaxed">
-                  {point}
-                </p>
-              </div>
-            ))}
+          <div>
+            {badgeText && (
+              <span className="text-[10px] font-bold uppercase text-[#07626A] tracking-wider block mb-1">
+                {badgeText}
+              </span>
+            )}
+            <h2 className="text-lg sm:text-xl font-extrabold text-[#0D0D0D] leading-snug">
+              {title}
+            </h2>
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="flex items-center justify-between gap-3 pt-5 border-t border-[#E1E1E1]">
-          {item.category === "emergency" ? (
-            <a
-              href="tel:112"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-semibold hover:bg-[#07626A]/90 transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              <span>SOS: 112</span>
-            </a>
-          ) : (
-            <div />
-          )}
+        {/* Short Description */}
+        <p className="text-xs sm:text-sm text-[#0D0D0D]/75 leading-relaxed">
+          {description}
+        </p>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-6 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-semibold hover:bg-[#07626A]/90 transition-colors cursor-pointer"
-          >
-            {dict.guidebook?.close || "Закрыть"}
-          </button>
-        </div>
+        {/* Detailed Points */}
+        {details.length > 0 && (
+          <div className="space-y-2.5 pt-2 border-t border-gray-100">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#0D0D0D]/60 block mb-2">
+              Рекомендации и правила:
+            </span>
+            {details.map((detail, idx) => (
+              <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[#0D0D0D]/85">
+                <CheckCircle2 className="w-4 h-4 text-[#07626A] shrink-0 mt-0.5" />
+                <span className="leading-relaxed">{detail}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Bottom Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full mt-2 py-3 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer"
+        >
+          Понятно
+        </button>
       </div>
     </div>
   );

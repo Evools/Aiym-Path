@@ -1,6 +1,16 @@
 import { RouteItem } from "@/types/route.types";
 import { GuidebookItem } from "@/types/guidebook.types";
 
+export interface AdminGuideBadge {
+  id: string;
+  icon: string; // Lucide icon name, e.g. "HeartPulse", "Mountain", "Compass", "Camera", "Tent", "ShieldCheck", "Footprints", "Sparkles", "Trees", "Coffee", "Car", "Sun", "Award", "Navigation", "Flame"
+  label: {
+    ru: string;
+    kg: string;
+    en: string;
+  };
+}
+
 export interface AdminGuideItem {
   id: string;
   name: string;
@@ -12,17 +22,32 @@ export interface AdminGuideItem {
   };
   image: string;
   phone: string;
+  email?: string;
+  whatsapp?: string;
+  telegram?: string;
+  instagram?: string;
+  priceRange?: string;
   experienceYears: number;
   languages: string[];
   locations: string[];
+  specialties?: string[];
   groupSize: string;
   skills: {
     firstAid: boolean;
     mountaineer: boolean;
     mountainGuide: boolean;
   };
+  badges?: AdminGuideBadge[];
   isFemale: boolean;
   isVerified: boolean;
+  rating?: number;
+  routesCount?: number;
+  reviewsCount?: number;
+  bio?: {
+    ru: string;
+    kg: string;
+    en: string;
+  };
 }
 
 export interface AdminLocationItem {
