@@ -43,44 +43,49 @@ export default function EditRoutePage() {
   const [pois, setPois] = useState<RoutePOI[]>([]);
 
   useEffect(() => {
-    const guides = AdminStorageService.getGuides();
-    setAvailableGuides(guides);
+    async function loadRouteData() {
+      const [guides, existingRoute] = await Promise.all([
+        AdminStorageService.getGuides(),
+        AdminStorageService.getRouteById(routeId),
+      ]);
+      setAvailableGuides(guides);
 
-    const existingRoute = AdminStorageService.getRouteById(routeId);
-    if (existingRoute) {
-      setTitle({
-        ru: existingRoute.title.ru || "",
-        kg: existingRoute.title.kg || "",
-        en: existingRoute.title.en || "",
-      });
-      setDescription({
-        ru: existingRoute.description.ru || "",
-        kg: existingRoute.description.kg || "",
-        en: existingRoute.description.en || "",
-      });
-      setRegion(existingRoute.region);
-      setDifficulty(existingRoute.difficulty);
-      setDistanceKm(existingRoute.distanceKm);
-      setDurationHours(existingRoute.durationHours);
-      setElevationGainMeters(existingRoute.elevationGainMeters);
-      setImageUrl(existingRoute.imageUrl || "");
-      setCoordinates(existingRoute.coordinates || []);
-      setPois(existingRoute.pois || []);
+      if (existingRoute) {
+        setTitle({
+          ru: existingRoute.title.ru || "",
+          kg: existingRoute.title.kg || "",
+          en: existingRoute.title.en || "",
+        });
+        setDescription({
+          ru: existingRoute.description.ru || "",
+          kg: existingRoute.description.kg || "",
+          en: existingRoute.description.en || "",
+        });
+        setRegion(existingRoute.region);
+        setDifficulty(existingRoute.difficulty);
+        setDistanceKm(existingRoute.distanceKm);
+        setDurationHours(existingRoute.durationHours);
+        setElevationGainMeters(existingRoute.elevationGainMeters);
+        setImageUrl(existingRoute.imageUrl || "");
+        setCoordinates(existingRoute.coordinates || []);
+        setPois(existingRoute.pois || []);
 
-      // Guides
-      if (existingRoute.assignedGuides && existingRoute.assignedGuides.length > 0) {
-        const matchingIds = guides
-          .filter((g) =>
-            existingRoute.assignedGuides?.some((ag) => ag.name === g.name)
-          )
-          .map((g) => g.id);
-        setSelectedGuideIds(matchingIds);
-      } else if (existingRoute.assignedGuide) {
-        const match = guides.find((g) => g.name === existingRoute.assignedGuide?.name);
-        if (match) setSelectedGuideIds([match.id]);
+        // Guides
+        if (existingRoute.assignedGuides && existingRoute.assignedGuides.length > 0) {
+          const matchingIds = guides
+            .filter((g) =>
+              existingRoute.assignedGuides?.some((ag) => ag.name === g.name)
+            )
+            .map((g) => g.id);
+          setSelectedGuideIds(matchingIds);
+        } else if (existingRoute.assignedGuide) {
+          const match = guides.find((g) => g.name === existingRoute.assignedGuide?.name);
+          if (match) setSelectedGuideIds([match.id]);
+        }
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
+    loadRouteData();
   }, [routeId]);
 
   const handleToggleGuide = (guideId: string) => {
@@ -104,7 +109,7 @@ export default function EditRoutePage() {
     setDistanceKm(dist);
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.ru.trim()) {
       toast.warning("Пожалуйста, укажите название маршрута", "Заполните поле");
@@ -172,23 +177,23 @@ export default function EditRoutePage() {
             ],
     };
 
-    AdminStorageService.saveRoute(updatedRoute);
-    toast.success(`Маршрут «${title.ru}» успешно обновлен`);
+    await AdminStorageService.saveRoute(updatedRoute);
+    toast.success(`Маршрут «${title.ru}» успешно обновлен в базе данных`);
     router.push("/admin/routes");
   };
 
   const handleDelete = async () => {
     const isConfirmed = await toast.confirm({
       title: "Удалить маршрут?",
-      message: `Вы точно хотите удалить маршрут «${title.ru || routeId}»? Это действие нельзя будет отменить.`,
+      message: `Вы точно хотите удалить маршрут «${title.ru || routeId}» из базы данных? Это действие нельзя будет отменить.`,
       confirmText: "Да, удалить",
       cancelText: "Отмена",
       isDestructive: true,
     });
 
     if (isConfirmed) {
-      AdminStorageService.deleteRoute(routeId);
-      toast.success("Маршрут успешно удален");
+      await AdminStorageService.deleteRoute(routeId);
+      toast.success("Маршрут успешно удален из базы данных");
       router.push("/admin/routes");
     }
   };

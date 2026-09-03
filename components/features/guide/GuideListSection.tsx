@@ -1,28 +1,54 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Search, MapPin, Users } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { INITIAL_GUIDES } from "@/data/guides.data";
+import { AdminStorageService, AdminGuideItem } from "@/lib/services/admin-storage.service";
+import { GuideItem, INITIAL_GUIDES } from "@/data/guides.data";
 import { GuideCard } from "./GuideCard";
 
 export const GuideListSection: React.FC = () => {
   const { dict } = useLanguage();
+  const [guides, setGuides] = useState<(AdminGuideItem | GuideItem)[]>(INITIAL_GUIDES);
   const [selectedLocation, setSelectedLocation] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<"all" | "guide" | "agency">("all");
 
-  const locations = ["all", "Бишкек", "Каракол", "Нарын", "Ош", "Ала-Арча", "Аламедин"];
+  useEffect(() => {
+    async function loadGuides() {
+      const dbGuides = await AdminStorageService.getGuides();
+      if (dbGuides && dbGuides.length > 0) {
+        setGuides(dbGuides);
+      }
+    }
+    loadGuides();
+  }, []);
+
+  const locations = useMemo(() => {
+    const locSet = new Set<string>();
+    guides.forEach((g) => {
+      if (g.locations) {
+        g.locations.forEach((l) => locSet.add(l));
+      }
+    });
+    return ["all", ...Array.from(locSet)];
+  }, [guides]);
 
   const filteredGuides = useMemo(() => {
-    return INITIAL_GUIDES.filter((guide) => {
+    return guides.filter((guide) => {
       // Category filter
       if (selectedCategory !== "all" && guide.category !== selectedCategory) {
         return false;
       }
 
       // Location filter
-      if (selectedLocation !== "all" && !guide.locations.some((l) => l.toLowerCase() === selectedLocation.toLowerCase())) {
+      if (
+        selectedLocation !== "all" &&
+        (!guide.locations ||
+          !guide.locations.some(
+            (l) => l.toLowerCase() === selectedLocation.toLowerCase()
+          ))
+      ) {
         return false;
       }
 
@@ -30,13 +56,15 @@ export const GuideListSection: React.FC = () => {
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesName = guide.name.toLowerCase().includes(query);
-        const matchesLoc = guide.locations.some((l) => l.toLowerCase().includes(query));
+        const matchesLoc =
+          guide.locations &&
+          guide.locations.some((l) => l.toLowerCase().includes(query));
         if (!matchesName && !matchesLoc) return false;
       }
 
       return true;
     });
-  }, [selectedCategory, selectedLocation, searchQuery]);
+  }, [guides, selectedCategory, selectedLocation, searchQuery]);
 
   return (
     <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
@@ -68,7 +96,7 @@ export const GuideListSection: React.FC = () => {
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
-                Все ({INITIAL_GUIDES.length})
+                Все ({guides.length})
               </button>
               <button
                 type="button"

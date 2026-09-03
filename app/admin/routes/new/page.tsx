@@ -45,11 +45,14 @@ export default function CreateRoutePage() {
   const [pois, setPois] = useState<RoutePOI[]>([]);
 
   useEffect(() => {
-    const guides = AdminStorageService.getGuides();
-    setAvailableGuides(guides);
-    if (guides.length > 0) {
-      setSelectedGuideIds([guides[0].id]);
+    async function loadGuides() {
+      const guides = await AdminStorageService.getGuides();
+      setAvailableGuides(guides);
+      if (guides.length > 0) {
+        setSelectedGuideIds([guides[0].id]);
+      }
     }
+    loadGuides();
   }, []);
 
   const handleToggleGuide = (id: string) => {
@@ -71,7 +74,7 @@ export default function CreateRoutePage() {
     setDistanceKm(dist);
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.ru.trim()) {
       toast.warning("Пожалуйста, укажите название маршрута на русском языке", "Заполните поле");
@@ -140,8 +143,8 @@ export default function CreateRoutePage() {
             ],
     };
 
-    AdminStorageService.saveRoute(newRoute);
-    toast.success(`Маршрут «${title.ru}» успешно создан`);
+    await AdminStorageService.saveRoute(newRoute);
+    toast.success(`Маршрут «${title.ru}» успешно сохранен в базе данных`);
     router.push("/admin/routes");
   };
 

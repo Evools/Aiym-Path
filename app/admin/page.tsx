@@ -33,30 +33,47 @@ export default function AdminDashboardPage() {
   const [contacts, setContacts] = useState<AdminProjectContacts | null>(null);
 
   useEffect(() => {
-    setRoutes(AdminStorageService.getRoutes());
-    setGuides(AdminStorageService.getGuides());
-    setLocations(AdminStorageService.getLocations());
-    setGuidebookItems(AdminStorageService.getGuidebookItems());
-    setContacts(AdminStorageService.getContacts());
+    async function loadData() {
+      const [r, g, l, gb, c] = await Promise.all([
+        AdminStorageService.getRoutes(),
+        AdminStorageService.getGuides(),
+        AdminStorageService.getLocations(),
+        AdminStorageService.getGuidebookItems(),
+        AdminStorageService.getContacts(),
+      ]);
+      setRoutes(r);
+      setGuides(g);
+      setLocations(l);
+      setGuidebookItems(gb);
+      setContacts(c);
+    }
+    loadData();
   }, []);
 
   const handleResetData = async () => {
     const isConfirmed = await toast.confirm({
       title: "Сбросить все данные?",
-      message: "Все добавленные и отредактированные маршруты, гиды, локации, путеводитель и контакты будут возвращены к исходным значениям по умолчанию.",
+      message: "Все добавленные и отредактированные маршруты, гиды, локации, путеводитель и контакты будут возвращены к исходным значениям по умолчанию в базе данных PostgreSQL.",
       confirmText: "Сбросить данные",
       cancelText: "Отмена",
       isDestructive: true,
     });
 
     if (isConfirmed) {
-      AdminStorageService.resetAll();
-      setRoutes(AdminStorageService.getRoutes());
-      setGuides(AdminStorageService.getGuides());
-      setLocations(AdminStorageService.getLocations());
-      setGuidebookItems(AdminStorageService.getGuidebookItems());
-      setContacts(AdminStorageService.getContacts());
-      toast.success("Данные успешно сброшены к начальным значениям");
+      await AdminStorageService.resetAll();
+      const [r, g, l, gb, c] = await Promise.all([
+        AdminStorageService.getRoutes(),
+        AdminStorageService.getGuides(),
+        AdminStorageService.getLocations(),
+        AdminStorageService.getGuidebookItems(),
+        AdminStorageService.getContacts(),
+      ]);
+      setRoutes(r);
+      setGuides(g);
+      setLocations(l);
+      setGuidebookItems(gb);
+      setContacts(c);
+      toast.success("Данные в базе данных успешно сброшены к начальным значениям");
     }
   };
 

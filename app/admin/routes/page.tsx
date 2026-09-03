@@ -29,23 +29,31 @@ export default function AdminRoutesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<RouteFilterRegion>("all");
 
+  const loadRoutes = async () => {
+    const [r, reg] = await Promise.all([
+      AdminStorageService.getRoutes(),
+      AdminStorageService.getRegions(),
+    ]);
+    setRoutes(r);
+    setRegions(reg);
+  };
+
   useEffect(() => {
-    setRoutes(AdminStorageService.getRoutes());
-    setRegions(AdminStorageService.getRegions());
+    loadRoutes();
   }, []);
 
   const handleDelete = async (id: string, title: string) => {
     const isConfirmed = await toast.confirm({
       title: "Удалить маршрут?",
-      message: `Вы уверены, что хотите удалить маршрут «${title}»?`,
+      message: `Вы уверены, что хотите удалить маршрут «${title}» из базы данных?`,
       confirmText: "Удалить",
       cancelText: "Отмена",
       isDestructive: true,
     });
 
     if (isConfirmed) {
-      AdminStorageService.deleteRoute(id);
-      setRoutes(AdminStorageService.getRoutes());
+      await AdminStorageService.deleteRoute(id);
+      await loadRoutes();
       toast.success(`Маршрут «${title}» удален`);
     }
   };

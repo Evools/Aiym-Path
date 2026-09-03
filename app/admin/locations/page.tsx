@@ -64,8 +64,13 @@ export default function AdminLocationsPage() {
     "Женский персонал",
   ]);
 
+  const loadLocations = async () => {
+    const data = await AdminStorageService.getLocations();
+    setLocations(data);
+  };
+
   useEffect(() => {
-    setLocations(AdminStorageService.getLocations());
+    loadLocations();
   }, []);
 
   useEffect(() => {
@@ -134,7 +139,7 @@ export default function AdminLocationsPage() {
     );
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.ru.trim()) {
       toast.warning("Введите название локации на русском языке", "Заполните поле");
@@ -152,12 +157,12 @@ export default function AdminLocationsPage() {
       amenities: amenitiesList.length > 0 ? amenitiesList : ["Wi-Fi", "Охрана 24/7"],
     };
 
-    AdminStorageService.saveLocation(locData);
-    setLocations(AdminStorageService.getLocations());
+    await AdminStorageService.saveLocation(locData);
+    await loadLocations();
     toast.success(
       editingLoc
-        ? `Локация «${title.ru}» обновлена`
-        : `Локация «${title.ru}» успешно добавлена`
+        ? `Локация «${title.ru}» обновлена в базе данных`
+        : `Локация «${title.ru}» успешно добавлена в базу данных`
     );
     setIsModalOpen(false);
   };
@@ -165,16 +170,16 @@ export default function AdminLocationsPage() {
   const handleDelete = async (id: string, name: string) => {
     const isConfirmed = await toast.confirm({
       title: "Удалить локацию?",
-      message: `Вы уверены, что хотите удалить локацию «${name}»?`,
+      message: `Вы уверены, что хотите удалить локацию «${name}» из базы данных?`,
       confirmText: "Удалить",
       cancelText: "Отмена",
       isDestructive: true,
     });
 
     if (isConfirmed) {
-      AdminStorageService.deleteLocation(id);
-      setLocations(AdminStorageService.getLocations());
-      toast.success(`Локация «${name}» удалена`);
+      await AdminStorageService.deleteLocation(id);
+      await loadLocations();
+      toast.success(`Локация «${name}» удалена из базы данных`);
     }
   };
 

@@ -18,7 +18,13 @@ export const GuidebookSection: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<GuidebookItem | null>(null);
 
   useEffect(() => {
-    setItems(AdminStorageService.getGuidebookItems());
+    async function loadItems() {
+      const dbItems = await AdminStorageService.getGuidebookItems();
+      if (dbItems && dbItems.length > 0) {
+        setItems(dbItems);
+      }
+    }
+    loadItems();
   }, []);
 
   const travelersItems = useMemo(

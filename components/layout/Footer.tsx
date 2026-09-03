@@ -13,7 +13,11 @@ export const Footer: React.FC = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    setContactsData(AdminStorageService.getContacts());
+    async function loadContacts() {
+      const data = await AdminStorageService.getContacts();
+      setContactsData(data);
+    }
+    loadContacts();
   }, []);
 
   if (pathname?.startsWith("/admin")) {

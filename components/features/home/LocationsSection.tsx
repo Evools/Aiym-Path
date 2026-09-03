@@ -1,14 +1,36 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { AdminStorageService } from "@/lib/services/admin-storage.service";
 import { INITIAL_LOCATIONS } from "@/data/locations.data";
+
+interface LocationItemView {
+  id: string;
+  key?: string;
+  title: { ru: string; kg?: string; en?: string };
+  desc?: { ru: string; kg?: string; en?: string };
+  description?: { ru: string; kg?: string; en?: string };
+  imageUrl?: string;
+  image?: string;
+}
 
 export const LocationsSection: React.FC = () => {
   const { dict, language } = useLanguage();
+  const [locations, setLocations] = useState<LocationItemView[]>(INITIAL_LOCATIONS);
+
+  useEffect(() => {
+    async function loadLocations() {
+      const dbLocations = await AdminStorageService.getLocations();
+      if (dbLocations && dbLocations.length > 0) {
+        setLocations(dbLocations);
+      }
+    }
+    loadLocations();
+  }, []);
 
   return (
     <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white">
@@ -36,19 +58,22 @@ export const LocationsSection: React.FC = () => {
 
         {/* 3 Location Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-7">
-          {INITIAL_LOCATIONS.map((loc) => {
+          {locations.slice(0, 3).map((loc) => {
             const title = loc.title[language] || loc.title.ru;
-            const desc = loc.desc[language] || loc.desc.ru;
+            const desc = (loc.desc && (loc.desc[language] || loc.desc.ru)) ||
+              (loc.description && (loc.description[language] || loc.description.ru)) || "";
+            const imageSrc = loc.imageUrl || loc.image || "/images/locations/ala-archa.jpg";
+            const keyParam = loc.key || (loc.id.includes("ala") ? "alaArcha" : loc.id.includes("alamedin") ? "alamedin" : "chunkurchak");
 
             return (
               <Link
                 key={loc.id}
-                href={`/map?location=${loc.key}`}
+                href={`/map?location=${keyParam}`}
                 className="group relative h-[380px] sm:h-[420px] lg:h-[440px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-end p-6 sm:p-7 block"
               >
                 {/* Background Image */}
                 <Image
-                  src={loc.imageUrl}
+                  src={imageSrc}
                   alt={title}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
@@ -82,4 +107,3 @@ export const LocationsSection: React.FC = () => {
     </section>
   );
 };
-

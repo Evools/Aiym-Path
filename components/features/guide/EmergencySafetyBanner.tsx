@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Phone, ShieldAlert, Check, Copy, MessageCircle, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Phone, ShieldAlert, Check, Copy, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { AdminStorageService, AdminEmergencyContact, DEFAULT_CONTACTS } from "@/lib/services/admin-storage.service";
 
@@ -11,10 +11,13 @@ export const EmergencySafetyBanner: React.FC = () => {
   const [contacts, setContacts] = useState<AdminEmergencyContact[]>(DEFAULT_CONTACTS.emergencyContacts);
 
   useEffect(() => {
-    const loaded = AdminStorageService.getContacts();
-    if (loaded?.emergencyContacts) {
-      setContacts(loaded.emergencyContacts);
+    async function loadEmergencyContacts() {
+      const loaded = await AdminStorageService.getContacts();
+      if (loaded?.emergencyContacts) {
+        setContacts(loaded.emergencyContacts);
+      }
     }
+    loadEmergencyContacts();
   }, []);
   const handleCopy = (number: string, id: string) => {
     if (typeof window !== "undefined") {

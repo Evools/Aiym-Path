@@ -5,7 +5,6 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { AppSyncInit } from "@/components/providers/AppSyncInit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +40,6 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-white text-[#0D0D0D] selection:bg-[rgba(7,98,106,0.20)] selection:text-[#07626A]">
         <LanguageProvider>
           <ToastProvider>
-            <AppSyncInit />
             <Header />
             <main className="flex-1 w-full">{children}</main>
             <Footer />

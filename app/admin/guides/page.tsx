@@ -120,8 +120,13 @@ export default function AdminGuidesPage() {
   const [isFemale, setIsFemale] = useState(true);
   const [isVerified, setIsVerified] = useState(true);
 
+  const loadGuides = async () => {
+    const data = await AdminStorageService.getGuides();
+    setGuides(data);
+  };
+
   useEffect(() => {
-    setGuides(AdminStorageService.getGuides());
+    loadGuides();
     setIsMounted(true);
   }, []);
 
@@ -203,7 +208,7 @@ export default function AdminGuidesPage() {
     );
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
       toast.warning("Пожалуйста, введите имя специалиста", "Заполните поле");
@@ -236,25 +241,25 @@ export default function AdminGuidesPage() {
       isVerified,
     };
 
-    AdminStorageService.saveGuide(guideData);
-    setGuides(AdminStorageService.getGuides());
-    toast.success(editingGuide ? `Профиль «${name}» обновлен` : `Специалист «${name}» успешно добавлен`);
+    await AdminStorageService.saveGuide(guideData);
+    await loadGuides();
+    toast.success(editingGuide ? `Профиль «${name}» обновлен в базе данных` : `Специалист «${name}» успешно сохранен в базе данных`);
     setIsModalOpen(false);
   };
 
   const handleDelete = async (id: string, guideName: string) => {
     const isConfirmed = await toast.confirm({
       title: "Удалить специалиста?",
-      message: `Вы уверены, что хотите удалить профиль «${guideName}»?`,
+      message: `Вы уверены, что хотите удалить профиль «${guideName}» из базы данных?`,
       confirmText: "Удалить",
       cancelText: "Отмена",
       isDestructive: true,
     });
 
     if (isConfirmed) {
-      AdminStorageService.deleteGuide(id);
-      setGuides(AdminStorageService.getGuides());
-      toast.success(`Профиль «${guideName}» удален`);
+      await AdminStorageService.deleteGuide(id);
+      await loadGuides();
+      toast.success(`Профиль «${guideName}» удален из базы данных`);
     }
   };
 

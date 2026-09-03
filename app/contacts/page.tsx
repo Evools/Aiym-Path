@@ -30,7 +30,11 @@ export default function ContactsPage() {
   const [showUnavailableModal, setShowUnavailableModal] = useState<boolean>(false);
 
   useEffect(() => {
-    setContactsData(AdminStorageService.getContacts());
+    async function loadContacts() {
+      const data = await AdminStorageService.getContacts();
+      setContactsData(data);
+    }
+    loadContacts();
   }, []);
 
   const [formData, setFormData] = useState({

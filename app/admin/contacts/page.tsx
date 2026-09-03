@@ -29,20 +29,26 @@ export default function AdminContactsPage() {
   const toast = useToast();
   const [contacts, setContacts] = useState<AdminProjectContacts>(DEFAULT_CONTACTS);
 
+  const loadContacts = async () => {
+    const data = await AdminStorageService.getContacts();
+    setContacts(data);
+  };
+
   useEffect(() => {
-    setContacts(AdminStorageService.getContacts());
+    loadContacts();
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    AdminStorageService.saveContacts(contacts);
-    toast.success("Контакты и номера экстренных служб успешно сохранены");
+    await AdminStorageService.saveContacts(contacts);
+    await loadContacts();
+    toast.success("Контакты и номера экстренных служб успешно сохранены в базе данных");
   };
 
   const handleReset = async () => {
     const isConfirmed = await toast.confirm({
       title: "Сбросить контакты?",
-      message: "Вернуть все контакты и номера экстренных служб к официальным значениям по умолчанию?",
+      message: "Вернуть все контакты и номера экстренных служб к официальным значениям по умолчанию в базе данных?",
       confirmText: "Сбросить",
       cancelText: "Отмена",
       isDestructive: true,
@@ -50,8 +56,9 @@ export default function AdminContactsPage() {
 
     if (isConfirmed) {
       setContacts(DEFAULT_CONTACTS);
-      AdminStorageService.saveContacts(DEFAULT_CONTACTS);
-      toast.success("Контакты сброшены к значениям по умолчанию");
+      await AdminStorageService.saveContacts(DEFAULT_CONTACTS);
+      await loadContacts();
+      toast.success("Контакты сброшены к значениям по умолчанию в базе данных");
     }
   };
 

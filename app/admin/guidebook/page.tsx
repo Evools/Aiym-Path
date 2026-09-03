@@ -75,8 +75,13 @@ export default function AdminGuidebookPage() {
     },
   });
 
+  const loadItems = async () => {
+    const data = await AdminStorageService.getGuidebookItems();
+    setItems(data);
+  };
+
   useEffect(() => {
-    setItems(AdminStorageService.getGuidebookItems());
+    loadItems();
   }, []);
 
   // Close modal on Escape key
@@ -154,20 +159,20 @@ export default function AdminGuidebookPage() {
   const handleDelete = async (id: string, titleRu: string) => {
     const isConfirmed = await toast.confirm({
       title: "Удалить статью?",
-      message: `Вы уверены, что хотите удалить «${titleRu}» из путеводителя?`,
+      message: `Вы уверены, что хотите удалить «${titleRu}» из базы данных путеводителя?`,
       confirmText: "Удалить",
       cancelText: "Отмена",
       isDestructive: true,
     });
 
     if (isConfirmed) {
-      AdminStorageService.deleteGuidebookItem(id);
-      setItems(AdminStorageService.getGuidebookItems());
+      await AdminStorageService.deleteGuidebookItem(id);
+      await loadItems();
       toast.success("Статья удалена из путеводителя");
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.title.ru.trim()) {
@@ -200,10 +205,11 @@ export default function AdminGuidebookPage() {
         kg: formData.details.kg.split("\n").map((s) => s.trim()).filter(Boolean),
         en: formData.details.en.split("\n").map((s) => s.trim()).filter(Boolean),
       },
+      actionType: editingItem?.actionType,
     };
 
-    AdminStorageService.saveGuidebookItem(itemToSave);
-    setItems(AdminStorageService.getGuidebookItems());
+    await AdminStorageService.saveGuidebookItem(itemToSave);
+    await loadItems();
     setIsModalOpen(false);
     toast.success(
       editingItem ? "Статья успешно обновлена" : "Новая статья добавлена в путеводитель"

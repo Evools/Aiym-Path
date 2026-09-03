@@ -16,19 +16,18 @@ export const MapExplorerSection: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const loadAll = () => {
-      setRoutesData(AdminStorageService.getRoutes());
-      setLocationsData(AdminStorageService.getLocations());
+    const loadAll = async () => {
+      const [r, l] = await Promise.all([
+        AdminStorageService.getRoutes(),
+        AdminStorageService.getLocations(),
+      ]);
+      setRoutesData(r);
+      setLocationsData(l);
     };
     loadAll();
 
-    window.addEventListener("aiym_storage_updated", loadAll);
-    window.addEventListener("storage", loadAll);
     window.addEventListener("focus", loadAll);
-
     return () => {
-      window.removeEventListener("aiym_storage_updated", loadAll);
-      window.removeEventListener("storage", loadAll);
       window.removeEventListener("focus", loadAll);
     };
   }, []);

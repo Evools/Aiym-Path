@@ -31,8 +31,9 @@ export const RegionSelectWithAdd: React.FC<RegionSelectWithAddProps> = ({
   const [newRegionEn, setNewRegionEn] = useState("");
   const [isTranslating, setIsTranslating] = useState(false);
 
-  const loadRegions = () => {
-    setRegions(AdminStorageService.getRegions());
+  const loadRegions = async () => {
+    const data = await AdminStorageService.getRegions();
+    setRegions(data);
   };
 
   useEffect(() => {
@@ -85,7 +86,7 @@ export const RegionSelectWithAdd: React.FC<RegionSelectWithAddProps> = ({
   };
 
   // Save new custom region
-  const handleSaveNewRegion = (e: React.FormEvent) => {
+  const handleSaveNewRegion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newRegionRu.trim()) {
       toast.warning("Введите название региона");
@@ -110,10 +111,10 @@ export const RegionSelectWithAdd: React.FC<RegionSelectWithAddProps> = ({
       },
     };
 
-    AdminStorageService.saveRegion(newRegion);
-    loadRegions();
+    await AdminStorageService.saveRegion(newRegion);
+    await loadRegions();
     onChange(newRegion.id);
-    toast.success(`Регион «${newRegion.label.ru}» успешно добавлен`);
+    toast.success(`Регион «${newRegion.label.ru}» успешно добавлен в базу данных`);
 
     // Reset and close
     setNewRegionRu("");

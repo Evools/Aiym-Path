@@ -15,10 +15,13 @@ export const ToursGuideListSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<"all" | "guide" | "agency">("all");
 
   useEffect(() => {
-    const storedGuides = AdminStorageService.getGuides();
-    if (storedGuides && storedGuides.length > 0) {
-      setGuides(storedGuides);
+    async function loadGuides() {
+      const dbGuides = await AdminStorageService.getGuides();
+      if (dbGuides && dbGuides.length > 0) {
+        setGuides(dbGuides);
+      }
     }
+    loadGuides();
   }, []);
 
   const locations = useMemo(() => {
