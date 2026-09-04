@@ -13,6 +13,7 @@ import {
   BookOpen,
   PhoneCall,
   ExternalLink,
+  TrendingUp,
 } from "lucide-react";
 import {
   AdminStorageService,
@@ -22,6 +23,7 @@ import {
 } from "@/lib/services/admin-storage.service";
 import { RouteItem } from "@/types/route.types";
 import { GuidebookItem } from "@/types/guidebook.types";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { useToast } from "@/context/ToastContext";
 
 export default function AdminDashboardPage() {
@@ -31,6 +33,7 @@ export default function AdminDashboardPage() {
   const [locations, setLocations] = useState<AdminLocationItem[]>([]);
   const [guidebookItems, setGuidebookItems] = useState<GuidebookItem[]>([]);
   const [contacts, setContacts] = useState<AdminProjectContacts | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -46,6 +49,7 @@ export default function AdminDashboardPage() {
       setLocations(l);
       setGuidebookItems(gb);
       setContacts(c);
+      setIsLoaded(true);
     }
     loadData();
   }, []);
@@ -53,7 +57,8 @@ export default function AdminDashboardPage() {
   const handleResetData = async () => {
     const isConfirmed = await toast.confirm({
       title: "Сбросить все данные?",
-      message: "Все добавленные и отредактированные маршруты, гиды, локации, путеводитель и контакты будут возвращены к исходным значениям по умолчанию в базе данных PostgreSQL.",
+      message:
+        "Все добавленные и отредактированные маршруты, гиды, локации, путеводитель и контакты будут возвращены к исходным значениям по умолчанию в базе данных PostgreSQL.",
       confirmText: "Сбросить данные",
       cancelText: "Отмена",
       isDestructive: true,
@@ -109,7 +114,7 @@ export default function AdminDashboardPage() {
 
           <Link
             href="/admin/routes/new"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
           >
             <Plus className="w-4 h-4" />
             <span>Новый маршрут</span>
@@ -117,48 +122,53 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Key Metric Summary Cards (5 columns / grid) */}
+      {/* Key Metric Summary Cards with Upward Animated Counters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {/* Metric 1: Routes */}
         <Link
           href="/admin/routes"
-          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between group"
+          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
               Маршруты
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] group-hover:bg-[#07626A] group-hover:text-white transition-colors duration-200 flex items-center justify-center">
               <Map className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-3xl font-extrabold text-[#0D0D0D]">
-              {routes.length}
-            </span>
-            <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
-              ~{totalKm.toFixed(1)} км GPS треков
-            </p>
+            <div className="text-3xl font-extrabold text-[#0D0D0D] flex items-baseline">
+              {isLoaded && <AnimatedCounter value={routes.length} duration={1200} />}
+              {!isLoaded && <span className="text-[#0D0D0D]/30">0</span>}
+            </div>
+            <div className="text-[11px] text-[#0D0D0D]/50 mt-1 flex items-center gap-1">
+              <span>~</span>
+              {isLoaded && <AnimatedCounter value={totalKm} decimals={1} duration={1400} />}
+              {!isLoaded && <span>0.0</span>}
+              <span>км GPS треков</span>
+            </div>
           </div>
         </Link>
 
         {/* Metric 2: Female Guides */}
         <Link
           href="/admin/guides"
-          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between group"
+          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
               Женские гиды
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] group-hover:bg-[#07626A] group-hover:text-white transition-colors duration-200 flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-3xl font-extrabold text-[#0D0D0D]">
-              {guides.length}
-            </span>
+            <div className="text-3xl font-extrabold text-[#0D0D0D] flex items-baseline">
+              {isLoaded && <AnimatedCounter value={guides.length} duration={1300} />}
+              {!isLoaded && <span className="text-[#0D0D0D]/30">0</span>}
+            </div>
             <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
               Верифицированные гиды
             </p>
@@ -168,20 +178,21 @@ export default function AdminDashboardPage() {
         {/* Metric 3: Safe Locations & Hubs */}
         <Link
           href="/admin/locations"
-          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between group"
+          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
               Базы & Отели
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] group-hover:bg-[#07626A] group-hover:text-white transition-colors duration-200 flex items-center justify-center">
               <Building2 className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-3xl font-extrabold text-[#0D0D0D]">
-              {locations.length}
-            </span>
+            <div className="text-3xl font-extrabold text-[#0D0D0D] flex items-baseline">
+              {isLoaded && <AnimatedCounter value={locations.length} duration={1400} />}
+              {!isLoaded && <span className="text-[#0D0D0D]/30">0</span>}
+            </div>
             <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
               Проверенные базы отдыха
             </p>
@@ -191,20 +202,21 @@ export default function AdminDashboardPage() {
         {/* Metric 4: Guidebook */}
         <Link
           href="/admin/guidebook"
-          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between group"
+          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
               Путеводитель
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] group-hover:bg-[#07626A] group-hover:text-white transition-colors duration-200 flex items-center justify-center">
               <BookOpen className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-3xl font-extrabold text-[#0D0D0D]">
-              {guidebookItems.length}
-            </span>
+            <div className="text-3xl font-extrabold text-[#0D0D0D] flex items-baseline">
+              {isLoaded && <AnimatedCounter value={guidebookItems.length} duration={1500} />}
+              {!isLoaded && <span className="text-[#0D0D0D]/30">0</span>}
+            </div>
             <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
               Статей и рекомендаций
             </p>
@@ -214,22 +226,28 @@ export default function AdminDashboardPage() {
         {/* Metric 5: Contacts & SOS */}
         <Link
           href="/admin/contacts"
-          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between group"
+          className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
               Контакты & SOS
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] group-hover:bg-[#07626A] group-hover:text-white transition-colors duration-200 flex items-center justify-center">
               <PhoneCall className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-3xl font-extrabold text-[#0D0D0D]">
-              {contacts?.emergencyContacts.length || 7}
-            </span>
+            <div className="text-3xl font-extrabold text-[#0D0D0D] flex items-baseline">
+              {isLoaded && (
+                <AnimatedCounter
+                  value={contacts?.emergencyContacts.length || 7}
+                  duration={1600}
+                />
+              )}
+              {!isLoaded && <span className="text-[#0D0D0D]/30">0</span>}
+            </div>
             <p className="text-[11px] text-[#0D0D0D]/50 mt-1">
-              Экстренных служб и горячих линий
+              Экстренных служб и линий
             </p>
           </div>
         </Link>
