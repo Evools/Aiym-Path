@@ -17,27 +17,27 @@ model Region {
 }
 
 model Route {
-  id                 String     @id
-  regionId           String
-  titleRu            String
-  titleKg            String
-  titleEn            String
-  descRu             String
-  descKg             String
-  descEn             String
-  difficulty         String     @default("easy")
-  distanceKm         Float      @default(0.0)
-  durationHours      Float      @default(0.0)
-  hasFemaleGuide     Boolean    @default(false)
-  elevationGainMeters Int       @default(0)
-  centerLat          Float      @default(0.0)
-  centerLng          Float      @default(0.0)
-  coordinates        Json       // Array of [lat, lng]
-  imageUrl           String?
-  assignedGuides     Json?      // Array of AssignedGuide objects
-  pois               RoutePOI[]
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
+  id                  String     @id
+  regionId            String
+  titleRu             String
+  titleKg             String
+  titleEn             String
+  descRu              String
+  descKg              String
+  descEn              String
+  difficulty          String     @default("easy")
+  distanceKm          Float      @default(0.0)
+  durationHours       Float      @default(0.0)
+  hasFemaleGuide      Boolean    @default(false)
+  elevationGainMeters Int        @default(0)
+  centerLat           Float      @default(0.0)
+  centerLng           Float      @default(0.0)
+  coordinates         Json // Array of [lat, lng]
+  imageUrl            String?
+  assignedGuides      Json? // Array of AssignedGuide objects
+  pois                RoutePOI[]
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
 }
 
 model RoutePOI {
@@ -78,7 +78,7 @@ model Guide {
   skillsFirstAid      Boolean  @default(false)
   skillsMountaineer   Boolean  @default(false)
   skillsMountainGuide Boolean  @default(false)
-  badges              Json?    // Array of { id, icon, labelRu, labelKg, labelEn }
+  badges              Json? // Array of { id, icon, labelRu, labelKg, labelEn }
   isFemale            Boolean  @default(true)
   isVerified          Boolean  @default(true)
   rating              Float    @default(5.0)
@@ -92,49 +92,49 @@ model Guide {
 }
 
 model Location {
-  id                 String   @id
-  key                String?
-  titleRu            String
-  titleKg            String
-  titleEn            String
-  descRu             String
-  descKg             String
-  descEn             String
-  type               String   @default("hotel") // "hotel" | "camp" | "hub" | "location"
-  image              String
-  lat                Float
-  lng                Float
-  phone              String?
-  amenities          String[]
-  difficulty         String?
-  distanceKm         Float?
+  id                  String   @id
+  key                 String?
+  titleRu             String
+  titleKg             String
+  titleEn             String
+  descRu              String
+  descKg              String
+  descEn              String
+  type                String   @default("hotel") // "hotel" | "camp" | "hub" | "location"
+  image               String
+  lat                 Float
+  lng                 Float
+  phone               String?
+  amenities           String[]
+  difficulty          String?
+  distanceKm          Float?
   elevationGainMeters Int?
-  hasFemaleGuide     Boolean  @default(false)
-  hasEmergencyPoints Boolean  @default(false)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  hasFemaleGuide      Boolean  @default(false)
+  hasEmergencyPoints  Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 model GuidebookItem {
-  id             String   @id
-  audience       String   // "travelers" | "providers"
-  category       String   // "safety" | "female_tips" | "trekking" ...
-  iconName       String   // "ShieldCheck", etc.
-  titleRu        String
-  titleKg        String
-  titleEn        String
-  shortDescRu    String
-  shortDescKg    String
-  shortDescEn    String
-  detailsRu      String[]
-  detailsKg      String[]
-  detailsEn      String[]
-  badgeTextRu    String?
-  badgeTextKg    String?
-  badgeTextEn    String?
-  actionType     String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id          String   @id
+  audience    String // "travelers" | "providers"
+  category    String // "safety" | "female_tips" | "trekking" ...
+  iconName    String // "ShieldCheck", etc.
+  titleRu     String
+  titleKg     String
+  titleEn     String
+  shortDescRu String
+  shortDescKg String
+  shortDescEn String
+  detailsRu   String[]
+  detailsKg   String[]
+  detailsEn   String[]
+  badgeTextRu String?
+  badgeTextKg String?
+  badgeTextEn String?
+  actionType  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model ProjectContact {
@@ -147,7 +147,7 @@ model ProjectContact {
   workingHoursRu    String
   workingHoursKg    String
   workingHoursEn    String
-  emergencyContacts Json     // Array of AdminEmergencyContact
+  emergencyContacts Json // Array of AdminEmergencyContact
   updatedAt         DateTime @updatedAt
 }
 
@@ -155,10 +155,9 @@ model AdminUser {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  password  String   // Salted hash
+  password  String // Salted hash
   role      String   @default("Администратор")
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
