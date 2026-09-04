@@ -254,7 +254,7 @@ export default function AdminDashboardPage() {
       {!isLoaded ? (
         <AdminDataLoader
           title="Загрузка данных платформы..."
-          subtitle="Синхронизация метрик и списка маршрутов с базой данных PostgreSQL"
+          subtitle="Синхронизация метрик и списка маршрутов с базой данных"
           minHeight="min-h-[220px]"
         />
       ) : (
@@ -278,39 +278,39 @@ export default function AdminDashboardPage() {
             </Link>
           </div>
 
-        <div className="flex flex-col divide-y divide-[#E1E1E1] border-t border-[#E1E1E1] -mx-6 px-6">
-          {routes.slice(0, 5).map((route) => {
-            return (
-              <div
-                key={route.id}
-                className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center shrink-0 font-bold text-xs">
-                    {route.region === "ala-archa" ? "AA" : route.region === "alamedin" ? "AL" : "CH"}
+          <div className="flex flex-col divide-y divide-[#E1E1E1] border-t border-[#E1E1E1] -mx-6 px-6">
+            {routes.slice(0, 5).map((route) => {
+              return (
+                <div
+                  key={route.id}
+                  className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] flex items-center justify-center shrink-0 font-bold text-xs">
+                      {route.region === "ala-archa" ? "AA" : route.region === "alamedin" ? "AL" : "CH"}
+                    </div>
+
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-bold text-[#0D0D0D] truncate">
+                        {route.title.ru}
+                      </h4>
+                      <p className="text-xs text-[#0D0D0D]/60 truncate">
+                        {route.distanceKm} км • ~{route.durationHours} ч • +{route.elevationGainMeters} м • {route.coordinates.length} точек трека
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="min-w-0">
-                    <h4 className="text-sm font-bold text-[#0D0D0D] truncate">
-                      {route.title.ru}
-                    </h4>
-                    <p className="text-xs text-[#0D0D0D]/60 truncate">
-                      {route.distanceKm} км • ~{route.durationHours} ч • +{route.elevationGainMeters} м • {route.coordinates.length} точек трека
-                    </p>
+                  <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                    <Link
+                      href={`/admin/routes/${route.id}`}
+                      className="px-3 py-1.5 rounded-xl bg-[#F3F3F3] hover:bg-[#07626A] text-[#0D0D0D] hover:text-white text-xs font-bold transition-colors"
+                    >
+                      Редактировать
+                    </Link>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                  <Link
-                    href={`/admin/routes/${route.id}`}
-                    className="px-3 py-1.5 rounded-xl bg-[#F3F3F3] hover:bg-[#07626A] text-[#0D0D0D] hover:text-white text-xs font-bold transition-colors"
-                  >
-                    Редактировать
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
           </div>
         </div>
       )}
