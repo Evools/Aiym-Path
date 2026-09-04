@@ -21,6 +21,7 @@ import {
 } from "@/lib/services/admin-storage.service";
 import { RouteItem, RouteFilterRegion } from "@/types/route.types";
 import { useToast } from "@/context/ToastContext";
+import { AdminCardSkeleton } from "@/components/features/admin/AdminDataLoader";
 
 export default function AdminRoutesPage() {
   const toast = useToast();
@@ -28,14 +29,19 @@ export default function AdminRoutesPage() {
   const [regions, setRegions] = useState<AdminRegionItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState<RouteFilterRegion>("all");
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadRoutes = async () => {
-    const [r, reg] = await Promise.all([
-      AdminStorageService.getRoutes(),
-      AdminStorageService.getRegions(),
-    ]);
-    setRoutes(r);
-    setRegions(reg);
+    try {
+      const [r, reg] = await Promise.all([
+        AdminStorageService.getRoutes(),
+        AdminStorageService.getRegions(),
+      ]);
+      setRoutes(r);
+      setRegions(reg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -138,7 +144,9 @@ export default function AdminRoutesPage() {
       </div>
 
       {/* Routes Grid / Cards */}
-      {filteredRoutes.length === 0 ? (
+      {isLoading ? (
+        <AdminCardSkeleton count={4} type="route" />
+      ) : filteredRoutes.length === 0 ? (
         <div className="p-12 text-center rounded-3xl bg-white border border-[#E1E1E1]">
           <Footprints className="w-10 h-10 text-[#07626A]/40 mx-auto mb-3" />
           <h3 className="text-base font-bold text-[#0D0D0D]">Маршруты не найдены</h3>

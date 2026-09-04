@@ -36,6 +36,7 @@ import { CustomMultiSelect, MultiSelectOption } from "@/components/ui/CustomMult
 import { GuideBadgeSelector } from "@/components/features/admin/GuideBadgeSelector";
 import { getBadgeIconComponent } from "@/lib/constants/guide-badges";
 import { useToast } from "@/context/ToastContext";
+import { AdminCardSkeleton } from "@/components/features/admin/AdminDataLoader";
 
 const LANGUAGE_OPTIONS: MultiSelectOption[] = [
   { value: "Кыргызча", label: "Кыргызча", sublabel: "Мамлекеттик тил" },
@@ -114,7 +115,7 @@ const DEFAULT_AVATARS = [
 export default function AdminGuidesPage() {
   const toast = useToast();
   const [guides, setGuides] = useState<AdminGuideItem[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [editingGuide, setEditingGuide] = useState<AdminGuideItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -151,13 +152,17 @@ export default function AdminGuidesPage() {
   const [isVerified, setIsVerified] = useState(true);
 
   const loadGuides = async () => {
-    const data = await AdminStorageService.getGuides();
-    setGuides(data);
+    setIsLoading(true);
+    try {
+      const data = await AdminStorageService.getGuides();
+      setGuides(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     loadGuides();
-    setIsMounted(true);
   }, []);
 
   useEffect(() => {
@@ -401,29 +406,27 @@ export default function AdminGuidesPage() {
       </div>
 
       {/* Guides Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {!isMounted ? (
-          <div className="col-span-full p-12 text-center text-xs font-bold text-[#0D0D0D]/40">
-            Загрузка списка специалистов из базы данных...
-          </div>
-        ) : guides.length === 0 ? (
-          <div className="col-span-full p-12 text-center rounded-3xl bg-white border border-[#E1E1E1]">
-            <Users className="w-10 h-10 text-[#07626A]/40 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-[#0D0D0D]">Гиды не найдены</h3>
-            <p className="text-xs text-[#0D0D0D]/60 mt-1 mb-4">
-              Добавьте проверенного женского гида в базу платформы.
-            </p>
-            <button
-              type="button"
-              onClick={openCreateModal}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Создать первого гида</span>
-            </button>
-          </div>
-        ) : (
-          guides.map((guide) => {
+      {isLoading ? (
+        <AdminCardSkeleton count={6} type="guide" />
+      ) : guides.length === 0 ? (
+        <div className="col-span-full p-12 text-center rounded-3xl bg-white border border-[#E1E1E1]">
+          <Users className="w-10 h-10 text-[#07626A]/40 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-[#0D0D0D]">Гиды не найдены</h3>
+          <p className="text-xs text-[#0D0D0D]/60 mt-1 mb-4">
+            Добавьте проверенного женского гида в базу платформы.
+          </p>
+          <button
+            type="button"
+            onClick={openCreateModal}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Создать первого гида</span>
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {guides.map((guide) => {
             const roleRu = typeof guide.role === "object" ? guide.role.ru : guide.role;
             const badgesCount = guide.badges?.length || 0;
 
@@ -554,9 +557,9 @@ export default function AdminGuidesPage() {
                 </div>
               </div>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
 
       {/* Scalable Modal Dialog */}
       {isModalOpen && (

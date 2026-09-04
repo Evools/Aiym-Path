@@ -26,6 +26,7 @@ import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
 import { LocationMapPickerWrapper } from "@/components/features/admin/LocationMapPickerWrapper";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { useToast } from "@/context/ToastContext";
+import { AdminCardSkeleton } from "@/components/features/admin/AdminDataLoader";
 
 const PRESET_IMAGES = [
   "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
@@ -48,6 +49,7 @@ const POPULAR_AMENITIES = [
 export default function AdminLocationsPage() {
   const toast = useToast();
   const [locations, setLocations] = useState<AdminLocationItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [editingLoc, setEditingLoc] = useState<AdminLocationItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -65,8 +67,13 @@ export default function AdminLocationsPage() {
   ]);
 
   const loadLocations = async () => {
-    const data = await AdminStorageService.getLocations();
-    setLocations(data);
+    setIsLoading(true);
+    try {
+      const data = await AdminStorageService.getLocations();
+      setLocations(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -216,13 +223,32 @@ export default function AdminLocationsPage() {
       </div>
 
       {/* Locations Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {locations.map((loc) => {
-          return (
-            <div
-              key={loc.id}
-              className="p-5 rounded-3xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between gap-4 shadow-2xs"
-            >
+      {isLoading ? (
+        <AdminCardSkeleton count={6} type="location" />
+      ) : locations.length === 0 ? (
+        <div className="p-12 text-center rounded-3xl bg-white border border-[#E1E1E1]">
+          <Building2 className="w-10 h-10 text-[#07626A]/40 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-[#0D0D0D]">Локации не найдены</h3>
+          <p className="text-xs text-[#0D0D0D]/60 mt-1 mb-4">
+            Добавьте проверенный отель, базу отдыха или хаб безопасности.
+          </p>
+          <button
+            type="button"
+            onClick={openCreateModal}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Добавить локацию</span>
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {locations.map((loc) => {
+            return (
+              <div
+                key={loc.id}
+                className="p-5 rounded-3xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors flex flex-col justify-between gap-4 shadow-2xs"
+              >
               <div>
                 <div className="relative h-40 rounded-2xl bg-[#F3F3F3] overflow-hidden border border-[#E1E1E1] mb-3.5">
                   <Image
@@ -316,7 +342,8 @@ export default function AdminLocationsPage() {
             </div>
           );
         })}
-      </div>
+        </div>
+      )}
 
       {/* Extra-Wide Modal Dialog with Divided Categories */}
       {isModalOpen && (

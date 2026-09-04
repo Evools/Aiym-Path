@@ -20,6 +20,7 @@ import { RouteMapEditorWrapper } from "@/components/features/admin/RouteMapEdito
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { RegionSelectWithAdd } from "@/components/features/admin/RegionSelectWithAdd";
 import { useToast } from "@/context/ToastContext";
+import { AdminDataLoader } from "@/components/features/admin/AdminDataLoader";
 
 export default function EditRoutePage() {
   const router = useRouter();
@@ -200,8 +201,11 @@ export default function EditRoutePage() {
 
   if (isLoading) {
     return (
-      <div className="p-12 text-center text-xs font-bold text-[#0D0D0D]/60">
-        Загрузка данных маршрута...
+      <div className="py-8">
+        <AdminDataLoader
+          title="Загрузка данных маршрута..."
+          subtitle="Получение GPS-точек, высотного профиля и привязанных гидов из базы данных"
+        />
       </div>
     );
   }

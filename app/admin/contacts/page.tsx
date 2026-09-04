@@ -24,14 +24,21 @@ import {
 } from "@/lib/services/admin-storage.service";
 import { useToast } from "@/context/ToastContext";
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
+import { AdminDataLoader } from "@/components/features/admin/AdminDataLoader";
 
 export default function AdminContactsPage() {
   const toast = useToast();
   const [contacts, setContacts] = useState<AdminProjectContacts>(DEFAULT_CONTACTS);
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadContacts = async () => {
-    const data = await AdminStorageService.getContacts();
-    setContacts(data);
+    setIsLoading(true);
+    try {
+      const data = await AdminStorageService.getContacts();
+      setContacts(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -152,9 +159,15 @@ export default function AdminContactsPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="flex flex-col gap-8">
-        {/* 2. Main Project Contacts Card */}
-        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5 shadow-2xs">
+      {isLoading ? (
+        <AdminDataLoader
+          title="Загрузка настроек контактов..."
+          subtitle="Получение официальных контактов и экстренных номеров из базы данных"
+        />
+      ) : (
+        <form onSubmit={handleSave} className="flex flex-col gap-8">
+          {/* 2. Main Project Contacts Card */}
+          <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5 shadow-2xs">
           <div className="flex items-center justify-between pb-3 border-b border-[#E1E1E1]">
             <div className="flex items-center gap-2.5">
               <Mail className="w-4 h-4 text-[#07626A]" />
@@ -338,6 +351,7 @@ export default function AdminContactsPage() {
           </button>
         </div>
       </form>
+      )}
     </div>
   );
 }

@@ -17,6 +17,7 @@ import { GuidebookItem, GuidebookAudience, GuidebookCategory } from "@/types/gui
 import { useToast } from "@/context/ToastContext";
 import { CustomSelect, CustomSelectOption } from "@/components/ui/CustomSelect";
 import { I18nFieldEditor } from "@/components/features/admin/I18nFieldEditor";
+import { AdminCardSkeleton } from "@/components/features/admin/AdminDataLoader";
 
 const AUDIENCE_OPTIONS: CustomSelectOption[] = [
   {
@@ -45,6 +46,7 @@ const CATEGORY_OPTIONS: CustomSelectOption[] = [
 export default function AdminGuidebookPage() {
   const toast = useToast();
   const [items, setItems] = useState<GuidebookItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedAudience, setSelectedAudience] = useState<"all" | GuidebookAudience>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,8 +78,13 @@ export default function AdminGuidebookPage() {
   });
 
   const loadItems = async () => {
-    const data = await AdminStorageService.getGuidebookItems();
-    setItems(data);
+    setIsLoading(true);
+    try {
+      const data = await AdminStorageService.getGuidebookItems();
+      setItems(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -311,7 +318,9 @@ export default function AdminGuidebookPage() {
       </div>
 
       {/* 3. Items Grid */}
-      {filteredItems.length > 0 ? (
+      {isLoading ? (
+        <AdminCardSkeleton count={6} type="card" />
+      ) : filteredItems.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredItems.map((item) => (
             <div
