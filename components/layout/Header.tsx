@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export const Header: React.FC = () => {
   const { dict } = useLanguage();
@@ -43,20 +44,8 @@ export const Header: React.FC = () => {
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex flex-col group py-0.5">
-          <span
-            className="text-2xl sm:text-[24px] font-extrabold tracking-tight leading-none text-[#07626A]"
-            style={{
-              fontFamily: "var(--font-nunito-sans), 'Nunito Sans', sans-serif",
-            }}
-          >
-            Aiym Path
-          </span>
-          <span className="text-[10px] text-[#0D0D0D]/60 font-semibold tracking-wider uppercase mt-0.5">
-            female-friendly туризм
-          </span>
-        </Link>
+        {/* Dynamic Brand Logo */}
+        <BrandLogo href="/" size="md" />
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-1.5 lg:gap-2">

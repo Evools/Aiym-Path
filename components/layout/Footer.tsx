@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { ShieldCheck, Phone, Mail, MapPin, ArrowUpRight, ArrowUp } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { AdminStorageService, AdminProjectContacts, DEFAULT_CONTACTS } from "@/lib/services/admin-storage.service";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export const Footer: React.FC = () => {
   const { language, dict } = useLanguage();
@@ -43,20 +44,7 @@ export const Footer: React.FC = () => {
           
           {/* Col 1: Brand & Mission (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
-            <Link href="/" className="inline-flex flex-col group py-1">
-              <span
-                className="text-2xl sm:text-[26px] font-bold tracking-normal leading-none"
-                style={{
-                  color: "#07626A",
-                  fontFamily: "var(--font-nunito-sans), 'Nunito Sans', sans-serif",
-                }}
-              >
-                Aiym Path
-              </span>
-              <span className="text-[10.5px] uppercase font-semibold text-gray-400 tracking-wider mt-1">
-                female-friendly туризм
-              </span>
-            </Link>
+            <BrandLogo href="/" size="lg" />
 
             <p className="text-xs sm:text-[13px] text-gray-500 leading-relaxed max-w-sm">
               {dict.footer.description}

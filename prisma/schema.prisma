@@ -249,4 +249,20 @@ model EquipmentChecklistItem {
   updatedAt   DateTime @updatedAt
 }
 
+model SiteSettings {
+  id          String   @id @default("main")
+  logoType    String   @default("text") // "text" | "image" | "both"
+  logoTextRu  String   @default("Aiym Path")
+  logoTextKg  String   @default("Aiym Path")
+  logoTextEn  String   @default("Aiym Path")
+  logoSubRu   String   @default("female-friendly туризм")
+  logoSubKg   String   @default("female-friendly туризм")
+  logoSubEn   String   @default("female-friendly tourism")
+  logoImageUrl String   @default("")
+  logoHeight  Int      @default(36)
+  showSubtext Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+}
+
+
 

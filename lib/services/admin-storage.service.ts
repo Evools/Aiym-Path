@@ -1077,6 +1077,69 @@ export const AdminStorageService = {
     }
   },
 
+  // --- SITE LOGO & BRANDING ---
+  async getLogoSettings(): Promise<import("@/types/settings.types").SiteLogoData> {
+    const { DEFAULT_SITE_LOGO } = await import("@/types/settings.types");
+    try {
+      const res = await fetch("/api/settings/logo", { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.data) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("aiym_admin_site_logo", JSON.stringify(json.data));
+        }
+        return json.data;
+      }
+    } catch (err) {
+      console.error("Failed to fetch logo settings from API/DB:", err);
+    }
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("aiym_admin_site_logo");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          return { ...DEFAULT_SITE_LOGO, ...parsed };
+        }
+      } catch (e) {
+        console.error("Failed to read logo from localStorage:", e);
+      }
+    }
+    return DEFAULT_SITE_LOGO;
+  },
+
+  async saveLogoSettings(logo: import("@/types/settings.types").SiteLogoData): Promise<boolean> {
+    try {
+      const res = await fetch("/api/settings/logo", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(logo),
+      });
+      const json = await res.json();
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_site_logo", JSON.stringify(logo));
+        window.dispatchEvent(new Event("aiym_path_logo_change"));
+      }
+      return json.success ?? true;
+    } catch (err) {
+      console.error("Failed to save logo settings to DB:", err);
+      return false;
+    }
+  },
+
+  async resetLogoSettings(): Promise<boolean> {
+    try {
+      const res = await fetch("/api/settings/logo", { method: "POST" });
+      const json = await res.json();
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("aiym_admin_site_logo");
+        window.dispatchEvent(new Event("aiym_path_logo_change"));
+      }
+      return json.success ?? true;
+    } catch (err) {
+      console.error("Failed to reset logo in DB:", err);
+      return false;
+    }
+  },
+
   // Reset to default seed data
   async resetAll(): Promise<boolean> {
     try {

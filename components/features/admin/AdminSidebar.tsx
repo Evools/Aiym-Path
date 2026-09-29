@@ -15,9 +15,11 @@ import {
   PhoneCall,
   LogOut,
   Sparkles,
+  Type,
 } from "lucide-react";
 import { useAdminAuth } from "@/context/AdminAuthContext";
 import { useToast } from "@/context/ToastContext";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export const AdminSidebar: React.FC = () => {
   const pathname = usePathname();
@@ -30,6 +32,12 @@ export const AdminSidebar: React.FC = () => {
       href: "/admin",
       icon: LayoutDashboard,
       exact: true,
+    },
+    {
+      name: "Логотип и брендинг",
+      href: "/admin/logo",
+      icon: Type,
+      exact: false,
     },
     {
       name: "Главный баннер",
@@ -89,24 +97,7 @@ export const AdminSidebar: React.FC = () => {
       <div>
         {/* Admin Brand Header */}
         <div className="p-6 border-b border-[#E1E1E1]">
-          <Link href="/admin" className="flex flex-col group">
-            <div className="flex items-center gap-2">
-              <span
-                className="text-xl font-extrabold tracking-tight leading-none text-[#07626A]"
-                style={{
-                  fontFamily: "var(--font-nunito-sans), 'Nunito Sans', sans-serif",
-                }}
-              >
-                Aiym Path
-              </span>
-              <span className="px-2 py-0.5 rounded-md bg-[rgba(7,98,106,0.10)] text-[#07626A] text-[10px] font-extrabold uppercase">
-                CMS
-              </span>
-            </div>
-            <span className="text-[10px] text-[#0D0D0D]/50 font-semibold tracking-wider uppercase mt-1">
-              Панель управления
-            </span>
-          </Link>
+          <BrandLogo href="/admin" size="md" isAdmin />
         </div>
 
         {/* Navigation List */}
