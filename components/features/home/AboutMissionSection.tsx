@@ -10,11 +10,11 @@ export const AboutMissionSection: React.FC = () => {
 
   const cards = [
     {
-      id: "genderBalance",
-      image: "/images/about/1.webp",
-      icon: <ShieldCheck className="w-5 h-5 text-[#07626A]" strokeWidth={1.75} />,
-      title: dict.about.cards.genderBalance.title,
-      description: dict.about.cards.genderBalance.description,
+      id: "routeMapping",
+      image: "/images/about/3.webp",
+      icon: <Map className="w-5 h-5 text-[#07626A]" strokeWidth={1.75} />,
+      title: dict.about.cards.routeMapping.title,
+      description: dict.about.cards.routeMapping.description,
     },
     {
       id: "womenEmpowerment",
@@ -24,11 +24,11 @@ export const AboutMissionSection: React.FC = () => {
       description: dict.about.cards.womenEmpowerment.description,
     },
     {
-      id: "routeMapping",
-      image: "/images/about/3.webp",
-      icon: <Map className="w-5 h-5 text-[#07626A]" strokeWidth={1.75} />,
-      title: dict.about.cards.routeMapping.title,
-      description: dict.about.cards.routeMapping.description,
+      id: "genderBalance",
+      image: "/images/about/1.webp",
+      icon: <ShieldCheck className="w-5 h-5 text-[#07626A]" strokeWidth={1.75} />,
+      title: dict.about.cards.genderBalance.title,
+      description: dict.about.cards.genderBalance.description,
     },
   ];
 

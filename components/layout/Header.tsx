@@ -28,9 +28,9 @@ export const Header: React.FC = () => {
 
   const navLinks = [
     { href: "/#about", label: dict.nav.about },
-    { href: "/guide", label: dict.nav.guide },
     { href: "/map", label: dict.nav.map },
     { href: "/tours", label: dict.nav.tours },
+    { href: "/guide", label: dict.nav.guide },
     { href: "/contacts", label: dict.nav.contacts },
   ];
 

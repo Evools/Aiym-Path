@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Sparkles, ArrowRight, MessageSquare } from "lucide-react";
+import { ArrowRight, MapPin, Users } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const HeroSection: React.FC = () => {
@@ -88,12 +88,6 @@ export const HeroSection: React.FC = () => {
       {/* Hero Content Container */}
       <div className="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-xl">
-          {/* Pilot Project Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50/90 backdrop-blur-xs border border-teal-200/70 text-teal-800 text-xs font-semibold mb-6 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-            <span>{dict.hero.badge}</span>
-          </div>
-
           {/* Large Heading */}
           <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.08] mb-5 uppercase">
             <span className="block text-gray-900">{dict.hero.titlePrefix}</span>
@@ -113,20 +107,21 @@ export const HeroSection: React.FC = () => {
           {/* Buttons */}
           <div className="flex flex-wrap items-center gap-3.5">
             <Link
-              href="#about"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+              href="/map"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
               style={{ backgroundColor: "#07626A" }}
             >
-              <span>{dict.hero.ctaAbout}</span>
-              <ArrowRight className="w-4 h-4" />
+              <MapPin className="w-4 h-4" />
+              <span>{dict.hero.ctaMap || "Карта (Локации)"}</span>
+              <ArrowRight className="w-4 h-4 ml-0.5" />
             </Link>
 
             <Link
-              href="#contacts"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs sm:text-sm font-semibold shadow-xs transition-all active:scale-[0.98]"
+              href="/tours"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold shadow-xs transition-all active:scale-[0.98]"
             >
-              <span>{dict.hero.ctaContact}</span>
-              <MessageSquare className="w-4 h-4 text-gray-500" />
+              <Users className="w-4 h-4 text-[#07626A]" />
+              <span>{dict.hero.ctaGuides || "Гиды"}</span>
             </Link>
           </div>
         </div>

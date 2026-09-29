@@ -4,7 +4,7 @@
     "about": "About Us",
     "guide": "Guidebook",
     "map": "Map",
-    "tours": "Tours",
+    "tours": "Guides",
     "contacts": "Contacts",
     "admin": "Admin"
   },
@@ -15,7 +15,16 @@
     "titleLine3": "BOUNDARIES",
     "subtitle": "We create a safe, accessible, and inspiring environment for women traveling across the Kyrgyz Republic.",
     "ctaAbout": "Learn More About Project",
-    "ctaContact": "Contact Us"
+    "ctaContact": "Contact Us",
+    "ctaMap": "Map (Locations)",
+    "ctaGuides": "Guides"
+  },
+  "homeMap": {
+    "badge": "Route Mapping",
+    "title": "INTERACTIVE ROUTE MAP",
+    "subtitle": "Explore verified female-friendly trekking trails, elevation profiles, safe rest areas, and local guide contacts.",
+    "openFullMap": "Open Full Map Experience",
+    "viewDetails": "All routes on full map"
   },
   "about": {
     "badge": "About Us",
