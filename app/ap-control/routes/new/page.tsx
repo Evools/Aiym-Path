@@ -145,7 +145,7 @@ export default function CreateRoutePage() {
 
     await AdminStorageService.saveRoute(newRoute);
     toast.success(`Маршрут «${title.ru}» успешно сохранен в базе данных`);
-    router.push("/admin/routes");
+    router.push("/ap-control/routes");
   };
 
   return (
@@ -154,7 +154,7 @@ export default function CreateRoutePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E1E1E1]">
         <div className="flex items-center gap-3">
           <Link
-            href="/admin/routes"
+            href="/ap-control/routes"
             className="p-2.5 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] text-[#0D0D0D] transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -171,7 +171,7 @@ export default function CreateRoutePage() {
 
         <div className="flex items-center gap-2.5">
           <Link
-            href="/admin/routes"
+            href="/ap-control/routes"
             className="px-4 py-2.5 rounded-xl bg-white border border-[#E1E1E1] text-xs font-bold text-[#0D0D0D] hover:bg-[#F3F3F3] transition-colors"
           >
             Отмена

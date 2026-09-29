@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
     loadContacts();
   }, []);
 
-  if (pathname?.startsWith("/admin")) {
+  if (pathname?.startsWith("/ap-control") || pathname?.startsWith("/admin")) {
     return null;
   }
 

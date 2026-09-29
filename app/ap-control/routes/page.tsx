@@ -88,7 +88,7 @@ export default function AdminRoutesPage() {
         </div>
 
         <Link
-          href="/admin/routes/new"
+          href="/ap-control/routes/new"
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4" />
@@ -154,7 +154,7 @@ export default function AdminRoutesPage() {
             Попробуйте изменить параметры поиска или добавьте новый маршрут.
           </p>
           <Link
-            href="/admin/routes/new"
+            href="/ap-control/routes/new"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold"
           >
             <Plus className="w-4 h-4" />
@@ -275,7 +275,7 @@ export default function AdminRoutesPage() {
                     </button>
 
                     <Link
-                      href={`/admin/routes/${route.id}`}
+                      href={`/ap-control/routes/${route.id}`}
                       className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#F3F3F3] hover:bg-[#07626A] text-[#0D0D0D] hover:text-white text-xs font-bold transition-colors cursor-pointer"
                     >
                       <Edit className="w-3.5 h-3.5" />

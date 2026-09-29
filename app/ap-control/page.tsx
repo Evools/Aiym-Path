@@ -114,7 +114,7 @@ export default function AdminDashboardPage() {
           </button>
 
           <Link
-            href="/admin/routes/new"
+            href="/ap-control/routes/new"
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
           >
             <Plus className="w-4 h-4" />
@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {/* Metric 1: Routes */}
           <Link
-            href="/admin/routes"
+            href="/ap-control/routes"
             className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
@@ -155,7 +155,7 @@ export default function AdminDashboardPage() {
 
           {/* Metric 2: Guides */}
           <Link
-            href="/admin/guides"
+            href="/ap-control/guides"
             className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
@@ -178,7 +178,7 @@ export default function AdminDashboardPage() {
 
           {/* Metric 3: Safe Locations & Hubs */}
           <Link
-            href="/admin/locations"
+            href="/ap-control/locations"
             className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
 
           {/* Metric 4: Guidebook */}
           <Link
-            href="/admin/guidebook"
+            href="/ap-control/guidebook"
             className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
@@ -224,7 +224,7 @@ export default function AdminDashboardPage() {
 
           {/* Metric 5: Contacts & SOS */}
           <Link
-            href="/admin/contacts"
+            href="/ap-control/contacts"
             className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
@@ -270,7 +270,7 @@ export default function AdminDashboardPage() {
             </div>
 
             <Link
-              href="/admin/routes"
+              href="/ap-control/routes"
               className="inline-flex items-center gap-1 text-xs font-bold text-[#07626A] hover:underline"
             >
               <span>Все маршруты ({routes.length})</span>
@@ -302,7 +302,7 @@ export default function AdminDashboardPage() {
 
                   <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
                     <Link
-                      href={`/admin/routes/${route.id}`}
+                      href={`/ap-control/routes/${route.id}`}
                       className="px-3 py-1.5 rounded-xl bg-[#F3F3F3] hover:bg-[#07626A] text-[#0D0D0D] hover:text-white text-xs font-bold transition-colors"
                     >
                       Редактировать

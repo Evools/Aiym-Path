@@ -13,14 +13,14 @@ export const AdminAuthGuard: React.FC<{ children: React.ReactNode }> = ({
   const router = useRouter();
   const pathname = usePathname();
 
-  const isLoginPage = pathname === "/admin/login";
+  const isLoginPage = pathname === "/ap-control/login";
 
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated && !isLoginPage) {
-        router.replace("/admin/login");
+        router.replace("/ap-control/login");
       } else if (isAuthenticated && isLoginPage) {
-        router.replace("/admin");
+        router.replace("/ap-control");
       }
     }
   }, [isAuthenticated, isLoading, isLoginPage, router]);

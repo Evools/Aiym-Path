@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
   }, []);
 
   // Hide public header when inside admin
-  if (pathname?.startsWith("/admin")) {
+  if (pathname?.startsWith("/ap-control") || pathname?.startsWith("/admin")) {
     return null;
   }
 

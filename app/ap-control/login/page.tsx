@@ -28,12 +28,6 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleFillDemo = () => {
-    setEmail("admin@aiympath.kg");
-    setPassword("admin");
-    setErrorMsg(null);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -43,7 +37,7 @@ export default function AdminLoginPage() {
       const res = await login(email, password);
       if (res.success) {
         toast.success("Добро пожаловать в панель управления!", "Успешный вход");
-        router.push("/admin");
+        router.push("/ap-control");
       } else {
         setErrorMsg(res.error || "Не удалось выполнить вход");
         toast.error(res.error || "Неверные данные для входа", "Ошибка авторизации");
@@ -94,34 +88,12 @@ export default function AdminLoginPage() {
                 fontFamily: "var(--font-nunito-sans), 'Nunito Sans', sans-serif",
               }}
             >
-              Вход в админ-панель
+              Панель управления
             </h1>
             <p className="text-xs text-[#0D0D0D]/60 mt-1.5 max-w-xs">
-              Управление маршрутами, женскими гидами и безопасными локациями Aiym Path.
+              Авторизация для управления платформой Aiym Path
             </p>
           </div>
-
-          {/* Demo Autofill Banner */}
-          <button
-            type="button"
-            onClick={handleFillDemo}
-            className="w-full p-3 rounded-2xl bg-[#FAFBFB] border border-dashed border-[#07626A]/40 hover:border-[#07626A] hover:bg-[rgba(7,98,106,0.04)] text-left transition-all cursor-pointer flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-2.5">
-              <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-              <div>
-                <span className="text-xs font-bold text-[#07626A] block">
-                  Заполнить демо-доступ
-                </span>
-                <span className="text-[10px] text-[#0D0D0D]/50">
-                  Логин: admin@aiympath.kg • Пароль: admin
-                </span>
-              </div>
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#07626A] group-hover:underline">
-              Вставить
-            </span>
-          </button>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -133,11 +105,11 @@ export default function AdminLoginPage() {
               <div className="relative">
                 <Mail className="w-4 h-4 text-[#0D0D0D]/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
-                  type="text"
+                  type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@aiympath.kg"
+                  placeholder="admin@example.com"
                   className="w-full h-12 pl-10 pr-4 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs sm:text-sm font-medium text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A] transition-colors"
                 />
               </div>
@@ -146,7 +118,7 @@ export default function AdminLoginPage() {
             {/* Password Field */}
             <div>
               <label className="block text-xs font-bold text-[#0D0D0D] uppercase tracking-wider mb-1.5">
-                Пароль администратора
+                Пароль
               </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-[#0D0D0D]/40 absolute left-3.5 top-1/2 -translate-y-1/2" />

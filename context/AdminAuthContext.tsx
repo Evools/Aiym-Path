@@ -97,7 +97,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     localStorage.removeItem(ADMIN_STORAGE_KEY);
     setIsAuthenticated(false);
     setUser(null);
-    router.push("/admin/login");
+    router.push("/ap-control/login");
   };
 
   return (

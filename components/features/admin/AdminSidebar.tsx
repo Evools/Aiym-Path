@@ -29,49 +29,49 @@ export const AdminSidebar: React.FC = () => {
   const navigation = [
     {
       name: "Дашборд",
-      href: "/admin",
+      href: "/ap-control",
       icon: LayoutDashboard,
       exact: true,
     },
     {
       name: "Логотип и брендинг",
-      href: "/admin/logo",
+      href: "/ap-control/logo",
       icon: Type,
       exact: false,
     },
     {
       name: "Главный баннер",
-      href: "/admin/banner",
+      href: "/ap-control/banner",
       icon: Sparkles,
       exact: false,
     },
     {
       name: "Маршруты",
-      href: "/admin/routes",
+      href: "/ap-control/routes",
       icon: Map,
       exact: false,
     },
     {
       name: "Гиды",
-      href: "/admin/guides",
+      href: "/ap-control/guides",
       icon: Users,
       exact: false,
     },
     {
       name: "Базы отдыха и хабы",
-      href: "/admin/locations",
+      href: "/ap-control/locations",
       icon: Building2,
       exact: false,
     },
     {
       name: "Путеводитель",
-      href: "/admin/guidebook",
+      href: "/ap-control/guidebook",
       icon: BookOpen,
       exact: false,
     },
     {
       name: "Контакты и службы помощи",
-      href: "/admin/contacts",
+      href: "/ap-control/contacts",
       icon: PhoneCall,
       exact: false,
     },
@@ -97,7 +97,7 @@ export const AdminSidebar: React.FC = () => {
       <div>
         {/* Admin Brand Header */}
         <div className="p-6 border-b border-[#E1E1E1]">
-          <BrandLogo href="/admin" size="md" isAdmin />
+          <BrandLogo href="/ap-control" size="md" isAdmin />
         </div>
 
         {/* Navigation List */}
