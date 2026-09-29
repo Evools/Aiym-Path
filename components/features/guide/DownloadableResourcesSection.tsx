@@ -86,7 +86,7 @@ export const DownloadableResourcesSection: React.FC = () => {
               return (
                 <div
                   key={res.id}
-                  className="p-6 rounded-3xl bg-[#FAFBFB] border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors flex flex-col justify-between gap-5 shadow-2xs"
+                  className="p-6 rounded-3xl bg-[#FAFBFB] border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors flex flex-col justify-between gap-5"
                 >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between">
@@ -121,7 +121,7 @@ export const DownloadableResourcesSection: React.FC = () => {
                       href={downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors cursor-pointer shadow-xs active:scale-95"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>

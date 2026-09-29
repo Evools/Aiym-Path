@@ -95,35 +95,35 @@ export const GuideListSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedCategory("all")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                   selectedCategory === "all"
-                    ? "bg-[#07626A] text-white shadow-xs"
+                    ? "bg-[#07626A] text-white"
                     : "text-[#0D0D0D]/75 hover:text-[#07626A] hover:bg-white/60"
                 }`}
               >
-                Все ({guides.length})
+                {dict.guides?.tabAll || "Все"} ({guides.length})
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedCategory("guide")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                   selectedCategory === "guide"
-                    ? "bg-[#07626A] text-white shadow-xs"
+                    ? "bg-[#07626A] text-white"
                     : "text-[#0D0D0D]/75 hover:text-[#07626A] hover:bg-white/60"
                 }`}
               >
-                {dict.guides?.titlePrefix || "Женские гиды"}
+                Гиды
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedCategory("agency")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                   selectedCategory === "agency"
-                    ? "bg-[#07626A] text-white shadow-xs"
+                    ? "bg-[#07626A] text-white"
                     : "text-[#0D0D0D]/75 hover:text-[#07626A] hover:bg-white/60"
                 }`}
               >
-                {dict.guides?.titleHighlight || "Агентства и клубы"}
+                {dict.guides?.tabAgency || "Агентства и клубы"}
               </button>
             </div>
           </div>
@@ -142,9 +142,9 @@ export const GuideListSection: React.FC = () => {
                   key={loc}
                   type="button"
                   onClick={() => setSelectedLocation(loc)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer border ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer border ${
                     isSelected
-                      ? "bg-[#07626A] text-white border-[#07626A] shadow-xs"
+                      ? "bg-[#07626A] text-white border-[#07626A]"
                       : "bg-[#F0F2F2] text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] hover:bg-white"
                   }`}
                 >

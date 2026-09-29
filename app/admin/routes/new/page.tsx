@@ -360,11 +360,11 @@ export default function CreateRoutePage() {
           </p>
         </div>
 
-        {/* Right: Female Guides Selection (6 cols) */}
-        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-4 shadow-2xs">
+        {/* Right: Guides Selection (6 cols) */}
+        <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-4">
           <div className="flex items-center justify-between pb-3 border-b border-[#E1E1E1]">
             <h3 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
-              4. Закреплённые женские гиды
+              4. Закреплённые гиды
             </h3>
             <span className="text-xs text-[#07626A] font-bold">
               Выбрано: {selectedGuideIds.length}
@@ -380,9 +380,9 @@ export default function CreateRoutePage() {
                   key={guide.id}
                   type="button"
                   onClick={() => handleToggleGuide(guide.id)}
-                  className={`flex items-center gap-3.5 p-3 rounded-2xl border transition-all cursor-pointer text-left w-full ${
+                  className={`flex items-center gap-3.5 p-3 rounded-2xl border transition-colors cursor-pointer text-left w-full ${
                     isChecked
-                      ? "bg-[rgba(7,98,106,0.08)] border-[#07626A] shadow-2xs"
+                      ? "bg-[rgba(7,98,106,0.08)] border-[#07626A]"
                       : "bg-white border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] hover:bg-[#F3F3F3]"
                   }`}
                 >

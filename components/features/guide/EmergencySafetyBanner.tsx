@@ -89,9 +89,9 @@ export const EmergencySafetyBanner: React.FC = () => {
             return (
               <div
                 key={c.id}
-                className={`p-5 rounded-3xl border transition-all flex flex-col justify-between gap-4 ${
+                className={`p-5 rounded-3xl border transition-colors flex flex-col justify-between gap-4 ${
                   c.isMain
-                    ? "bg-[rgba(7,98,106,0.04)] border-[#07626A]/40 shadow-xs"
+                    ? "bg-[rgba(7,98,106,0.04)] border-[#07626A]/40"
                     : "bg-[#FAFBFB] border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)]"
                 }`}
               >
@@ -102,7 +102,7 @@ export const EmergencySafetyBanner: React.FC = () => {
                     </span>
 
                     {c.isMain && (
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#07626A] bg-[#F0F2F2] px-2 py-0.5 rounded-md border border-[#E1E1E1]">
                         SOS
                       </span>
                     )}
@@ -137,7 +137,7 @@ export const EmergencySafetyBanner: React.FC = () => {
                   {/* Full-width call CTA */}
                   <a
                     href={`tel:${c.number.replace(/[^0-9+]/g, "")}`}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors cursor-pointer shadow-2xs"
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#07626A] text-white text-xs font-bold hover:bg-[#07626A]/90 transition-colors cursor-pointer"
                   >
                     <Phone className="w-3.5 h-3.5" />
                     <span>Позвонить</span>
@@ -149,13 +149,10 @@ export const EmergencySafetyBanner: React.FC = () => {
         </div>
 
         {/* Emergency Action Checklist (Памятка в экстренных ситуациях) */}
-        <div className="p-6 sm:p-8 lg:p-10 rounded-3xl bg-[#F0F2F2] border-2 border-[#07626A]/30 flex flex-col gap-6 shadow-sm relative overflow-hidden">
-          {/* Subtle background glow */}
-          <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#07626A]/5 pointer-events-none blur-3xl" />
-
+        <div className="p-6 sm:p-8 lg:p-10 rounded-3xl bg-[#F0F2F2] border border-[#E1E1E1] flex flex-col gap-6 relative overflow-hidden">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E1E1E1]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-10 h-10 rounded-2xl bg-[#07626A] text-white flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -176,7 +173,7 @@ export const EmergencySafetyBanner: React.FC = () => {
               </div>
             </div>
 
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E1E1E1] text-[#07626A] text-xs font-bold self-start sm:self-auto shadow-2xs">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E1E1E1] text-[#07626A] text-xs font-bold self-start sm:self-auto">
               <ShieldAlert className="w-3.5 h-3.5 text-[#07626A]" />
               <span>Aiym Path Safety First</span>
             </span>
@@ -186,7 +183,7 @@ export const EmergencySafetyBanner: React.FC = () => {
             {emergencyChecklist.map((tip, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A]/50 transition-all flex flex-col justify-between gap-3 shadow-2xs group"
+                className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A]/50 transition-colors flex flex-col justify-between gap-3 group"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">

@@ -64,14 +64,11 @@ export const DosAndDontsSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#FAFBFB] border-t border-[#E1E1E1]">
+    <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white border-t border-[#E1E1E1]">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="max-w-2xl mb-10">
-          <div
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[#07626A] text-xs font-semibold uppercase mb-3"
-            style={{ backgroundColor: "rgba(7, 98, 106, 0.10)" }}
-          >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[#07626A] text-xs font-semibold uppercase mb-3 bg-[#F0F2F2] border border-[#E1E1E1]">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>
               {language === "kg"
@@ -82,7 +79,7 @@ export const DosAndDontsSection: React.FC = () => {
             </span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0D0D0D] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0D0D0D] tracking-tight uppercase">
             {language === "kg"
               ? "Эмне кылса болот жана эмнеге болбойт"
               : language === "en"
@@ -102,11 +99,11 @@ export const DosAndDontsSection: React.FC = () => {
         {/* Two-Column Grid: DOs vs DONTs */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* DOs Column */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-emerald-500/30 shadow-sm flex flex-col gap-5 relative overflow-hidden">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5">
             <div className="flex items-center justify-between pb-3.5 border-b border-[#E1E1E1]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
-                  <CheckCircle2 className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-2xl bg-[#F0F2F2] text-[#07626A] flex items-center justify-center shrink-0 border border-[#E1E1E1]">
+                  <CheckCircle2 className="w-5 h-5 text-[#07626A]" />
                 </div>
                 <div>
                   <h3 className="text-base sm:text-lg font-extrabold text-[#0D0D0D]">
@@ -116,7 +113,7 @@ export const DosAndDontsSection: React.FC = () => {
                       ? "Recommended (Do's)"
                       : "Рекомендуется (Можно)"}
                   </h3>
-                  <span className="text-[11px] text-emerald-700 font-bold uppercase tracking-wider">
+                  <span className="text-[11px] text-[#07626A] font-bold uppercase tracking-wider">
                     {language === "kg"
                       ? "Сиздин коопсуздугуңуз үчүн"
                       : language === "en"
@@ -126,18 +123,18 @@ export const DosAndDontsSection: React.FC = () => {
                 </div>
               </div>
 
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-xl text-[11px] font-bold bg-[#F0F2F2] text-[#07626A] border border-[#E1E1E1] uppercase tracking-wider">
                 Do's
               </span>
             </div>
 
-            <ul className="flex flex-col gap-3.5 pt-1">
+            <ul className="flex flex-col gap-3 pt-1">
               {dos.map((item, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-3 p-3 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1]/70 hover:border-emerald-500/40 transition-colors text-xs sm:text-[13px] text-[#0D0D0D] leading-relaxed font-medium"
+                  className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] hover:border-[#07626A]/40 transition-colors text-xs sm:text-[13px] text-[#0D0D0D] leading-relaxed font-medium"
                 >
-                  <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                  <span className="w-6 h-6 rounded-xl bg-[#07626A] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                     {idx + 1}
                   </span>
                   <span>{item[language as "ru" | "kg" | "en"] || item.ru}</span>
@@ -147,11 +144,11 @@ export const DosAndDontsSection: React.FC = () => {
           </div>
 
           {/* DONTs Column */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-rose-500/30 shadow-sm flex flex-col gap-5 relative overflow-hidden">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E1E1E1] flex flex-col gap-5">
             <div className="flex items-center justify-between pb-3.5 border-b border-[#E1E1E1]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 shadow-2xs">
-                  <XCircle className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center shrink-0 border border-red-200/60">
+                  <XCircle className="w-5 h-5 text-red-500" />
                 </div>
                 <div>
                   <h3 className="text-base sm:text-lg font-extrabold text-[#0D0D0D]">
@@ -161,7 +158,7 @@ export const DosAndDontsSection: React.FC = () => {
                       ? "Avoid (Don'ts)"
                       : "Не рекомендуется (Нельзя)"}
                   </h3>
-                  <span className="text-[11px] text-rose-700 font-bold uppercase tracking-wider">
+                  <span className="text-[11px] text-red-500 font-bold uppercase tracking-wider">
                     {language === "kg"
                       ? "Тобокелдиктерди алдын алуу"
                       : language === "en"
@@ -171,18 +168,18 @@ export const DosAndDontsSection: React.FC = () => {
                 </div>
               </div>
 
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-xl text-[11px] font-bold bg-red-50 text-red-600 border border-red-200/60 uppercase tracking-wider">
                 Don'ts
               </span>
             </div>
 
-            <ul className="flex flex-col gap-3.5 pt-1">
+            <ul className="flex flex-col gap-3 pt-1">
               {donts.map((item, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-3 p-3 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1]/70 hover:border-rose-500/40 transition-colors text-xs sm:text-[13px] text-[#0D0D0D] leading-relaxed font-medium"
+                  className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] hover:border-red-300 transition-colors text-xs sm:text-[13px] text-[#0D0D0D] leading-relaxed font-medium"
                 >
-                  <span className="w-6 h-6 rounded-full bg-rose-600 text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                  <span className="w-6 h-6 rounded-xl bg-red-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                     {idx + 1}
                   </span>
                   <span>{item[language as "ru" | "kg" | "en"] || item.ru}</span>

@@ -73,7 +73,7 @@ export const GuideProfileModal: React.FC<GuideProfileModalProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden border border-[#E1E1E1] shadow-2xl animate-in zoom-in-95 duration-150 my-auto flex flex-col max-h-[92vh]"
+        className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden border border-[#E1E1E1] animate-in zoom-in-95 duration-150 my-auto flex flex-col max-h-[92vh]"
       >
         {/* Header with Photo & Verification Badge */}
         <div className="relative w-full h-56 sm:h-64 bg-gray-100 shrink-0">
@@ -90,7 +90,7 @@ export const GuideProfileModal: React.FC<GuideProfileModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md text-white flex items-center justify-center transition-all cursor-pointer"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md text-white flex items-center justify-center transition-colors cursor-pointer"
             title="Закрыть"
           >
             <X className="w-5 h-5" />
@@ -98,7 +98,7 @@ export const GuideProfileModal: React.FC<GuideProfileModalProps> = ({
 
           {/* Top-Left Verification Pill */}
           {guide.isVerified && (
-            <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#07626A] text-white text-xs font-bold shadow-md">
+            <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#07626A] text-white text-xs font-bold">
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>{dict.guides?.certified || "Проверенный гид Aiym Path"}</span>
             </div>
@@ -275,7 +275,7 @@ export const GuideProfileModal: React.FC<GuideProfileModalProps> = ({
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 min-w-[140px] h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-2 shadow-xs"
+              className="flex-1 min-w-[140px] h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-2"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp</span>

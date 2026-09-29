@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import {
   Plus,
@@ -150,6 +150,24 @@ export default function AdminGuidesPage() {
   const [bio, setBio] = useState({ ru: "", kg: "", en: "" });
   const [isFemale, setIsFemale] = useState(true);
   const [isVerified, setIsVerified] = useState(true);
+  const [adminTab, setAdminTab] = useState<"all" | "guide" | "agency">("all");
+
+  const guideCount = useMemo(
+    () => guides.filter((g) => g.category !== "agency").length,
+    [guides]
+  );
+  const agencyCount = useMemo(
+    () => guides.filter((g) => g.category === "agency").length,
+    [guides]
+  );
+
+  const filteredGuides: AdminGuideItem[] = useMemo(() => {
+    return guides.filter((g) => {
+      if (adminTab === "guide") return g.category !== "agency";
+      if (adminTab === "agency") return g.category === "agency";
+      return true;
+    });
+  }, [guides, adminTab]);
 
   const loadGuides = async () => {
     setIsLoading(true);
@@ -388,52 +406,84 @@ export default function AdminGuidesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E1E1E1]">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0D0D0D] tracking-tight">
-            Гиды и агентства (Female Guides CMS)
+            Гиды и агентства (Guides CMS)
           </h1>
           <p className="text-xs sm:text-sm text-[#0D0D0D]/65 mt-1">
-            Управление профилями проверенных женщин-гидов, компетенциями с иконками, турами и прямыми контактами.
+            Управление профилями проверенных специалистов (женщин и мужчин), компетенциями, турами и контактами.
           </p>
         </div>
 
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shrink-0 shadow-sm"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Добавить гида</span>
         </button>
       </div>
 
+      {/* Filter Tabs Row */}
+      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 rounded-2xl bg-[#F0F2F2] border border-[#E1E1E1] self-start max-w-full">
+        {[
+          { id: "all", label: "Все специалисты", count: guides.length },
+          { id: "guide", label: "Гиды", count: guideCount },
+          { id: "agency", label: "Агентства и клубы", count: agencyCount },
+        ].map((tab) => {
+          const isSelected = adminTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setAdminTab(tab.id as any)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                isSelected
+                  ? "bg-[#07626A] text-white"
+                  : "text-[#0D0D0D]/75 hover:text-[#07626A] hover:bg-white/60"
+              }`}
+            >
+              <span>{tab.label}</span>
+              <span
+                className={`text-[11px] px-1.5 py-0.2 rounded-md font-semibold ${
+                  isSelected ? "bg-white/20 text-white" : "bg-black/5 text-[#0D0D0D]/60"
+                }`}
+              >
+                {tab.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Guides Grid */}
       {isLoading ? (
         <AdminCardSkeleton count={6} type="guide" />
-      ) : guides.length === 0 ? (
+      ) : filteredGuides.length === 0 ? (
         <div className="col-span-full p-12 text-center rounded-3xl bg-white border border-[#E1E1E1]">
           <Users className="w-10 h-10 text-[#07626A]/40 mx-auto mb-3" />
           <h3 className="text-base font-bold text-[#0D0D0D]">Гиды не найдены</h3>
           <p className="text-xs text-[#0D0D0D]/60 mt-1 mb-4">
-            Добавьте проверенного женского гида в базу платформы.
+            По выбранному фильтру нет специалистов в базе данных.
           </p>
           <button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Создать первого гида</span>
+            <span>Создать специалиста</span>
           </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {guides.map((guide) => {
+          {filteredGuides.map((guide) => {
             const roleRu = typeof guide.role === "object" ? guide.role.ru : guide.role;
             const badgesCount = guide.badges?.length || 0;
 
             return (
               <div
                 key={guide.id}
-                className="rounded-3xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.35)] shadow-xs hover:shadow-md transition-all p-5 flex flex-col justify-between gap-4"
+                className="rounded-3xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors p-5 flex flex-col justify-between gap-4"
               >
                 <div>
                   {/* Top Row: Avatar & Badges */}
@@ -457,9 +507,17 @@ export default function AdminGuidesPage() {
                           </span>
                         )}
 
-                        {guide.isFemale && (
+                        {guide.category === "agency" ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold">
+                            <span>Агентство</span>
+                          </span>
+                        ) : guide.isFemale ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 text-[10px] font-bold">
-                            <span>Female Guide</span>
+                            <span>Женский гид</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 text-[10px] font-bold">
+                            <span>Мужской гид</span>
                           </span>
                         )}
 
@@ -483,7 +541,7 @@ export default function AdminGuidesPage() {
                   {/* Badges Preview Row */}
                   {guide.badges && guide.badges.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-3 pt-2.5 border-t border-[#E1E1E1]/60">
-                      {guide.badges.slice(0, 4).map((b) => (
+                      {guide.badges.slice(0, 4).map((b: AdminGuideBadge) => (
                         <span
                           key={b.id}
                           className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#F0F4F4] text-[#07626A] text-[10.5px] font-semibold"
@@ -569,7 +627,7 @@ export default function AdminGuidesPage() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] flex flex-col border border-[#E1E1E1] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150 my-auto cursor-default"
+            className="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] flex flex-col border border-[#E1E1E1] overflow-hidden animate-in zoom-in-95 duration-150 my-auto cursor-default"
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 sm:px-8 border-b border-[#E1E1E1] shrink-0 bg-white">
@@ -577,10 +635,10 @@ export default function AdminGuidesPage() {
                 <h3 className="text-lg font-bold text-[#0D0D0D]">
                   {editingGuide
                     ? "Редактирование профиля специалиста"
-                    : "Новый женский гид / Агентство"}
+                    : "Новый специалист / Гид / Агентство"}
                 </h3>
                 <p className="text-xs text-[#0D0D0D]/60 mt-0.5">
-                  Настройка компетенций, иконок, сертификатов, цен и контактов в базе данных.
+                  Настройка профиля, компетенций, иконок, сертификатов, цен и контактов в базе данных.
                 </p>
               </div>
 
@@ -612,7 +670,7 @@ export default function AdminGuidesPage() {
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Например: Айсулуу Жумабекова"
+                      placeholder="Например: Айсулуу Жумабекова или Руслан Маматкулов"
                       className="w-full h-11 px-3.5 rounded-xl border border-[#E1E1E1] bg-[#FAFBFB] text-xs font-bold text-[#0D0D0D] focus:bg-white focus:outline-none focus:border-[#07626A]"
                     />
                   </div>
@@ -625,12 +683,12 @@ export default function AdminGuidesPage() {
                     options={[
                       {
                         value: "guide",
-                        label: "Индивидуальный женский гид",
+                        label: isFemale ? "Индивидуальный гид (Женщина)" : "Индивидуальный гид (Мужчина)",
                         sublabel: "Персональное сопровождение",
                       },
                       {
                         value: "agency",
-                        label: "Туристическое агентство / Женский клуб",
+                        label: "Туристическое агентство / Клуб",
                         sublabel: "Групповые туры и комьюнити",
                       },
                     ]}
@@ -763,25 +821,46 @@ export default function AdminGuidesPage() {
                     </div>
                   </div>
 
-                  {/* Trust Badges */}
-                  <div className="p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] flex flex-col gap-3">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#0D0D0D]/60">
-                      Статусы доверия
-                    </span>
+                  {/* Gender & Trust Badges */}
+                  <div className="p-4 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1] flex flex-col gap-3.5">
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#0D0D0D]/60 block mb-2">
+                        Пол специалиста
+                      </span>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsFemale(true)}
+                          className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                            isFemale
+                              ? "bg-[#07626A] text-white border-[#07626A]"
+                              : "bg-white text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[#07626A]"
+                          }`}
+                        >
+                          <span>👩 Женщина-гид</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setIsFemale(false)}
+                          className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                            !isFemale
+                              ? "bg-[#07626A] text-white border-[#07626A]"
+                              : "bg-white text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[#07626A]"
+                          }`}
+                        >
+                          <span>👨 Мужчина-гид</span>
+                        </button>
+                      </div>
+                    </div>
 
-                    <CustomCheckbox
-                      checked={isFemale}
-                      onChange={setIsFemale}
-                      label="Female Guide / Женский специалист"
-                      description="Отображать бейдж женщины-гида для безопасности соло-путешественниц"
-                    />
-
-                    <CustomCheckbox
-                      checked={isVerified}
-                      onChange={setIsVerified}
-                      label="Верифицированный профиль (Certified)"
-                      description="Проверены документы и опыт командой Aiym Path"
-                    />
+                    <div className="pt-2 border-t border-[#E1E1E1]">
+                      <CustomCheckbox
+                        checked={isVerified}
+                        onChange={setIsVerified}
+                        label="Верифицированный профиль (Certified)"
+                        description="Проверены документы и квалификация командой Aiym Path"
+                      />
+                    </div>
                   </div>
                 </div>
 

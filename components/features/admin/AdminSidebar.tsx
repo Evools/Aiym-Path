@@ -37,7 +37,7 @@ export const AdminSidebar: React.FC = () => {
       exact: false,
     },
     {
-      name: "Женские гиды",
+      name: "Гиды",
       href: "/admin/guides",
       icon: Users,
       exact: false,

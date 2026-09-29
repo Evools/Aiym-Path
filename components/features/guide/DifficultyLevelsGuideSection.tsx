@@ -106,9 +106,9 @@ export const DifficultyLevelsGuideSection: React.FC = () => {
               key={level.id}
               type="button"
               onClick={() => setSelectedLevelId(level.id)}
-              className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all duration-200 cursor-pointer border select-none flex flex-col justify-between min-h-[96px] ${
+              className={`p-3.5 sm:p-4 rounded-2xl text-left transition-colors duration-150 cursor-pointer border select-none flex flex-col justify-between min-h-[96px] ${
                 isSelected
-                  ? "bg-[#F0F2F2] border-[#07626A] shadow-xs"
+                  ? "bg-[#F0F2F2] border-[#07626A]"
                   : "bg-white border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] hover:bg-[#FAFBFB]"
               }`}
             >

@@ -66,7 +66,7 @@ export const GuidesPreviewSection: React.FC = () => {
         <div className="flex justify-center mt-12">
           <Link
             href="/tours"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-md transition-all active:scale-[0.98]"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white text-xs sm:text-sm font-bold transition-colors"
             style={{ backgroundColor: "#07626A" }}
           >
             <Users className="w-4 h-4" />

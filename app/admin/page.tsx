@@ -131,7 +131,7 @@ export default function AdminDashboardPage() {
           {/* Metric 1: Routes */}
           <Link
             href="/admin/routes"
-            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
+            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
@@ -153,14 +153,14 @@ export default function AdminDashboardPage() {
             </div>
           </Link>
 
-          {/* Metric 2: Female Guides */}
+          {/* Metric 2: Guides */}
           <Link
             href="/admin/guides"
-            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
+            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
-                Женские гиды
+                Гиды
               </span>
               <div className="w-9 h-9 rounded-xl bg-[rgba(7,98,106,0.08)] text-[#07626A] group-hover:bg-[#07626A] group-hover:text-white transition-colors duration-200 flex items-center justify-center">
                 <Users className="w-4 h-4" />
@@ -179,7 +179,7 @@ export default function AdminDashboardPage() {
           {/* Metric 3: Safe Locations & Hubs */}
           <Link
             href="/admin/locations"
-            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
+            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
@@ -202,7 +202,7 @@ export default function AdminDashboardPage() {
           {/* Metric 4: Guidebook */}
           <Link
             href="/admin/guidebook"
-            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
+            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">
@@ -225,7 +225,7 @@ export default function AdminDashboardPage() {
           {/* Metric 5: Contacts & SOS */}
           <Link
             href="/admin/contacts"
-            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] hover:shadow-xs transition-colors duration-200 flex flex-col justify-between group"
+            className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A] transition-colors duration-200 flex flex-col justify-between group"
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase text-[#0D0D0D]/60 tracking-wider">

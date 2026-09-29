@@ -92,17 +92,21 @@ export const GuideCard: React.FC<{ guide: AdminGuideItem | GuideItem }> = ({ gui
           {/* Certified Badge Top Right */}
           {guide.isVerified && (
             <div
-              className="absolute top-3.5 right-3.5 inline-flex items-center gap-1 px-3 py-1 rounded-full text-white text-[11px] font-medium shadow-xs"
+              className="absolute top-3.5 right-3.5 inline-flex items-center gap-1 px-3 py-1 rounded-full text-white text-[11px] font-medium"
               style={{ backgroundColor: "#07626A" }}
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-              <span>{dict.guides?.certified || "Certified"}</span>
+              <span>
+                {guide.isFemale
+                  ? dict.guides?.femaleBadge || "Female Guide"
+                  : dict.guides?.maleBadge || "Mountain Guide"}
+              </span>
             </div>
           )}
 
           {/* Experience Badge Top Left */}
           {(guide as AdminGuideItem).experienceYears && (
-            <div className="absolute top-3.5 left-3.5 px-2.5 py-0.5 rounded-full bg-white/90 text-gray-900 text-[11px] font-medium shadow-2xs">
+            <div className="absolute top-3.5 left-3.5 px-2.5 py-0.5 rounded-full bg-white/95 border border-[#E1E1E1] text-gray-900 text-[11px] font-medium">
               {(guide as AdminGuideItem).experienceYears} лет опыта
             </div>
           )}
@@ -233,7 +237,7 @@ export const GuideCard: React.FC<{ guide: AdminGuideItem | GuideItem }> = ({ gui
               <button
                 type="button"
                 onClick={() => setIsDetailOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-all cursor-pointer shadow-2xs hover:shadow-xs"
+                className="px-3.5 py-1.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer"
               >
                 Подробнее
               </button>

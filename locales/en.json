@@ -48,7 +48,7 @@
     "badge": "Our People",
     "titlePrefix": "GUIDES",
     "titleHighlight": "TOUR AGENTS",
-    "subtitle": "Professional guides and tour agents who make your journey comfortable, safe, and unforgettable.",
+    "subtitle": "Professional female and male guides and tour agencies who make your journey comfortable, safe, and unforgettable.",
     "certified": "Certified",
     "skills": {
       "firstAid": "First Aid Certified",
@@ -60,7 +60,12 @@
     "viewAllList": "View Full List",
     "allLocations": "All Locations",
     "searchPlaceholder": "Search guide or destination...",
-    "foundCount": "Specialists found"
+    "foundCount": "Specialists found",
+    "tabAll": "All",
+    "tabGuides": "Guides",
+    "tabAgency": "Agencies & Clubs",
+    "femaleBadge": "Female Guide",
+    "maleBadge": "Mountain Guide"
   },
   "concept": {
     "badge": "Concept",

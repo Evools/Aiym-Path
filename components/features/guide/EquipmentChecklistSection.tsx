@@ -114,7 +114,7 @@ export const EquipmentChecklistSection: React.FC = () => {
           </div>
 
           {/* Progress Tracker & Reset Button */}
-          <div className="flex items-center gap-4 bg-white p-3.5 rounded-2xl border border-[#E1E1E1] shadow-2xs self-start md:self-auto">
+          <div className="flex items-center gap-4 bg-white p-3.5 rounded-2xl border border-[#E1E1E1] self-start md:self-auto">
             <div className="text-left">
               <span className="text-xs text-[#0D0D0D]/70 font-semibold block">
                 {dict.guidebook?.checklistProgress || "Собрано"}: {current} / {total}
@@ -157,9 +157,9 @@ export const EquipmentChecklistSection: React.FC = () => {
             <button
               type="button"
               onClick={() => setSelectedLocationId("all")}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer border ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer border ${
                 selectedLocationId === "all"
-                  ? "bg-[#07626A] text-white border-[#07626A] shadow-xs"
+                  ? "bg-[#07626A] text-white border-[#07626A]"
                   : "bg-[#F0F2F2] text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] hover:bg-white"
               }`}
             >
@@ -175,9 +175,9 @@ export const EquipmentChecklistSection: React.FC = () => {
                   key={loc.id}
                   type="button"
                   onClick={() => setSelectedLocationId(loc.id)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer border ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer border ${
                     isSelected
-                      ? "bg-[#07626A] text-white border-[#07626A] shadow-xs"
+                      ? "bg-[#07626A] text-white border-[#07626A]"
                       : "bg-[#F0F2F2] text-[#0D0D0D]/75 border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] hover:bg-white"
                   }`}
                 >
@@ -198,7 +198,7 @@ export const EquipmentChecklistSection: React.FC = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
                     isSelected
                       ? "bg-[#07626A]/10 text-[#07626A] font-bold"
                       : "text-[#0D0D0D]/60 hover:text-[#0D0D0D] hover:bg-[#F0F2F2]"
@@ -225,10 +225,10 @@ export const EquipmentChecklistSection: React.FC = () => {
               <div
                 key={item.id}
                 onClick={() => toggleItem(item.id)}
-                className={`p-4 rounded-2xl text-left transition-all duration-150 cursor-pointer border select-none ${
+                className={`p-4 rounded-2xl text-left transition-colors duration-150 cursor-pointer border select-none ${
                   isChecked
                     ? "bg-[#F0F2F2] border-[#07626A]/40"
-                    : "bg-white border-[#E1E1E1] hover:border-[#07626A]/50 hover:shadow-2xs"
+                    : "bg-white border-[#E1E1E1] hover:border-[#07626A]/50"
                 }`}
               >
                 <CustomCheckbox
@@ -258,7 +258,7 @@ export const EquipmentChecklistSection: React.FC = () => {
         </div>
 
         {percentage === 100 && total > 0 && (
-          <div className="mt-6 p-4 rounded-2xl border border-[#07626A]/30 bg-[#F0F2F2] text-[#07626A] flex items-center gap-3 text-xs sm:text-sm font-bold shadow-xs">
+          <div className="mt-6 p-4 rounded-2xl border border-[#07626A]/30 bg-[#F0F2F2] text-[#07626A] flex items-center gap-3 text-xs sm:text-sm font-bold">
             <Sparkles className="w-5 h-5 shrink-0 text-[#07626A]" />
             <span>
               {dict.guidebook?.checklistCompleted ||
