@@ -14,6 +14,7 @@ import {
   BookOpen,
   PhoneCall,
   LogOut,
+  Sparkles,
 } from "lucide-react";
 import { useAdminAuth } from "@/context/AdminAuthContext";
 import { useToast } from "@/context/ToastContext";
@@ -29,6 +30,12 @@ export const AdminSidebar: React.FC = () => {
       href: "/admin",
       icon: LayoutDashboard,
       exact: true,
+    },
+    {
+      name: "Главный баннер",
+      href: "/admin/banner",
+      icon: Sparkles,
+      exact: false,
     },
     {
       name: "Маршруты",

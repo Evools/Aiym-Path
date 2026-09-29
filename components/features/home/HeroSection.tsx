@@ -5,10 +5,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin, Users } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { AdminStorageService } from "@/lib/services/admin-storage.service";
+import { HeroBannerData, DEFAULT_HERO_BANNER } from "@/types/banner.types";
 
 export const HeroSection: React.FC = () => {
-  const { dict } = useLanguage();
+  const { language, dict } = useLanguage();
   const [scrollY, setScrollY] = useState(0);
+  const [bannerData, setBannerData] = useState<HeroBannerData>(DEFAULT_HERO_BANNER);
+
+  useEffect(() => {
+    let isMounted = true;
+    AdminStorageService.getHeroBanner()
+      .then((data) => {
+        if (isMounted && data) {
+          setBannerData(data);
+        }
+      })
+      .catch((err) => console.error("Failed to load hero banner:", err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -32,9 +50,21 @@ export const HeroSection: React.FC = () => {
   const uzorShift = Math.min(scrollY * 0.08, 30); // Ornament shifts down subtly
   const effectLift = Math.min(scrollY * 0.1, 30); // Effect smoothly rises slightly upwards on scroll
 
+  const currentLang = (language || "ru") as "ru" | "kg" | "en";
+  const titlePrefix = bannerData.titlePrefix?.[currentLang] || dict.hero.titlePrefix;
+  const titleLine2 = bannerData.titleLine2?.[currentLang] || dict.hero.titleLine2;
+  const titleLine3 = bannerData.titleLine3?.[currentLang] || dict.hero.titleLine3;
+  const subtitle = bannerData.subtitle?.[currentLang] || dict.hero.subtitle;
+  const ctaMapText = bannerData.ctaMap?.[currentLang] || dict.hero.ctaMap || "Карта";
+  const ctaGuidesText = bannerData.ctaGuides?.[currentLang] || dict.hero.ctaGuides || "Гиды";
+
+  const bgImage = bannerData.backgroundImage || "/images/banner/banner.webp";
+  const ornamentImg = bannerData.ornamentImage || "/images/banner/uzor.webp";
+  const girlImg = bannerData.girlImage || "/images/banner/asia-girl.webp";
+
   return (
     <section className="relative w-full max-w-[100vw] min-h-[540px] sm:min-h-[620px] lg:min-h-[680px] flex items-center pt-8 sm:pt-12 lg:pt-16 pb-20 bg-white overflow-x-clip">
-      {/* Background Banner Image (/images/banner/banner.webp) with subtle parallax */}
+      {/* Background Banner Image with subtle parallax */}
       <div
         className="absolute inset-0 z-0 overflow-hidden will-change-transform transition-transform duration-75 ease-out"
         style={{
@@ -42,7 +72,7 @@ export const HeroSection: React.FC = () => {
         }}
       >
         <Image
-          src="/images/banner/banner.webp"
+          src={bgImage}
           alt="Aiym Path Banner Background"
           fill
           priority
@@ -50,7 +80,7 @@ export const HeroSection: React.FC = () => {
         />
       </div>
 
-      {/* Kyrgyz national ornament on the left (/images/banner/uzor.webp) with subtle downward shift */}
+      {/* Kyrgyz national ornament on the left with subtle downward shift */}
       <div
         className="absolute top-0 left-0 bottom-0 z-[5] w-full max-w-[380px] sm:max-w-[500px] lg:max-w-[620px] pointer-events-none select-none overflow-hidden flex items-center justify-start will-change-transform transition-transform duration-75 ease-out"
         style={{
@@ -59,7 +89,7 @@ export const HeroSection: React.FC = () => {
       >
         <div className="relative w-full h-full">
           <Image
-            src="/images/banner/uzor.webp"
+            src={ornamentImg}
             alt="Кыргызский национальный узор"
             fill
             priority
@@ -68,7 +98,7 @@ export const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Girl traveler in the right corner (/images/banner/asia-girl.webp) - moves down slowly on scroll */}
+      {/* Girl traveler in the right corner - moves down slowly on scroll */}
       <div
         className="hidden md:flex absolute bottom-0 right-0 z-10 w-full max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[620px] xl:max-w-[700px] h-[75%] sm:h-[85%] lg:h-[92%] pointer-events-none select-none items-end justify-end will-change-transform transition-transform duration-75 ease-out"
         style={{
@@ -77,7 +107,7 @@ export const HeroSection: React.FC = () => {
       >
         <div className="relative w-full h-full">
           <Image
-            src="/images/banner/asia-girl.webp"
+            src={girlImg}
             alt="Кыргызская девушка-путешественница"
             fill
             priority
@@ -91,18 +121,18 @@ export const HeroSection: React.FC = () => {
         <div className="max-w-xl">
           {/* Large Heading */}
           <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.08] mb-5 uppercase">
-            <span className="block text-gray-900">{dict.hero.titlePrefix}</span>
+            <span className="block text-gray-900">{titlePrefix}</span>
             <span className="block" style={{ color: "#07626A" }}>
-              {dict.hero.titleLine2}
+              {titleLine2}
             </span>
             <span className="block" style={{ color: "#07626A" }}>
-              {dict.hero.titleLine3}
+              {titleLine3}
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mb-8 max-w-lg">
-            {dict.hero.subtitle}
+            {subtitle}
           </p>
 
           {/* Buttons */}
@@ -113,7 +143,7 @@ export const HeroSection: React.FC = () => {
               style={{ backgroundColor: "#07626A" }}
             >
               <MapPin className="w-4 h-4" />
-              <span>{dict.hero.ctaMap || "Карта"}</span>
+              <span>{ctaMapText}</span>
               <ArrowRight className="w-4 h-4 ml-0.5" />
             </Link>
 
@@ -122,7 +152,7 @@ export const HeroSection: React.FC = () => {
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold transition-colors"
             >
               <Users className="w-4 h-4 text-[#07626A]" />
-              <span>{dict.hero.ctaGuides || "Гиды"}</span>
+              <span>{ctaGuidesText}</span>
             </Link>
           </div>
         </div>

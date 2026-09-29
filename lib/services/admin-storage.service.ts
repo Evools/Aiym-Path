@@ -823,159 +823,256 @@ export const AdminStorageService = {
 
   // --- EQUIPMENT CHECKLIST ---
   async getChecklistItems(): Promise<import("@/types/guidebook.types").ChecklistItem[]> {
-    if (typeof window === "undefined") {
-      const { EQUIPMENT_CHECKLIST } = await import("@/data/guidebook.data");
-      return EQUIPMENT_CHECKLIST;
-    }
+    const { EQUIPMENT_CHECKLIST } = await import("@/data/guidebook.data");
     try {
-      const stored = localStorage.getItem("aiym_admin_checklist");
-      if (stored) {
-        return JSON.parse(stored);
+      const res = await fetch("/api/checklist", { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.data && json.data.length > 0) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("aiym_admin_checklist", JSON.stringify(json.data));
+        }
+        return json.data;
       }
     } catch (e) {
-      console.error("Failed to read checklist from localStorage:", e);
+      console.error("Failed to fetch checklist from DB:", e);
     }
-    const { EQUIPMENT_CHECKLIST } = await import("@/data/guidebook.data");
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("aiym_admin_checklist");
+        if (stored) return JSON.parse(stored);
+      } catch {
+        // fallback
+      }
+    }
     return EQUIPMENT_CHECKLIST;
   },
 
   async saveChecklistItem(item: import("@/types/guidebook.types").ChecklistItem): Promise<boolean> {
     try {
-      const list = await this.getChecklistItems();
-      const idx = list.findIndex((i) => i.id === item.id);
-      let updated: typeof list;
-      if (idx >= 0) {
-        updated = [...list];
-        updated[idx] = item;
-      } else {
-        updated = [item, ...list];
-      }
+      const res = await fetch("/api/checklist", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
+      const json = await res.json();
       if (typeof window !== "undefined") {
+        const list = await this.getChecklistItems();
+        const idx = list.findIndex((i) => i.id === item.id);
+        const updated = idx >= 0 ? list.map((x) => (x.id === item.id ? item : x)) : [item, ...list];
         localStorage.setItem("aiym_admin_checklist", JSON.stringify(updated));
       }
-      return true;
+      return json.success ?? true;
     } catch (err) {
-      console.error("Failed to save checklist item:", err);
+      console.error("Failed to save checklist item to DB:", err);
       return false;
     }
   },
 
   async deleteChecklistItem(id: string): Promise<boolean> {
     try {
-      const list = await this.getChecklistItems();
-      const updated = list.filter((i) => i.id !== id);
+      const res = await fetch(`/api/checklist?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
       if (typeof window !== "undefined") {
+        const list = await this.getChecklistItems();
+        const updated = list.filter((i) => i.id !== id);
         localStorage.setItem("aiym_admin_checklist", JSON.stringify(updated));
       }
-      return true;
+      return json.success ?? true;
     } catch (err) {
-      console.error("Failed to delete checklist item:", err);
+      console.error("Failed to delete checklist item from DB:", err);
       return false;
     }
   },
 
   // --- PDF OFFICIAL MANUALS & GUIDES (GOOGLE DRIVE) ---
   async getPdfResources(): Promise<import("@/types/guidebook.types").PdfResourceItem[]> {
-    if (typeof window === "undefined") {
-      const { DEFAULT_PDF_RESOURCES } = await import("@/data/guidebook.data");
-      return DEFAULT_PDF_RESOURCES;
-    }
+    const { DEFAULT_PDF_RESOURCES } = await import("@/data/guidebook.data");
     try {
-      const stored = localStorage.getItem("aiym_admin_pdf_resources");
-      if (stored) {
-        return JSON.parse(stored);
+      const res = await fetch("/api/pdf-resources", { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.data && json.data.length > 0) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("aiym_admin_pdf_resources", JSON.stringify(json.data));
+        }
+        return json.data;
       }
     } catch (e) {
-      console.error("Failed to read PDF resources from localStorage:", e);
+      console.error("Failed to fetch PDF resources from DB:", e);
     }
-    const { DEFAULT_PDF_RESOURCES } = await import("@/data/guidebook.data");
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("aiym_admin_pdf_resources");
+        if (stored) return JSON.parse(stored);
+      } catch {
+        // fallback
+      }
+    }
     return DEFAULT_PDF_RESOURCES;
   },
 
   async savePdfResource(item: import("@/types/guidebook.types").PdfResourceItem): Promise<boolean> {
     try {
-      const list = await this.getPdfResources();
-      const idx = list.findIndex((i) => i.id === item.id);
-      let updated: typeof list;
-      if (idx >= 0) {
-        updated = [...list];
-        updated[idx] = item;
-      } else {
-        updated = [item, ...list];
-      }
+      const res = await fetch("/api/pdf-resources", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
+      const json = await res.json();
       if (typeof window !== "undefined") {
+        const list = await this.getPdfResources();
+        const idx = list.findIndex((i) => i.id === item.id);
+        const updated = idx >= 0 ? list.map((x) => (x.id === item.id ? item : x)) : [item, ...list];
         localStorage.setItem("aiym_admin_pdf_resources", JSON.stringify(updated));
       }
-      return true;
+      return json.success ?? true;
     } catch (err) {
-      console.error("Failed to save PDF resource:", err);
+      console.error("Failed to save PDF resource to DB:", err);
       return false;
     }
   },
 
   async deletePdfResource(id: string): Promise<boolean> {
     try {
-      const list = await this.getPdfResources();
-      const updated = list.filter((i) => i.id !== id);
+      const res = await fetch(`/api/pdf-resources?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
       if (typeof window !== "undefined") {
+        const list = await this.getPdfResources();
+        const updated = list.filter((i) => i.id !== id);
         localStorage.setItem("aiym_admin_pdf_resources", JSON.stringify(updated));
       }
-      return true;
+      return json.success ?? true;
     } catch (err) {
-      console.error("Failed to delete PDF resource:", err);
+      console.error("Failed to delete PDF resource from DB:", err);
       return false;
     }
   },
 
   // --- DIFFICULTY LEVELS & PREPARATION GUIDE ---
   async getDifficultyLevels(): Promise<import("@/types/guidebook.types").DifficultyLevelGuide[]> {
-    if (typeof window === "undefined") {
-      const { DIFFICULTY_LEVELS_GUIDE } = await import("@/data/guidebook.data");
-      return DIFFICULTY_LEVELS_GUIDE;
-    }
+    const { DIFFICULTY_LEVELS_GUIDE } = await import("@/data/guidebook.data");
     try {
-      const stored = localStorage.getItem("aiym_admin_difficulty_levels");
-      if (stored) {
-        return JSON.parse(stored);
+      const res = await fetch("/api/difficulty-levels", { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.data && json.data.length > 0) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("aiym_admin_difficulty_levels", JSON.stringify(json.data));
+        }
+        return json.data;
       }
     } catch (e) {
-      console.error("Failed to read difficulty levels from localStorage:", e);
+      console.error("Failed to fetch difficulty levels from DB:", e);
     }
-    const { DIFFICULTY_LEVELS_GUIDE } = await import("@/data/guidebook.data");
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("aiym_admin_difficulty_levels");
+        if (stored) return JSON.parse(stored);
+      } catch {
+        // fallback
+      }
+    }
     return DIFFICULTY_LEVELS_GUIDE;
   },
 
   async saveDifficultyLevel(item: import("@/types/guidebook.types").DifficultyLevelGuide): Promise<boolean> {
     try {
-      const list = await this.getDifficultyLevels();
-      const idx = list.findIndex((i) => i.id === item.id);
-      let updated: typeof list;
-      if (idx >= 0) {
-        updated = [...list];
-        updated[idx] = item;
-      } else {
-        updated = [...list, item];
-      }
+      const res = await fetch("/api/difficulty-levels", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
+      const json = await res.json();
       if (typeof window !== "undefined") {
+        const list = await this.getDifficultyLevels();
+        const idx = list.findIndex((i) => i.id === item.id);
+        const updated = idx >= 0 ? list.map((x) => (x.id === item.id ? item : x)) : [...list, item];
         localStorage.setItem("aiym_admin_difficulty_levels", JSON.stringify(updated));
       }
-      return true;
+      return json.success ?? true;
     } catch (err) {
-      console.error("Failed to save difficulty level:", err);
+      console.error("Failed to save difficulty level to DB:", err);
       return false;
     }
   },
 
   async deleteDifficultyLevel(id: string): Promise<boolean> {
     try {
-      const list = await this.getDifficultyLevels();
-      const updated = list.filter((i) => i.id !== id);
+      const res = await fetch(`/api/difficulty-levels?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+      const json = await res.json();
       if (typeof window !== "undefined") {
+        const list = await this.getDifficultyLevels();
+        const updated = list.filter((i) => i.id !== id);
         localStorage.setItem("aiym_admin_difficulty_levels", JSON.stringify(updated));
       }
-      return true;
+      return json.success ?? true;
     } catch (err) {
-      console.error("Failed to delete difficulty level:", err);
+      console.error("Failed to delete difficulty level from DB:", err);
+      return false;
+    }
+  },
+
+  // --- HERO BANNER ---
+  async getHeroBanner(): Promise<import("@/types/banner.types").HeroBannerData> {
+    const { DEFAULT_HERO_BANNER } = await import("@/types/banner.types");
+    try {
+      const res = await fetch("/api/banner", { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.data) {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("aiym_admin_hero_banner", JSON.stringify(json.data));
+        }
+        return json.data;
+      }
+    } catch (err) {
+      console.error("Failed to fetch banner from API/DB:", err);
+    }
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("aiym_admin_hero_banner");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          return { ...DEFAULT_HERO_BANNER, ...parsed };
+        }
+      } catch (e) {
+        console.error("Failed to read banner from localStorage:", e);
+      }
+    }
+    return DEFAULT_HERO_BANNER;
+  },
+
+  async saveHeroBanner(banner: import("@/types/banner.types").HeroBannerData): Promise<boolean> {
+    try {
+      const res = await fetch("/api/banner", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(banner),
+      });
+      const json = await res.json();
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_hero_banner", JSON.stringify(banner));
+      }
+      return json.success ?? true;
+    } catch (err) {
+      console.error("Failed to save hero banner to DB:", err);
+      return false;
+    }
+  },
+
+  async resetHeroBanner(): Promise<boolean> {
+    try {
+      const res = await fetch("/api/banner", { method: "POST" });
+      const json = await res.json();
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("aiym_admin_hero_banner");
+      }
+      return json.success ?? true;
+    } catch (err) {
+      console.error("Failed to reset hero banner in DB:", err);
       return false;
     }
   },

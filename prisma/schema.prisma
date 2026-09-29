@@ -161,3 +161,92 @@ model AdminUser {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model HeroBanner {
+  id              String   @id @default("main")
+  badgeRu         String   @default("Пилотный проект")
+  badgeKg         String   @default("Пилоттук долбоор")
+  badgeEn         String   @default("Pilot Project")
+  titlePrefixRu   String   @default("AIYM PATH")
+  titlePrefixKg   String   @default("AIYM PATH")
+  titlePrefixEn   String   @default("AIYM PATH")
+  titleLine2Ru    String   @default("ПУТЕШЕСТВИЯ БЕЗ")
+  titleLine2Kg    String   @default("ЧЕКСИЗ")
+  titleLine2En    String   @default("TRAVEL WITHOUT")
+  titleLine3Ru    String   @default("ГРАНИЦ")
+  titleLine3Kg    String   @default("САЯКАТТАР")
+  titleLine3En    String   @default("BOUNDARIES")
+  subtitleRu      String
+  subtitleKg      String
+  subtitleEn      String
+  ctaMapRu        String   @default("Карта")
+  ctaMapKg        String   @default("Карта")
+  ctaMapEn        String   @default("Map")
+  ctaGuidesRu     String   @default("Гиды")
+  ctaGuidesKg     String   @default("Гиддер")
+  ctaGuidesEn     String   @default("Guides")
+  backgroundImage String   @default("/images/banner/banner.webp")
+  ornamentImage   String   @default("/images/banner/uzor.webp")
+  girlImage       String   @default("/images/banner/asia-girl.webp")
+  updatedAt       DateTime @updatedAt
+}
+
+model DifficultyLevel {
+  id             String   @id
+  badgeRu        String
+  badgeKg        String
+  badgeEn        String
+  titleRu        String
+  titleKg        String
+  titleEn        String
+  durationRu     String
+  durationKg     String
+  durationEn     String
+  elevationRu    String
+  elevationKg    String
+  elevationEn    String
+  descRu         String
+  descKg         String
+  descEn         String
+  suitableRu     String
+  suitableKg     String
+  suitableEn     String
+  requiredGearRu String[]
+  requiredGearKg String[]
+  requiredGearEn String[]
+  orderIndex     Int      @default(0)
+  updatedAt      DateTime @updatedAt
+}
+
+model PdfResource {
+  id         String   @id
+  titleRu    String
+  titleKg    String
+  titleEn    String
+  descRu     String
+  descKg     String
+  descEn     String
+  badgeRu    String
+  badgeKg    String
+  badgeEn    String
+  fileUrl    String
+  fileSize   String   @default("")
+  orderIndex Int      @default(0)
+  updatedAt  DateTime @updatedAt
+}
+
+model EquipmentChecklistItem {
+  id          String   @id
+  labelRu     String
+  labelKg     String
+  labelEn     String
+  noteRu      String?
+  noteKg      String?
+  noteEn      String?
+  category    String   @default("clothing")
+  isEssential Boolean  @default(false)
+  orderIndex  Int      @default(0)
+  updatedAt   DateTime @updatedAt
+}
+
+
