@@ -31,15 +31,18 @@ export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
           onChange(!checked);
         }
       }}
-      onClick={() => !disabled && onChange(!checked)}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (!disabled) onChange(!checked);
+      }}
       className={`flex items-start gap-3 cursor-pointer select-none transition-colors ${
         disabled ? "opacity-50 cursor-not-allowed" : ""
       } ${className}`}
     >
       <div
-        className={`w-5 h-5 rounded-lg border transition-all duration-200 flex items-center justify-center shrink-0 mt-0.5 ${
+        className={`w-5 h-5 rounded-lg border transition-colors duration-150 flex items-center justify-center shrink-0 mt-0.5 ${
           checked
-            ? "bg-[#07626A] border-[#07626A] text-white shadow-xs"
+            ? "bg-[#07626A] border-[#07626A] text-white"
             : "bg-white border-[#E1E1E1] hover:border-[#07626A]/50"
         }`}
       >

@@ -6,13 +6,13 @@ import {
   Backpack,
   Sparkles,
   MapPin,
+  Check,
 } from "lucide-react";
 import { EQUIPMENT_CHECKLIST } from "@/data/guidebook.data";
 import { ChecklistItem, EquipmentCategory } from "@/types/guidebook.types";
 import { AdminStorageService, AdminLocationItem } from "@/lib/services/admin-storage.service";
 import { INITIAL_LOCATIONS } from "@/data/locations.data";
 import { useLanguage } from "@/context/LanguageContext";
-import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 import { DifficultyLevelsGuideSection } from "./DifficultyLevelsGuideSection";
 
 export const EquipmentChecklistSection: React.FC = () => {
@@ -211,7 +211,7 @@ export const EquipmentChecklistSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Checklist Grid with CustomCheckbox */}
+        {/* Checklist Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           {filteredItems.map((item) => {
             const isChecked = checkedIds.includes(item.id);
@@ -222,19 +222,28 @@ export const EquipmentChecklistSection: React.FC = () => {
               (language === "kg" ? "Сөзсүз керек" : language === "en" ? "Essential" : "Обязательно");
 
             return (
-              <div
+              <button
                 key={item.id}
+                type="button"
                 onClick={() => toggleItem(item.id)}
-                className={`p-4 rounded-2xl text-left transition-colors duration-150 cursor-pointer border select-none ${
+                className={`p-4 rounded-2xl text-left transition-colors duration-150 cursor-pointer border select-none w-full ${
                   isChecked
                     ? "bg-[#F0F2F2] border-[#07626A]/40"
                     : "bg-white border-[#E1E1E1] hover:border-[#07626A]/50"
                 }`}
               >
-                <CustomCheckbox
-                  checked={isChecked}
-                  onChange={() => toggleItem(item.id)}
-                  label={
+                <div className="flex items-start gap-3">
+                  <div
+                    className={`w-5 h-5 rounded-lg border transition-colors flex items-center justify-center shrink-0 mt-0.5 ${
+                      isChecked
+                        ? "bg-[#07626A] border-[#07626A] text-white"
+                        : "bg-white border-[#E1E1E1]"
+                    }`}
+                  >
+                    {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  </div>
+
+                  <div className="flex flex-col flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span
                         className={`text-xs sm:text-sm font-semibold transition-colors ${
@@ -249,10 +258,14 @@ export const EquipmentChecklistSection: React.FC = () => {
                         </span>
                       )}
                     </div>
-                  }
-                  description={note || undefined}
-                />
-              </div>
+                    {note && (
+                      <span className="text-[11px] text-[#0D0D0D]/60 mt-0.5">
+                        {note}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </button>
             );
           })}
         </div>

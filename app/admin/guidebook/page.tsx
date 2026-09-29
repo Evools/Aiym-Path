@@ -45,11 +45,12 @@ const CATEGORY_OPTIONS: CustomSelectOption[] = [
 
 import { AdminChecklistManager } from "@/components/features/admin/AdminChecklistManager";
 import { AdminPdfResourcesManager } from "@/components/features/admin/AdminPdfResourcesManager";
-import { Backpack, FileText } from "lucide-react";
+import { AdminDifficultyLevelsManager } from "@/components/features/admin/AdminDifficultyLevelsManager";
+import { Backpack, FileText, TrendingUp } from "lucide-react";
 
 export default function AdminGuidebookPage() {
   const toast = useToast();
-  const [activeTab, setActiveTab] = useState<"articles" | "checklist" | "pdf">("articles");
+  const [activeTab, setActiveTab] = useState<"articles" | "checklist" | "pdf" | "difficulty">("articles");
   const [items, setItems] = useState<GuidebookItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAudience, setSelectedAudience] = useState<"all" | GuidebookAudience>("all");
@@ -263,7 +264,7 @@ export default function AdminGuidebookPage() {
             <button
               type="button"
               onClick={handleOpenCreateModal}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Добавить статью</span>
@@ -277,9 +278,9 @@ export default function AdminGuidebookPage() {
         <button
           type="button"
           onClick={() => setActiveTab("articles")}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors cursor-pointer ${
             activeTab === "articles"
-              ? "bg-[#07626A] text-white shadow-xs"
+              ? "bg-[#07626A] text-white"
               : "bg-[#F0F2F2] text-[#0D0D0D]/70 hover:bg-white hover:text-[#07626A]"
           }`}
         >
@@ -290,9 +291,9 @@ export default function AdminGuidebookPage() {
         <button
           type="button"
           onClick={() => setActiveTab("checklist")}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors cursor-pointer ${
             activeTab === "checklist"
-              ? "bg-[#07626A] text-white shadow-xs"
+              ? "bg-[#07626A] text-white"
               : "bg-[#F0F2F2] text-[#0D0D0D]/70 hover:bg-white hover:text-[#07626A]"
           }`}
         >
@@ -303,14 +304,27 @@ export default function AdminGuidebookPage() {
         <button
           type="button"
           onClick={() => setActiveTab("pdf")}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors cursor-pointer ${
             activeTab === "pdf"
-              ? "bg-[#07626A] text-white shadow-xs"
+              ? "bg-[#07626A] text-white"
               : "bg-[#F0F2F2] text-[#0D0D0D]/70 hover:bg-white hover:text-[#07626A]"
           }`}
         >
           <FileText className="w-4 h-4" />
           <span>PDF Пособия (Google Диск)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("difficulty")}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors cursor-pointer ${
+            activeTab === "difficulty"
+              ? "bg-[#07626A] text-white"
+              : "bg-[#F0F2F2] text-[#0D0D0D]/70 hover:bg-white hover:text-[#07626A]"
+          }`}
+        >
+          <TrendingUp className="w-4 h-4" />
+          <span>Уровни сложности</span>
         </button>
       </div>
 
@@ -318,6 +332,8 @@ export default function AdminGuidebookPage() {
         <AdminChecklistManager />
       ) : activeTab === "pdf" ? (
         <AdminPdfResourcesManager />
+      ) : activeTab === "difficulty" ? (
+        <AdminDifficultyLevelsManager />
       ) : (
         <>
           {/* 2. Filter & Search Controls */}
@@ -327,9 +343,9 @@ export default function AdminGuidebookPage() {
           <button
             type="button"
             onClick={() => setSelectedAudience("all")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
               selectedAudience === "all"
-                ? "bg-white text-[#0D0D0D] shadow-xs"
+                ? "bg-white text-[#0D0D0D]"
                 : "text-[#0D0D0D]/60 hover:text-[#0D0D0D]"
             }`}
           >
@@ -338,9 +354,9 @@ export default function AdminGuidebookPage() {
           <button
             type="button"
             onClick={() => setSelectedAudience("travelers")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
               selectedAudience === "travelers"
-                ? "bg-white text-[#07626A] shadow-xs"
+                ? "bg-white text-[#07626A]"
                 : "text-[#0D0D0D]/60 hover:text-[#0D0D0D]"
             }`}
           >
@@ -349,9 +365,9 @@ export default function AdminGuidebookPage() {
           <button
             type="button"
             onClick={() => setSelectedAudience("providers")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
               selectedAudience === "providers"
-                ? "bg-white text-[#07626A] shadow-xs"
+                ? "bg-white text-[#07626A]"
                 : "text-[#0D0D0D]/60 hover:text-[#0D0D0D]"
             }`}
           >
@@ -461,7 +477,7 @@ export default function AdminGuidebookPage() {
           }}
         >
           <div
-            className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 border border-[#E1E1E1] shadow-2xl relative my-8 flex flex-col gap-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150"
+            className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 border border-[#E1E1E1] relative my-8 flex flex-col gap-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -598,7 +614,7 @@ export default function AdminGuidebookPage() {
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                  className="px-6 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer"
                 >
                   {editingItem ? "Сохранить изменения" : "Создать статью"}
                 </button>

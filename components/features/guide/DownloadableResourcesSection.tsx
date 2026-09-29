@@ -113,8 +113,9 @@ export const DownloadableResourcesSection: React.FC = () => {
                   </div>
 
                   <div className="pt-3 border-t border-[#E1E1E1] flex items-center justify-between gap-3">
-                    <span className="text-[11px] font-mono text-[#0D0D0D]/50 font-medium">
-                      {res.fileSize}
+                    <span className="text-[11px] font-semibold text-[#07626A] flex items-center gap-1.5">
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>PDF Документ</span>
                     </span>
 
                     <a
@@ -126,10 +127,10 @@ export const DownloadableResourcesSection: React.FC = () => {
                       <Download className="w-3.5 h-3.5" />
                       <span>
                         {language === "kg"
-                          ? "Жүктөө"
+                          ? "Окуу / Жүктөө"
                           : language === "en"
-                          ? "Download"
-                          : "Скачать"}
+                          ? "Read / Download"
+                          : "Читать / Скачать"}
                       </span>
                     </a>
                   </div>

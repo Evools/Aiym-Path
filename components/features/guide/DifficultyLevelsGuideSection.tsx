@@ -23,30 +23,38 @@ import { RouteItem } from "@/types/route.types";
 
 export const DifficultyLevelsGuideSection: React.FC = () => {
   const { language } = useLanguage();
+  const [levels, setLevels] = useState<DifficultyLevelGuide[]>(DIFFICULTY_LEVELS_GUIDE);
   const [selectedLevelId, setSelectedLevelId] = useState<"easy" | "medium" | "hard" | "expert">("medium");
   const [routes, setRoutes] = useState<RouteItem[]>(ROUTES_DATA);
 
   useEffect(() => {
-    async function loadRoutes() {
-      const dbRoutes = await AdminStorageService.getRoutes();
+    async function loadData() {
+      const [dbRoutes, dbLevels] = await Promise.all([
+        AdminStorageService.getRoutes(),
+        AdminStorageService.getDifficultyLevels(),
+      ]);
       if (dbRoutes && dbRoutes.length > 0) {
         setRoutes(dbRoutes);
       }
+      if (dbLevels && dbLevels.length > 0) {
+        setLevels(dbLevels);
+      }
     }
-    loadRoutes();
+    loadData();
 
-    window.addEventListener("focus", loadRoutes);
+    window.addEventListener("focus", loadData);
     return () => {
-      window.removeEventListener("focus", loadRoutes);
+      window.removeEventListener("focus", loadData);
     };
   }, []);
 
   const activeLevel: DifficultyLevelGuide = useMemo(() => {
     return (
-      DIFFICULTY_LEVELS_GUIDE.find((l) => l.id === selectedLevelId) ||
-      DIFFICULTY_LEVELS_GUIDE[1]
+      levels.find((l) => l.id === selectedLevelId) ||
+      levels[0] ||
+      DIFFICULTY_LEVELS_GUIDE[0]
     );
-  }, [selectedLevelId]);
+  }, [levels, selectedLevelId]);
 
   // Matching routes from database/admin
   const matchingRoutes = useMemo(() => {
@@ -97,7 +105,7 @@ export const DifficultyLevelsGuideSection: React.FC = () => {
 
       {/* Level Selector Tabs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mb-6">
-        {DIFFICULTY_LEVELS_GUIDE.map((level) => {
+        {levels.map((level) => {
           const isSelected = selectedLevelId === level.id;
           const badgeText = level.badge[language as "ru" | "kg" | "en"] || level.badge.ru;
 

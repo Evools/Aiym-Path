@@ -927,6 +927,59 @@ export const AdminStorageService = {
     }
   },
 
+  // --- DIFFICULTY LEVELS & PREPARATION GUIDE ---
+  async getDifficultyLevels(): Promise<import("@/types/guidebook.types").DifficultyLevelGuide[]> {
+    if (typeof window === "undefined") {
+      const { DIFFICULTY_LEVELS_GUIDE } = await import("@/data/guidebook.data");
+      return DIFFICULTY_LEVELS_GUIDE;
+    }
+    try {
+      const stored = localStorage.getItem("aiym_admin_difficulty_levels");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error("Failed to read difficulty levels from localStorage:", e);
+    }
+    const { DIFFICULTY_LEVELS_GUIDE } = await import("@/data/guidebook.data");
+    return DIFFICULTY_LEVELS_GUIDE;
+  },
+
+  async saveDifficultyLevel(item: import("@/types/guidebook.types").DifficultyLevelGuide): Promise<boolean> {
+    try {
+      const list = await this.getDifficultyLevels();
+      const idx = list.findIndex((i) => i.id === item.id);
+      let updated: typeof list;
+      if (idx >= 0) {
+        updated = [...list];
+        updated[idx] = item;
+      } else {
+        updated = [...list, item];
+      }
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_difficulty_levels", JSON.stringify(updated));
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to save difficulty level:", err);
+      return false;
+    }
+  },
+
+  async deleteDifficultyLevel(id: string): Promise<boolean> {
+    try {
+      const list = await this.getDifficultyLevels();
+      const updated = list.filter((i) => i.id !== id);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_difficulty_levels", JSON.stringify(updated));
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to delete difficulty level:", err);
+      return false;
+    }
+  },
+
   // Reset to default seed data
   async resetAll(): Promise<boolean> {
     try {

@@ -12,6 +12,7 @@ import {
   Link2,
   X,
   HardDriveDownload,
+  BookOpen,
 } from "lucide-react";
 import {
   AdminStorageService,
@@ -32,14 +33,12 @@ export const AdminPdfResourcesManager: React.FC = () => {
     id: string;
     title: { ru: string; kg: string; en: string };
     description: { ru: string; kg: string; en: string };
-    fileSize: string;
     badge: { ru: string; kg: string; en: string };
     fileUrl: string;
   }>({
     id: "",
     title: { ru: "", kg: "", en: "" },
     description: { ru: "", kg: "", en: "" },
-    fileSize: "PDF • 2.5 MB",
     badge: { ru: "Для путешественниц", kg: "Саякатчылар үчүн", en: "For Travelers" },
     fileUrl: "",
   });
@@ -64,7 +63,6 @@ export const AdminPdfResourcesManager: React.FC = () => {
       id: `pdf-${Date.now()}`,
       title: { ru: "", kg: "", en: "" },
       description: { ru: "", kg: "", en: "" },
-      fileSize: "PDF • 2.5 MB",
       badge: { ru: "Для путешественниц", kg: "Саякатчылар үчүн", en: "For Travelers" },
       fileUrl: "",
     });
@@ -77,7 +75,6 @@ export const AdminPdfResourcesManager: React.FC = () => {
       id: item.id,
       title: { ...item.title },
       description: { ...item.description },
-      fileSize: item.fileSize,
       badge: { ...item.badge },
       fileUrl: item.fileUrl,
     });
@@ -87,7 +84,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
   const handleDelete = async (id: string, titleRu: string) => {
     const confirmed = await toast.confirm({
       title: "Удалить PDF пособие?",
-      message: `Вы действительно хотите удалить «${titleRu}»? Ссылка на скачивание перестанет быть доступной на сайте.`,
+      message: `Вы действительно хотите удалить «${titleRu}»? Ссылка на документ перестанет быть доступной на сайте.`,
       confirmText: "Удалить",
       cancelText: "Отмена",
       isDestructive: true,
@@ -124,11 +121,11 @@ export const AdminPdfResourcesManager: React.FC = () => {
         kg: formData.description.kg.trim() || formData.description.ru.trim(),
         en: formData.description.en.trim() || formData.description.ru.trim(),
       },
-      fileSize: formData.fileSize.trim() || "PDF • 2.0 MB",
+      fileSize: "PDF",
       badge: {
-        ru: formData.badge.ru.trim() || "PDF",
-        kg: formData.badge.kg.trim() || "PDF",
-        en: formData.badge.en.trim() || "PDF",
+        ru: formData.badge.ru.trim() || "Для чтения",
+        kg: formData.badge.kg.trim() || "Окуу үчүн",
+        en: formData.badge.en.trim() || "Document",
       },
       fileUrl: formData.fileUrl.trim(),
     };
@@ -140,21 +137,21 @@ export const AdminPdfResourcesManager: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-in fade-in duration-200">
+    <div className="flex flex-col gap-6 animate-in fade-in duration-150">
       {/* Top Banner / Google Drive Instructions */}
       <div className="p-5 rounded-2xl bg-[rgba(7,98,106,0.06)] border border-[rgba(7,98,106,0.15)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
+          <div className="w-10 h-10 rounded-xl bg-[#07626A] text-white flex items-center justify-center shrink-0">
             <Info className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-[#0D0D0D]">
-              Интеграция с Google Диском для скачивания PDF
+              Интеграция с Google Диском для чтения и скачивания PDF
             </h3>
             <p className="text-xs text-[#0D0D0D]/70 mt-0.5 leading-relaxed">
               Загрузите PDF на Google Диск → нажмите «Поделиться» → выберите доступ{" "}
               <strong>«Все, у кого есть ссылка (Читатель)»</strong> → вставьте ссылку сюда.
-              Aiym Path автоматически преобразует её в прямую ссылку на скачивание.
+              Файл открывается для онлайн-чтения и скачивания.
             </p>
           </div>
         </div>
@@ -162,7 +159,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
         <button
           type="button"
           onClick={handleOpenCreate}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shrink-0 shadow-xs"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Добавить PDF документ</span>
@@ -184,7 +181,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
             return (
               <div
                 key={res.id}
-                className="p-6 rounded-3xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors flex flex-col justify-between gap-5 shadow-2xs"
+                className="p-6 rounded-3xl bg-white border border-[#E1E1E1] hover:border-[rgba(7,98,106,0.30)] transition-colors flex flex-col justify-between gap-5"
               >
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between">
@@ -196,16 +193,16 @@ export const AdminPdfResourcesManager: React.FC = () => {
                     </div>
 
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#07626A] bg-[#F0F2F2] px-2.5 py-1 rounded-full border border-[#E1E1E1]">
-                      {res.badge.ru}
+                      {res.badge?.ru || "Документ"}
                     </span>
                   </div>
 
                   <div>
                     <h4 className="text-base font-bold text-[#0D0D0D] leading-snug">
-                      {res.title.ru}
+                      {res.title?.ru}
                     </h4>
                     <p className="text-xs text-[#0D0D0D]/70 leading-relaxed mt-2 line-clamp-3">
-                      {res.description.ru}
+                      {res.description?.ru}
                     </p>
                   </div>
                 </div>
@@ -213,8 +210,9 @@ export const AdminPdfResourcesManager: React.FC = () => {
                 <div className="space-y-3 pt-3 border-t border-[#E1E1E1]">
                   {/* Google Drive Link Preview */}
                   <div className="flex items-center justify-between text-[11px] text-[#0D0D0D]/60 bg-[#F0F2F2] px-3 py-1.5 rounded-xl border border-[#E1E1E1]">
-                    <span className="font-mono font-medium truncate max-w-[170px]">
-                      {res.fileSize}
+                    <span className="font-semibold text-[#07626A] flex items-center gap-1.5">
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>PDF файл для чтения</span>
                     </span>
                     <a
                       href={res.fileUrl}
@@ -223,7 +221,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
                       className="inline-flex items-center gap-1 text-[#07626A] hover:underline font-bold shrink-0"
                     >
                       <Link2 className="w-3.5 h-3.5" />
-                      <span>Диск</span>
+                      <span>Открыть</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
@@ -236,7 +234,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
                       className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#07626A]/10 hover:bg-[#07626A] text-[#07626A] hover:text-white text-xs font-bold transition-colors cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>Тест скачивания</span>
+                      <span>Тест ссылки</span>
                     </a>
 
                     <div className="flex items-center gap-1.5">
@@ -276,7 +274,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#07626A] text-white text-xs font-bold transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Добавить PDF</span>
@@ -287,13 +285,13 @@ export const AdminPdfResourcesManager: React.FC = () => {
       {/* Create / Edit Modal */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsModalOpen(false);
           }}
         >
           <div
-            className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 border border-[#E1E1E1] shadow-2xl relative my-8 flex flex-col gap-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150"
+            className="w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 border border-[#E1E1E1] relative my-8 flex flex-col gap-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-[#E1E1E1]">
@@ -319,7 +317,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
                 onClick={() => setIsModalOpen(false)}
                 className="p-2 rounded-xl text-[#0D0D0D]/50 hover:text-[#0D0D0D] hover:bg-[#F0F2F2] transition-colors cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -341,35 +339,6 @@ export const AdminPdfResourcesManager: React.FC = () => {
                 <p className="text-[11px] text-[#0D0D0D]/50">
                   Вставьте стандартную ссылку «Поделиться» из Google Диска с открытым доступом на чтение.
                 </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* File size indicator */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-[#0D0D0D]">
-                    Формат и размер файла
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.fileSize}
-                    onChange={(e) => setFormData((p) => ({ ...p, fileSize: e.target.value }))}
-                    placeholder="Например: PDF • 2.4 MB"
-                    required
-                    className="w-full px-4 py-2.5 rounded-xl border border-[#E1E1E1] bg-white text-xs text-[#0D0D0D] placeholder-[#0D0D0D]/40 focus:outline-none focus:border-[#07626A]"
-                  />
-                </div>
-
-                {/* Badge Editor */}
-                <I18nFieldEditor
-                  label="Бейдж документа"
-                  value={formData.badge}
-                  onChange={(val) => setFormData((p) => ({ ...p, badge: val }))}
-                  placeholder={{
-                    ru: "Для путешественниц",
-                    kg: "Саякатчылар үчүн",
-                    en: "For Travelers",
-                  }}
-                />
               </div>
 
               {/* Title i18n */}
@@ -400,6 +369,18 @@ export const AdminPdfResourcesManager: React.FC = () => {
                 required
               />
 
+              {/* Badge Editor - Full Width under Description */}
+              <I18nFieldEditor
+                label="Бейдж документа"
+                value={formData.badge}
+                onChange={(val) => setFormData((p) => ({ ...p, badge: val }))}
+                placeholder={{
+                  ru: "Для путешественниц",
+                  kg: "Саякатчылар үчүн",
+                  en: "For Travelers",
+                }}
+              />
+
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E1E1E1]">
                 <button
                   type="button"
@@ -411,7 +392,7 @@ export const AdminPdfResourcesManager: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                  className="px-6 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer"
                 >
                   {editingItem ? "Сохранить изменения" : "Добавить документ"}
                 </button>
