@@ -12,16 +12,6 @@ export interface GuideItem {
 export const INITIAL_GUIDES: GuideItem[] = [
   {
     id: 1,
-    name: "Руслан Маматкулов",
-    image: "/images/guides/guide-1.webp",
-    locations: ["Бишкек", "Каракол", "Нарын"],
-    phone: "+996 700 000 002",
-    category: "guide",
-    isFemale: false,
-    isVerified: true,
-  },
-  {
-    id: 2,
     name: "Айсулуу Жумабекова",
     image: "/images/guides/guide-2.jpg",
     locations: ["Бишкек", "Ала-Арча", "Чуй"],
@@ -31,7 +21,7 @@ export const INITIAL_GUIDES: GuideItem[] = [
     isVerified: true,
   },
   {
-    id: 3,
+    id: 2,
     name: "Наргиза Касымова",
     image: "/images/guides/guide-3.jpg",
     locations: ["Каракол", "Ысык-Көл", "Жеты-Огуз"],
@@ -41,17 +31,7 @@ export const INITIAL_GUIDES: GuideItem[] = [
     isVerified: true,
   },
   {
-    id: 4,
-    name: "Бектур Садыков",
-    image: "/images/guides/guide-1.webp",
-    locations: ["Нарын", "Сон-Көл", "Кель-Суу"],
-    phone: "+996 703 334 455",
-    category: "guide",
-    isFemale: false,
-    isVerified: true,
-  },
-  {
-    id: 5,
+    id: 3,
     name: "Алина Таалайбекова",
     image: "/images/guides/guide-2.jpg",
     locations: ["Бишкек", "Чункурчак", "Аламедин"],
@@ -61,7 +41,17 @@ export const INITIAL_GUIDES: GuideItem[] = [
     isVerified: true,
   },
   {
-    id: 6,
+    id: 4,
+    name: "Гульмира Токтогулова",
+    image: "/images/guides/guide-2.jpg",
+    locations: ["Ош", "Сары-Челек", "Арсланбоб"],
+    phone: "+996 700 998 877",
+    category: "agency",
+    isFemale: true,
+    isVerified: true,
+  },
+  {
+    id: 5,
     name: "Эльмира Асанова",
     image: "/images/guides/guide-3.jpg",
     locations: ["Ош", "Сары-Челек", "Арсланбоб"],

@@ -107,7 +107,6 @@ const SPECIALTY_PRESETS = [
 const DEFAULT_AVATARS = [
   "/images/guides/guide-2.jpg",
   "/images/guides/guide-3.jpg",
-  "/images/guides/guide-1.webp",
   "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
 ];
