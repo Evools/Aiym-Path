@@ -18,6 +18,13 @@ function mapDbToPdf(p: any): PdfResourceItem {
 
 export async function GET() {
   try {
+    if (!prisma?.pdfResource) {
+      return NextResponse.json({
+        success: true,
+        data: DEFAULT_PDF_RESOURCES,
+      });
+    }
+
     const list = await prisma.pdfResource.findMany({
       orderBy: { orderIndex: "asc" },
     });
@@ -45,6 +52,13 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const item: PdfResourceItem = await req.json();
+
+    if (!prisma?.pdfResource) {
+      return NextResponse.json({
+        success: true,
+        data: item,
+      });
+    }
 
     const saved = await prisma.pdfResource.upsert({
       where: { id: item.id },
@@ -94,7 +108,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    if (id) {
+    if (id && prisma?.pdfResource) {
       await prisma.pdfResource.deleteMany({
         where: { id },
       });

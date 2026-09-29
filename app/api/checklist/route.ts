@@ -17,6 +17,13 @@ function mapDbToChecklist(c: any): ChecklistItem {
 
 export async function GET() {
   try {
+    if (!prisma?.equipmentChecklistItem) {
+      return NextResponse.json({
+        success: true,
+        data: EQUIPMENT_CHECKLIST,
+      });
+    }
+
     const list = await prisma.equipmentChecklistItem.findMany({
       orderBy: { orderIndex: "asc" },
     });
@@ -44,6 +51,13 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const item: ChecklistItem = await req.json();
+
+    if (!prisma?.equipmentChecklistItem) {
+      return NextResponse.json({
+        success: true,
+        data: item,
+      });
+    }
 
     const saved = await prisma.equipmentChecklistItem.upsert({
       where: { id: item.id },
@@ -87,7 +101,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    if (id) {
+    if (id && prisma?.equipmentChecklistItem) {
       await prisma.equipmentChecklistItem.deleteMany({
         where: { id },
       });

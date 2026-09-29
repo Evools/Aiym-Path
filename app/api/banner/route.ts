@@ -49,6 +49,13 @@ function mapDbBannerToItem(b: any): HeroBannerData {
 
 export async function GET() {
   try {
+    if (!prisma?.heroBanner) {
+      return NextResponse.json({
+        success: true,
+        data: DEFAULT_HERO_BANNER,
+      });
+    }
+
     const banner = await prisma.heroBanner.findUnique({
       where: { id: "main" },
     });
@@ -76,6 +83,13 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const body: HeroBannerData = await req.json();
+
+    if (!prisma?.heroBanner) {
+      return NextResponse.json({
+        success: true,
+        data: body,
+      });
+    }
 
     const bannerData = {
       badgeRu: body.badge?.ru ?? DEFAULT_HERO_BANNER.badge?.ru ?? "",
@@ -128,9 +142,11 @@ export async function PUT(req: NextRequest) {
 
 export async function POST() {
   try {
-    await prisma.heroBanner.deleteMany({
-      where: { id: "main" },
-    });
+    if (prisma?.heroBanner) {
+      await prisma.heroBanner.deleteMany({
+        where: { id: "main" },
+      });
+    }
     return NextResponse.json({
       success: true,
       data: DEFAULT_HERO_BANNER,

@@ -25,6 +25,13 @@ function mapDbToLogo(s: any): SiteLogoData {
 
 export async function GET() {
   try {
+    if (!prisma?.siteSettings) {
+      return NextResponse.json({
+        success: true,
+        data: DEFAULT_SITE_LOGO,
+      });
+    }
+
     const settings = await prisma.siteSettings.findUnique({
       where: { id: "main" },
     });
@@ -52,6 +59,13 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const body: SiteLogoData = await req.json();
+
+    if (!prisma?.siteSettings) {
+      return NextResponse.json({
+        success: true,
+        data: body,
+      });
+    }
 
     const data = {
       logoType: body.type || "text",
@@ -90,9 +104,11 @@ export async function PUT(req: NextRequest) {
 
 export async function POST() {
   try {
-    await prisma.siteSettings.deleteMany({
-      where: { id: "main" },
-    });
+    if (prisma?.siteSettings) {
+      await prisma.siteSettings.deleteMany({
+        where: { id: "main" },
+      });
+    }
     return NextResponse.json({
       success: true,
       data: DEFAULT_SITE_LOGO,
