@@ -109,17 +109,17 @@ export const HeroSection: React.FC = () => {
           <div className="flex flex-wrap items-center gap-3.5">
             <Link
               href="/map"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-colors"
               style={{ backgroundColor: "#07626A" }}
             >
               <MapPin className="w-4 h-4" />
-              <span>{dict.hero.ctaMap || "Карта (Локации)"}</span>
+              <span>{dict.hero.ctaMap || "Карта"}</span>
               <ArrowRight className="w-4 h-4 ml-0.5" />
             </Link>
 
             <Link
               href="/tours"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold shadow-xs transition-all active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold transition-colors"
             >
               <Users className="w-4 h-4 text-[#07626A]" />
               <span>{dict.hero.ctaGuides || "Гиды"}</span>

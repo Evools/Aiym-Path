@@ -192,6 +192,86 @@ const MAP_I18N = {
     kg: "Картадагы эс алуу базасын басыңыз же төмөнкү тизмеден маршрутту тандаңыз",
     en: "Click a basecamp on the map or select a route from the list below",
   },
+  fullscreen: {
+    ru: "Во весь экран",
+    kg: "Толук экранга",
+    en: "Fullscreen",
+  },
+  collapse: {
+    ru: "Свернуть",
+    kg: "Жыйноо",
+    en: "Collapse",
+  },
+  fullscreenTitle: {
+    ru: "Развернуть на весь экран",
+    kg: "Толук экранга чыгаруу",
+    en: "Toggle Fullscreen",
+  },
+  collapseTitle: {
+    ru: "Свернуть карту",
+    kg: "Картаны жыйноо",
+    en: "Exit Fullscreen",
+  },
+  myLocation: {
+    ru: "Моё местоположение",
+    kg: "Менин ордум",
+    en: "My location",
+  },
+  locating: {
+    ru: "Определяем...",
+    kg: "Аныкталууда...",
+    en: "Locating...",
+  },
+  zoomInTitle: {
+    ru: "Приблизить карту",
+    kg: "Жакындатуу",
+    en: "Zoom in",
+  },
+  zoomOutTitle: {
+    ru: "Отдалить карту",
+    kg: "Алыстатуу",
+    en: "Zoom out",
+  },
+  youAreHere: {
+    ru: "Вы здесь",
+    kg: "Сиз бул жердесиз",
+    en: "You are here",
+  },
+  geolocationUnsupported: {
+    ru: "Геолокация не поддерживается вашим браузером",
+    kg: "Геолокация сиздин браузериңизде иштебейт",
+    en: "Geolocation is not supported by your browser",
+  },
+  geolocationDenied: {
+    ru: "Доступ к геолокации запрещен в браузере. Разрешите доступ к геопозиции в настройках сайта.",
+    kg: "Браузерде геолокацияга уруксат берилген эмес. Сайттын жөндөөлөрүнөн уруксат бериңиз.",
+    en: "Geolocation access is denied in browser. Please enable location access in site settings.",
+  },
+  geolocationFailed: {
+    ru: "Не удалось определить координаты GPS",
+    kg: "GPS координаттарын аныктоо мүмкүн болбоду",
+    en: "Could not determine GPS coordinates",
+  },
+  call: {
+    ru: "Позвонить",
+    kg: "Чалуу",
+    en: "Call",
+  },
+  close: {
+    ru: "Закрыть",
+    kg: "Жабуу",
+    en: "Close",
+  },
+  expandDetails: {
+    ru: "Развернуть детали",
+    kg: "Толук маалыматты ачуу",
+    en: "Expand details",
+  },
+  collapseCard: {
+    ru: "Свернуть карточку",
+    kg: "Карточканы жыйноо",
+    en: "Collapse card",
+  },
 };
 
 interface InteractiveLeafletMapProps {
@@ -559,7 +639,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
   // Locate User GPS & render current location marker
   const handleLocateMe = () => {
     if (!navigator.geolocation) {
-      alert("Геолокация не поддерживается вашим браузером");
+      alert(MAP_I18N.geolocationUnsupported[language] || MAP_I18N.geolocationUnsupported.ru);
       return;
     }
     setIsLocating(true);
@@ -610,7 +690,9 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
 
           userMarker
             .bindTooltip(
-              `<div style="text-align:center; font-weight:700; color:#0284C7; font-size:11px;">Вы здесь</div>`,
+              `<div style="text-align:center; font-weight:700; color:#0284C7; font-size:11px;">${
+                MAP_I18N.youAreHere[language] || MAP_I18N.youAreHere.ru
+              }</div>`,
               { permanent: false, direction: "top", offset: [0, -10] }
             )
             .openTooltip();
@@ -621,9 +703,13 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
       (err) => {
         setIsLocating(false);
         if (err.code === 1) {
-          alert("Доступ к геолокации запрещен в браузере. Разрешите доступ к геопозиции в настройках сайта.");
+          alert(
+            MAP_I18N.geolocationDenied[language] || MAP_I18N.geolocationDenied.ru
+          );
         } else {
-          alert("Не удалось определить координаты GPS");
+          alert(
+            MAP_I18N.geolocationFailed[language] || MAP_I18N.geolocationFailed.ru
+          );
         }
       },
       { enableHighAccuracy: true, timeout: 10000 }
@@ -662,17 +748,25 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
           type="button"
           onClick={toggleFullscreen}
           className="flex items-center gap-1.5 p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] text-xs font-semibold text-[#07626A] shadow-md transition-colors cursor-pointer"
-          title={isFullscreen ? "Свернуть карту" : "Развернуть на весь экран"}
+          title={
+            isFullscreen
+              ? MAP_I18N.collapseTitle[language] || MAP_I18N.collapseTitle.ru
+              : MAP_I18N.fullscreenTitle[language] || MAP_I18N.fullscreenTitle.ru
+          }
         >
           {isFullscreen ? (
             <>
               <Minimize2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Свернуть</span>
+              <span className="hidden sm:inline">
+                {MAP_I18N.collapse[language] || MAP_I18N.collapse.ru}
+              </span>
             </>
           ) : (
             <>
               <Maximize2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Во весь экран</span>
+              <span className="hidden sm:inline">
+                {MAP_I18N.fullscreen[language] || MAP_I18N.fullscreen.ru}
+              </span>
             </>
           )}
         </button>
@@ -683,11 +777,13 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
           onClick={handleLocateMe}
           disabled={isLocating}
           className="flex items-center gap-1.5 p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-white border border-[#E1E1E1] hover:border-[#07626A] text-xs font-semibold text-[#07626A] shadow-md transition-colors cursor-pointer"
-          title="Моё местоположение"
+          title={MAP_I18N.myLocation[language] || MAP_I18N.myLocation.ru}
         >
           <Compass className={`w-4 h-4 ${isLocating ? "animate-spin" : ""}`} />
           <span className="hidden sm:inline">
-            {isLocating ? "Определяем..." : "Моё местоположение"}
+            {isLocating
+              ? MAP_I18N.locating[language] || MAP_I18N.locating.ru
+              : MAP_I18N.myLocation[language] || MAP_I18N.myLocation.ru}
           </span>
         </button>
 
@@ -697,7 +793,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
             type="button"
             onClick={handleZoomIn}
             className="p-2.5 hover:bg-[#F0F2F2] text-[#07626A] transition-colors border-b border-[#E1E1E1] cursor-pointer flex items-center justify-center"
-            title="Приблизить карту"
+            title={MAP_I18N.zoomInTitle[language] || MAP_I18N.zoomInTitle.ru}
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -705,7 +801,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
             type="button"
             onClick={handleZoomOut}
             className="p-2.5 hover:bg-[#F0F2F2] text-[#07626A] transition-colors cursor-pointer flex items-center justify-center"
-            title="Отдалить карту"
+            title={MAP_I18N.zoomOutTitle[language] || MAP_I18N.zoomOutTitle.ru}
           >
             <Minus className="w-4 h-4" />
           </button>
@@ -729,7 +825,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
               type="button"
               onClick={handleCloseBasecampModal}
               className="p-1.5 rounded-lg text-[#0D0D0D]/60 hover:text-[#0D0D0D] hover:bg-[#F0F2F2] transition-colors cursor-pointer"
-              title="Закрыть"
+              title={MAP_I18N.close[language] || MAP_I18N.close.ru}
             >
               <X className="w-4 h-4" />
             </button>
@@ -810,7 +906,11 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                   )
                 }
                 className="p-1.5 rounded-lg bg-[#F0F2F2] hover:bg-[#E1E1E1] text-[#0D0D0D]/70 transition-colors cursor-pointer sm:hidden"
-                title={isCardCollapsed ? "Развернуть детали" : "Свернуть карточку"}
+                title={
+                  isCardCollapsed
+                    ? MAP_I18N.expandDetails[language] || MAP_I18N.expandDetails.ru
+                    : MAP_I18N.collapseCard[language] || MAP_I18N.collapseCard.ru
+                }
               >
                 {isCardCollapsed ? (
                   <ChevronUp className="w-4 h-4" />
@@ -835,7 +935,6 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
           {/* Full content when not collapsed */}
           {!isCardCollapsed && (
             <>
-
               {/* Expandable Safety Guidance Notice */}
               {showSafetyModal && (
                 <div className="p-3 rounded-xl border border-[#07626A]/20 bg-[#F0F2F2] flex items-start gap-2.5 animate-in fade-in duration-150">
@@ -991,7 +1090,11 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                   <div className="flex items-center gap-2 pt-1 border-t border-[#E1E1E1]">
                     <a
                       href={`https://wa.me/${currentGuide.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                        `Здравствуйте, ${currentGuide.name}! Хочу узнать о сопровождении по маршруту «${activeTitle}».`
+                        language === "kg"
+                          ? `Саламатсызбы, ${currentGuide.name}! «${activeTitle}» маршруту боюнча сурап жатам.`
+                          : language === "en"
+                          ? `Hello, ${currentGuide.name}! I would like to ask about guiding on trail «${activeTitle}».`
+                          : `Здравствуйте, ${currentGuide.name}! Хочу узнать о сопровождении по маршруту «${activeTitle}».`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -1004,7 +1107,7 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
                     <a
                       href={`tel:${currentGuide.phone.replace(/\s+/g, "")}`}
                       className="inline-flex items-center justify-center p-2 rounded-xl text-[#07626A] border border-[#E1E1E1] hover:border-[#07626A] bg-white transition-colors cursor-pointer"
-                      title={`Позвонить ${currentGuide.name}`}
+                      title={`${MAP_I18N.call[language] || MAP_I18N.call.ru} ${currentGuide.name}`}
                     >
                       <Phone className="w-3.5 h-3.5" />
                     </a>

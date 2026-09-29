@@ -47,11 +47,11 @@ export const AdminAuthGuard: React.FC<{ children: React.ReactNode }> = ({
     return null;
   }
 
-  // Authenticated admin view with sidebar
+  // Authenticated admin view with fixed sidebar and scrollable right content
   return (
-    <div className="min-h-screen bg-[#F7F9F9] flex flex-col md:flex-row text-[#0D0D0D]">
+    <div className="h-screen w-full bg-[#F7F9F9] flex flex-col md:flex-row text-[#0D0D0D] overflow-hidden">
       <AdminSidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
         <main className="flex-1 p-6 sm:p-8 lg:p-10 w-full">{children}</main>
       </div>
     </div>

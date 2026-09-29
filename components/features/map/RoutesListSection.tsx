@@ -17,19 +17,7 @@ export const RoutesListSection: React.FC<RoutesListSectionProps> = ({
   selectedRouteId,
   onSelectRoute,
 }) => {
-  const { language } = useLanguage();
-
-  const title = {
-    ru: "ПОПУЛЯРНЫЕ ПЕШИЕ МАРШРУТЫ",
-    kg: "ПОПУЛЯРДУУ ЖӨӨ МАРШРУТТАР",
-    en: "POPULAR HIKING TRAILS",
-  };
-
-  const subtitle = {
-    ru: "Проверенные горные тропы Кыргызстана с оценкой безопасности и сопровождением женщин-гидов",
-    kg: "Кыргызстандын коопсуздук деңгээли текшерилген жана аял-гиддер коштогон тоо чыйырлары",
-    en: "Verified Kyrgyzstan mountain trails with safety certification and female guide support",
-  };
+  const { language, dict } = useLanguage();
 
   return (
     <section className="py-8 sm:py-12 bg-white">
@@ -42,20 +30,31 @@ export const RoutesListSection: React.FC<RoutesListSectionProps> = ({
           >
             <Compass className="w-3.5 h-3.5" />
             <span>
-              {language === "kg"
-                ? "Тоо багыттары"
-                : language === "en"
-                ? "Trail Directory"
-                : "Каталог троп"}
+              {dict.mapPage?.trailDirectory ||
+                (language === "kg"
+                  ? "Тоо багыттары"
+                  : language === "en"
+                  ? "Trail Directory"
+                  : "Каталог троп")}
             </span>
           </div>
 
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#0D0D0D] tracking-tight">
-            {title[language] || title.ru}
+            {dict.mapPage?.popularTrails ||
+              (language === "kg"
+                ? "ПОПУЛЯРДУУ ЖӨӨ МАРШРУТТАР"
+                : language === "en"
+                ? "POPULAR HIKING TRAILS"
+                : "ПОПУЛЯРНЫЕ ПЕШИЕ МАРШРУТЫ")}
           </h2>
 
           <p className="text-sm text-[#0D0D0D]/75 mt-1 max-w-2xl">
-            {subtitle[language] || subtitle.ru}
+            {dict.mapPage?.popularTrailsSubtitle ||
+              (language === "kg"
+                ? "Кыргызстандын коопсуздук деңгээли текшерилген жана аял-гиддер коштогон тоо чыйырлары"
+                : language === "en"
+                ? "Verified Kyrgyzstan mountain trails with safety certification and female guide support"
+                : "Проверенные горные тропы Кыргызстана с оценкой безопасности и сопровождением женщин-гидов")}
           </p>
         </div>
 

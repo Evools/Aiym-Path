@@ -102,72 +102,90 @@ export const DosAndDontsSection: React.FC = () => {
         {/* Two-Column Grid: DOs vs DONTs */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* DOs Column */}
-          <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E1E1E1] shadow-xs flex flex-col gap-4">
-            <div className="flex items-center gap-2.5 pb-3 border-b border-[#E1E1E1]">
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-5 h-5" />
+          <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-emerald-500/30 shadow-sm flex flex-col gap-5 relative overflow-hidden">
+            <div className="flex items-center justify-between pb-3.5 border-b border-[#E1E1E1]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-extrabold text-[#0D0D0D]">
+                    {language === "kg"
+                      ? "Сунушталат (Кылса болот)"
+                      : language === "en"
+                      ? "Recommended (Do's)"
+                      : "Рекомендуется (Можно)"}
+                  </h3>
+                  <span className="text-[11px] text-emerald-700 font-bold uppercase tracking-wider">
+                    {language === "kg"
+                      ? "Сиздин коопсуздугуңуз үчүн"
+                      : language === "en"
+                      ? "Safe & Empowering Practice"
+                      : "Для вашей безопасности и уверенности"}
+                  </span>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base font-bold text-[#0D0D0D]">
-                  {language === "kg"
-                    ? "Сунушталат (Кылса болот)"
-                    : language === "en"
-                    ? "Recommended (Do's)"
-                    : "Рекомендуется (Можно)"}
-                </h3>
-                <span className="text-[11px] text-emerald-700 font-semibold">
-                  {language === "kg"
-                    ? "Сиздин коопсуздугуңуз үчүн"
-                    : language === "en"
-                    ? "For your safety & confidence"
-                    : "Для вашей безопасности и уверенности"}
-                </span>
-              </div>
+
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 uppercase tracking-wider">
+                Do's
+              </span>
             </div>
 
             <ul className="flex flex-col gap-3.5 pt-1">
               {dos.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3 text-xs sm:text-[13px] text-[#0D0D0D]/85 leading-relaxed">
-                  <span className="w-5 h-5 rounded-full bg-emerald-100/80 text-emerald-800 text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                <li
+                  key={idx}
+                  className="flex items-start gap-3 p-3 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1]/70 hover:border-emerald-500/40 transition-colors text-xs sm:text-[13px] text-[#0D0D0D] leading-relaxed font-medium"
+                >
+                  <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                     {idx + 1}
                   </span>
-                  <span>{item[language] || item.ru}</span>
+                  <span>{item[language as "ru" | "kg" | "en"] || item.ru}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* DONTs Column */}
-          <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E1E1E1] shadow-xs flex flex-col gap-4">
-            <div className="flex items-center gap-2.5 pb-3 border-b border-[#E1E1E1]">
-              <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
-                <XCircle className="w-5 h-5" />
+          <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-rose-500/30 shadow-sm flex flex-col gap-5 relative overflow-hidden">
+            <div className="flex items-center justify-between pb-3.5 border-b border-[#E1E1E1]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 shadow-2xs">
+                  <XCircle className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-extrabold text-[#0D0D0D]">
+                    {language === "kg"
+                      ? "Сунушталбайт (Болбойт)"
+                      : language === "en"
+                      ? "Avoid (Don'ts)"
+                      : "Не рекомендуется (Нельзя)"}
+                  </h3>
+                  <span className="text-[11px] text-rose-700 font-bold uppercase tracking-wider">
+                    {language === "kg"
+                      ? "Тобокелдиктерди алдын алуу"
+                      : language === "en"
+                      ? "Risk Prevention"
+                      : "Предотвращение рисков"}
+                  </span>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base font-bold text-[#0D0D0D]">
-                  {language === "kg"
-                    ? "Сунушталбайт (Болбойт)"
-                    : language === "en"
-                    ? "Avoid (Don'ts)"
-                    : "Не рекомендуется (Нельзя)"}
-                </h3>
-                <span className="text-[11px] text-rose-600 font-semibold">
-                  {language === "kg"
-                    ? "Тобокелдиктерди алдын алуу"
-                    : language === "en"
-                    ? "Risk prevention"
-                    : "Предотвращение рисков"}
-                </span>
-              </div>
+
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 uppercase tracking-wider">
+                Don'ts
+              </span>
             </div>
 
             <ul className="flex flex-col gap-3.5 pt-1">
               {donts.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3 text-xs sm:text-[13px] text-[#0D0D0D]/85 leading-relaxed">
-                  <span className="w-5 h-5 rounded-full bg-rose-100/80 text-rose-800 text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                <li
+                  key={idx}
+                  className="flex items-start gap-3 p-3 rounded-2xl bg-[#FAFBFB] border border-[#E1E1E1]/70 hover:border-rose-500/40 transition-colors text-xs sm:text-[13px] text-[#0D0D0D] leading-relaxed font-medium"
+                >
+                  <span className="w-6 h-6 rounded-full bg-rose-600 text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                     {idx + 1}
                   </span>
-                  <span>{item[language] || item.ru}</span>
+                  <span>{item[language as "ru" | "kg" | "en"] || item.ru}</span>
                 </li>
               ))}
             </ul>

@@ -78,7 +78,7 @@ export const HomeMapSection: React.FC = () => {
           <div className="shrink-0">
             <Link
               href="/map"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-md transition-all active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white text-xs sm:text-sm font-bold transition-colors"
               style={{ backgroundColor: "#07626A" }}
             >
               <Maximize2 className="w-4 h-4" />
@@ -98,7 +98,7 @@ export const HomeMapSection: React.FC = () => {
         </div>
 
         {/* Interactive Map Container */}
-        <div className="rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-[#E1E1E1] shadow-xs">
+        <div className="rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-[#E1E1E1]">
           <InteractiveMapWrapper
             routes={filteredRoutes}
             locations={locationsData}

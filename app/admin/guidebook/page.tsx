@@ -43,8 +43,13 @@ const CATEGORY_OPTIONS: CustomSelectOption[] = [
   { value: "planning", label: "Планирование поездки" },
 ];
 
+import { AdminChecklistManager } from "@/components/features/admin/AdminChecklistManager";
+import { AdminPdfResourcesManager } from "@/components/features/admin/AdminPdfResourcesManager";
+import { Backpack, FileText } from "lucide-react";
+
 export default function AdminGuidebookPage() {
   const toast = useToast();
+  const [activeTab, setActiveTab] = useState<"articles" | "checklist" | "pdf">("articles");
   const [items, setItems] = useState<GuidebookItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAudience, setSelectedAudience] = useState<"all" | GuidebookAudience>("all");
@@ -254,19 +259,69 @@ export default function AdminGuidebookPage() {
             <span>Смотреть на сайте</span>
           </Link>
 
-          <button
-            type="button"
-            onClick={handleOpenCreateModal}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Добавить статью</span>
-          </button>
+          {activeTab === "articles" && (
+            <button
+              type="button"
+              onClick={handleOpenCreateModal}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#07626A] hover:bg-[#07626A]/90 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Добавить статью</span>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* 2. Filter & Search Controls */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+      {/* Primary Section Switcher */}
+      <div className="flex flex-wrap items-center gap-2 border-b border-[#E1E1E1] pb-2">
+        <button
+          type="button"
+          onClick={() => setActiveTab("articles")}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === "articles"
+              ? "bg-[#07626A] text-white shadow-xs"
+              : "bg-[#F0F2F2] text-[#0D0D0D]/70 hover:bg-white hover:text-[#07626A]"
+          }`}
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>Статьи и гайды ({items.length})</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("checklist")}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === "checklist"
+              ? "bg-[#07626A] text-white shadow-xs"
+              : "bg-[#F0F2F2] text-[#0D0D0D]/70 hover:bg-white hover:text-[#07626A]"
+          }`}
+        >
+          <Backpack className="w-4 h-4" />
+          <span>Чек-лист экипировки</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("pdf")}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === "pdf"
+              ? "bg-[#07626A] text-white shadow-xs"
+              : "bg-[#F0F2F2] text-[#0D0D0D]/70 hover:bg-white hover:text-[#07626A]"
+          }`}
+        >
+          <FileText className="w-4 h-4" />
+          <span>PDF Пособия (Google Диск)</span>
+        </button>
+      </div>
+
+      {activeTab === "checklist" ? (
+        <AdminChecklistManager />
+      ) : activeTab === "pdf" ? (
+        <AdminPdfResourcesManager />
+      ) : (
+        <>
+          {/* 2. Filter & Search Controls */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         {/* Audience Filter Tabs */}
         <div className="inline-flex p-1 rounded-xl bg-[#F0F2F2] border border-[#E1E1E1] self-start sm:self-auto">
           <button
@@ -392,6 +447,8 @@ export default function AdminGuidebookPage() {
           </p>
         </div>
       )}
+    </>
+  )}
 
       {/* 4. Create / Edit Modal with Backdrop Click & ESC support */}
       {isModalOpen && (

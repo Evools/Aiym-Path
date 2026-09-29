@@ -29,7 +29,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({
   isSelected,
   onSelect,
 }) => {
-  const { language } = useLanguage();
+  const { language, dict } = useLanguage();
 
   const title = route.title[language] || route.title.ru;
   const description = route.description[language] || route.description.ru;
@@ -86,6 +86,23 @@ export const RouteCard: React.FC<RouteCardProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showSafetyPopover]);
+
+  const unitKm = language === "en" ? "km" : "км";
+  const unitHours = language === "kg" ? "саат" : language === "en" ? "h" : "ч";
+  const unitMeters = language === "en" ? "m" : "м";
+
+  const defaultWaMsg =
+    language === "kg"
+      ? `Саламатсызбы, ${activeGuide?.name || ""}! «${title}» маршруту боюнча сурап жатам.`
+      : language === "en"
+      ? `Hello, ${activeGuide?.name || ""}! I would like to book a guided tour for «${title}».`
+      : `Здравствуйте, ${activeGuide?.name || ""}! Хочу забронировать сопровождение по маршруту «${title}».`;
+
+  const waMessage = activeGuide
+    ? (dict.mapPage?.bookGuideWhatsApp || defaultWaMsg)
+        .replace("{name}", activeGuide.name)
+        .replace("{title}", title)
+    : defaultWaMsg;
 
   return (
     <div
@@ -146,20 +163,24 @@ export const RouteCard: React.FC<RouteCardProps> = ({
                     ? "bg-[#07626A] text-white border-[#07626A]"
                     : "bg-[#F0F2F2] text-[#07626A] border-[#E1E1E1] hover:border-[#07626A]"
                 }`}
-                title="Памятка безопасности"
+                title={dict.mapPage?.safetyAdviceTitle || "Памятка безопасности"}
               >
                 <ShieldAlert className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Безопасность</span>
+                <span className="hidden sm:inline">
+                  {dict.mapPage?.safetyAdvice || "Безопасность"}
+                </span>
                 <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showSafetyPopover ? "rotate-180" : ""}`} />
               </button>
 
               {/* Popover Card */}
               {showSafetyPopover && (
-                <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 p-4 rounded-2xl bg-white border border-[#E1E1E1] z-20 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2">
+                <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 p-4 rounded-2xl bg-white border border-[#E1E1E1] z-20 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2 shadow-xl">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase text-[#07626A] flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4" />
-                      <span>Совет безопасности</span>
+                      <span>
+                        {dict.mapPage?.safetyAdviceTitle || "Совет безопасности"}
+                      </span>
                     </span>
                     <button
                       type="button"
@@ -170,7 +191,8 @@ export const RouteCard: React.FC<RouteCardProps> = ({
                     </button>
                   </div>
                   <p className="text-xs text-[#0D0D0D]/85 leading-relaxed font-normal">
-                    Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой, а не поодиночке.
+                    {dict.mapPage?.safetyAdviceText ||
+                      "Сообщайте маршрут доверенному человеку, проверяйте прогноз погоды и берите с собой аптечку. На сложных участках двигайтесь группой, а не поодиночке."}
                   </p>
                 </div>
               )}
@@ -190,10 +212,10 @@ export const RouteCard: React.FC<RouteCardProps> = ({
             >
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#0D0D0D]/60 font-medium mb-0.5">
                 <MapPin className="w-3.5 h-3.5 text-[#07626A]" />
-                <span>Дистанция</span>
+                <span>{dict.mapPage?.distance || "Дистанция"}</span>
               </div>
               <span className="text-sm font-bold text-[#0D0D0D]">
-                {route.distanceKm} км
+                {route.distanceKm} {unitKm}
               </span>
             </div>
 
@@ -203,10 +225,10 @@ export const RouteCard: React.FC<RouteCardProps> = ({
             >
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#0D0D0D]/60 font-medium mb-0.5">
                 <Clock className="w-3.5 h-3.5 text-[#07626A]" />
-                <span>Пешком</span>
+                <span>{dict.mapPage?.duration || "Пешком"}</span>
               </div>
               <span className="text-sm font-bold text-[#0D0D0D]">
-                ~{route.durationHours} ч
+                ~{route.durationHours} {unitHours}
               </span>
             </div>
 
@@ -216,10 +238,10 @@ export const RouteCard: React.FC<RouteCardProps> = ({
             >
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#0D0D0D]/60 font-medium mb-0.5">
                 <TrendingUp className="w-3.5 h-3.5 text-[#07626A]" />
-                <span>Подъем</span>
+                <span>{dict.mapPage?.elevation || "Подъем"}</span>
               </div>
               <span className="text-sm font-bold text-[#0D0D0D]">
-                +{route.elevationGainMeters} м
+                +{route.elevationGainMeters} {unitMeters}
               </span>
             </div>
           </div>
@@ -232,17 +254,19 @@ export const RouteCard: React.FC<RouteCardProps> = ({
                   {guides.length > 1 ? (
                     <>
                       <Users className="w-4 h-4" />
-                      <span>Ответственные гиды ({guides.length})</span>
+                      <span>
+                        {dict.mapPage?.leadGuides || "Ответственные гиды"} ({guides.length})
+                      </span>
                     </>
                   ) : (
                     <>
                       <ShieldCheck className="w-4 h-4" />
-                      <span>Ответственный гид</span>
+                      <span>{dict.mapPage?.leadGuide || "Ответственный гид"}</span>
                     </>
                   )}
                 </span>
                 <span className="text-xs font-semibold text-[#0D0D0D]/60">
-                  {activeGuide.experienceYears} лет опыта
+                  {activeGuide.experienceYears} {dict.mapPage?.experienceYears || "лет опыта"}
                 </span>
               </div>
 
@@ -298,7 +322,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({
                 <div className="flex items-center gap-1.5 shrink-0">
                   <a
                     href={`https://wa.me/${activeGuide.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                      `Здравствуйте, ${activeGuide.name}! Хочу забронировать сопровождение по маршруту «${title}».`
+                      waMessage
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -311,7 +335,7 @@ export const RouteCard: React.FC<RouteCardProps> = ({
                   <a
                     href={`tel:${activeGuide.phone.replace(/\s+/g, "")}`}
                     className="p-2 rounded-xl text-[#07626A] border border-[#E1E1E1] hover:border-[#07626A] bg-white transition-colors"
-                    title={`Позвонить ${activeGuide.name}`}
+                    title={`${dict.mapPage?.call || "Позвонить"} ${activeGuide.name}`}
                   >
                     <Phone className="w-3.5 h-3.5" />
                   </a>
@@ -331,11 +355,12 @@ export const RouteCard: React.FC<RouteCardProps> = ({
         >
           <Footprints className="w-4 h-4" />
           <span>
-            {language === "kg"
-              ? "Маршрутту интерактивдүү картадан көрүү"
-              : language === "en"
-              ? "View Trail on Interactive Map"
-              : "Показать маршрут на карте"}
+            {dict.mapPage?.viewOnMap ||
+              (language === "kg"
+                ? "Маршрутту интерактивдүү картадан көрүү"
+                : language === "en"
+                ? "View Trail on Interactive Map"
+                : "Показать маршрут на карте")}
           </span>
         </button>
       </div>

@@ -149,27 +149,68 @@ export const EmergencySafetyBanner: React.FC = () => {
         </div>
 
         {/* Emergency Action Checklist (Памятка в экстренных ситуациях) */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-[#FAFBFB] border border-[#E1E1E1] flex flex-col gap-5">
-          <div className="flex items-center gap-2.5 pb-3 border-b border-[#E1E1E1]">
-            <ShieldCheck className="w-5 h-5 text-[#07626A]" />
-            <h3 className="text-base font-bold text-[#0D0D0D]">
-              {language === "kg"
-                ? "Шашылыш кырдаалдагы аракеттердин тартиби"
-                : language === "en"
-                ? "Emergency Response Protocol"
-                : "Памятка действий в нештатных ситуациях"}
-            </h3>
+        <div className="p-6 sm:p-8 lg:p-10 rounded-3xl bg-[#F0F2F2] border-2 border-[#07626A]/30 flex flex-col gap-6 shadow-sm relative overflow-hidden">
+          {/* Subtle background glow */}
+          <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#07626A]/5 pointer-events-none blur-3xl" />
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E1E1E1]">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#07626A] text-white flex items-center justify-center shrink-0 shadow-xs">
+                <ShieldCheck className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#07626A] block">
+                  {language === "kg"
+                    ? "Коопсуздук эрежелери"
+                    : language === "en"
+                    ? "Safety Protocol"
+                    : "Инструкция безопасности"}
+                </span>
+                <h3 className="text-lg sm:text-xl font-extrabold text-[#0D0D0D] tracking-tight uppercase">
+                  {language === "kg"
+                    ? "Шашылыш кырдаалдагы аракеттердин эстелиги"
+                    : language === "en"
+                    ? "Emergency Action Quick Guide"
+                    : "Памятка действий в нештатных ситуациях"}
+                </h3>
+              </div>
+            </div>
+
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E1E1E1] text-[#07626A] text-xs font-bold self-start sm:self-auto shadow-2xs">
+              <ShieldAlert className="w-3.5 h-3.5 text-[#07626A]" />
+              <span>Aiym Path Safety First</span>
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
             {emergencyChecklist.map((tip, idx) => (
-              <div key={idx} className="flex flex-col gap-1.5">
-                <h4 className="text-xs font-bold text-[#07626A] uppercase tracking-wider">
-                  {tip.title}
-                </h4>
-                <p className="text-xs text-[#0D0D0D]/80 leading-relaxed font-normal">
-                  {tip.text}
-                </p>
+              <div
+                key={idx}
+                className="p-5 rounded-2xl bg-white border border-[#E1E1E1] hover:border-[#07626A]/50 transition-all flex flex-col justify-between gap-3 shadow-2xs group"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="w-6 h-6 rounded-lg bg-[#F0F2F2] text-[#07626A] text-xs font-black flex items-center justify-center shrink-0 group-hover:bg-[#07626A] group-hover:text-white transition-colors">
+                      0{idx + 1}
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#0D0D0D]/40">
+                      Шаг {idx + 1}
+                    </span>
+                  </div>
+
+                  <h4 className="text-xs sm:text-[13px] font-extrabold text-[#0D0D0D] leading-snug">
+                    {tip.title}
+                  </h4>
+
+                  <p className="text-xs text-[#0D0D0D]/75 leading-relaxed mt-2 font-normal">
+                    {tip.text}
+                  </p>
+                </div>
+
+                <div className="pt-2.5 border-t border-[#E1E1E1]/60 flex items-center gap-1.5 text-[11px] font-bold text-[#07626A]">
+                  <Check className="w-3.5 h-3.5 text-[#07626A]" />
+                  <span>Проверено стандартами безопасности</span>
+                </div>
               </div>
             ))}
           </div>

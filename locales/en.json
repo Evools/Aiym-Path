@@ -16,7 +16,7 @@
     "subtitle": "We create a safe, accessible, and inspiring environment for women traveling across the Kyrgyz Republic.",
     "ctaAbout": "About Project",
     "ctaContact": "Contact Us",
-    "ctaMap": "Map (Locations)",
+    "ctaMap": "Map",
     "ctaGuides": "Guides"
   },
   "homeMap": {
@@ -78,32 +78,20 @@
     ]
   },
   "locations": {
-    "badge": "Kyrgyzstan Locations",
+    "badge": "Kyrgyzstan",
     "title": "REGIONS & LOCATIONS",
-    "subtitle": "Explore verified female-friendly locations, gorges, and scenic destinations across the country.",
+    "subtitle": "Discover verified female-friendly mountain resorts, yurt camps, boutique stays, and safety hubs across Kyrgyzstan.",
     "viewOnMap": "View on map",
     "filterAllRegions": "All Regions",
-    "filterAllDifficulties": "All Levels",
-    "difficultyEasy": "Easy",
-    "difficultyMedium": "Medium",
-    "difficultyHard": "Hard",
-    "km": "km",
-    "meters": "m",
-    "elevation": "Gain",
-    "items": {
-      "alaArcha": {
-        "title": "Ala-Archa Gorge",
-        "desc": "National park 40 km from Bishkek, the gateway to the Kyrgyz ridge highlands."
-      },
-      "alamedin": {
-        "title": "Alamedin Gorge",
-        "desc": "Hot springs, coniferous forests, and moderate difficulty trails."
-      },
-      "chunkurchak": {
-        "title": "Chunkurchak",
-        "desc": "Plateau and foothills near Bishkek, ideal for one-day walks."
-      }
-    }
+    "filterAllTypes": "All Stays & Hubs",
+    "typeHotel": "Hotels & Resorts",
+    "typeCamp": "Camps & Yurts",
+    "typeHub": "Safety Hubs",
+    "amenitiesTitle": "Amenities & Safety",
+    "safetyVerified": "Safety Standard",
+    "phone": "Phone",
+    "noLocations": "No locations found matching the selected filters.",
+    "resetFilters": "Reset filters"
   },
   "cta": {
     "badge": "Aiym Path Community",
@@ -185,5 +173,34 @@
     "sosCall": "Call Now",
     "copied": "Copied",
     "essentialNote": "Essential"
+  },
+  "mapPage": {
+    "badge": "Interactive Map",
+    "titlePrefix": "INTERACTIVE TRAIL",
+    "titleHighlight": "MAP",
+    "subtitle": "Hiking and trekking routes, safety checkpoints, verified guesthouses, and emergency services across Kyrgyzstan.",
+    "allRegions": "All Regions",
+    "popularTrails": "POPULAR HIKING TRAILS",
+    "popularTrailsSubtitle": "Verified Kyrgyzstan mountain trails with safety certification and female guide support",
+    "trailDirectory": "Trail Directory",
+    "viewOnMap": "View Trail on Map",
+    "safetyAdvice": "Safety",
+    "safetyAdviceTitle": "Safety Tip",
+    "safetyAdviceText": "Share your route with a trusted person, check the weather forecast and pack a first-aid kit. Travel in groups on challenging sections.",
+    "distance": "Distance",
+    "duration": "Duration",
+    "elevation": "Elevation",
+    "leadGuide": "Lead Guide",
+    "leadGuides": "Assigned Guides",
+    "experienceYears": "yrs experience",
+    "fullscreen": "Fullscreen",
+    "collapse": "Collapse",
+    "myLocation": "My Location",
+    "locating": "Locating...",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "youAreHere": "You are here",
+    "bookGuideWhatsApp": "Hello, {name}! I would like to book a guided tour for «{title}».",
+    "call": "Call"
   }
 }

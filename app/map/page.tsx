@@ -15,11 +15,14 @@ export default function MapPage() {
       {/* Top Banner */}
       <InnerPageBanner
         breadcrumbLabel={dict.nav.map}
-        badge={dict.nav.map}
+        badge={dict.mapPage?.badge || dict.nav.map}
         badgeIcon={<Map className="w-3.5 h-3.5" />}
-        titlePrefix="ИНТЕРАКТИВНАЯ КАРТА"
-        titleHighlight="МАРШРУТОВ"
-        subtitle="Пешие и треккинговые тропы, точки безопасности, проверенные отели и спасательные пункты в Кыргызстане."
+        titlePrefix={dict.mapPage?.titlePrefix || "ИНТЕРАКТИВНАЯ КАРТА"}
+        titleHighlight={dict.mapPage?.titleHighlight || "МАРШРУТОВ"}
+        subtitle={
+          dict.mapPage?.subtitle ||
+          "Пешие и треккинговые тропы, точки безопасности, проверенные отели и спасательные пункты в Кыргызстане."
+        }
       />
 
       {/* Map Explorer with Tabs, OSM Map, Legend and Route Cards */}

@@ -1,4 +1,4 @@
-import { GuidebookItem, ChecklistItem } from "@/types/guidebook.types";
+import { GuidebookItem, ChecklistItem, DifficultyLevelGuide } from "@/types/guidebook.types";
 
 export const GUIDEBOOK_ITEMS: GuidebookItem[] = [
   // --- ТАБ: ДЛЯ ПУТЕШЕСТВЕННИЦ (TRAVELERS) ---
@@ -501,124 +501,523 @@ export const GUIDEBOOK_ITEMS: GuidebookItem[] = [
 ];
 
 export const EQUIPMENT_CHECKLIST: ChecklistItem[] = [
+  // --- Базовое обязательное снаряжение ---
   {
     id: "chk-boots",
     category: "clothing",
     isEssential: true,
+    difficulty: "all",
     label: {
       ru: "Треккинговые ботинки с поддержкой голеностопа",
       kg: "Бутту кармап турган треккинг бут кийими",
       en: "Trekking boots with ankle support",
     },
     note: {
-      ru: "Обязательно разношенные, с цепким протектором",
+      ru: "Обязательно разношенные, с цепким нескользящим протектором",
       kg: "Сыналган жана тайгаланбаган таманы менен",
-      en: "Well broken-in with non-slip vibram tread",
+      en: "Well broken-in with reliable grip tread",
     },
   },
   {
     id: "chk-membrane",
     category: "clothing",
     isEssential: true,
+    difficulty: "all",
     label: {
       ru: "Ветро- и влагозащитная мембранная куртка",
       kg: "Шамал жана жамгыр өткөрбөс мембраналык куртка",
       en: "Waterproof & windproof membrane jacket",
     },
     note: {
-      ru: "Погода в горах меняется мгновенно",
-      kg: "Тоодо аба ырайы тез өзгөрөт",
-      en: "Mountain weather changes abruptly",
+      ru: "Погода в горах меняется мгновенно даже в солнечный день",
+      kg: "Тоодо аба ырайы күн ачык болсо да тез өзгөрөт",
+      en: "Mountain weather changes abruptly even on sunny days",
     },
   },
   {
     id: "chk-fleece",
     category: "clothing",
     isEssential: true,
+    difficulty: "all",
     label: {
       ru: "Теплый флис или легкая пуховая жилетка",
       kg: "Жылуу флис же жеңил чыптама",
       en: "Warm fleece mid-layer or lightweight down vest",
     },
     note: {
-      ru: "Для вечерней прохлады и на перевалах",
-      kg: "Кечки салкынга жана ашууларга",
-      en: "For cold evenings and breezy passes",
+      ru: "Для вечерней прохлады, привалов и перевалов",
+      kg: "Кечки салкынга, эс алууга жана ашууларга",
+      en: "For chilly evenings, rest breaks, and breezy passes",
+    },
+  },
+  {
+    id: "chk-poles",
+    category: "clothing",
+    isEssential: false,
+    difficulty: "medium",
+    locationIds: ["ala-archa", "jety-oguz", "barskoon", "alay", "kel-suu"],
+    label: {
+      ru: "Телескопические треккинговые палки",
+      kg: "Телескопиялык треккинг таяктары",
+      en: "Telescopic trekking poles",
+    },
+    note: {
+      ru: "Снижают нагрузку на колени на 25% при спусках и подъемах",
+      kg: "Түшүүдө жана чыгууда тизеге күч келтирүүнү 25% азайтат",
+      en: "Reduces knee strain by 25% on steep descents and climbs",
+    },
+  },
+  {
+    id: "chk-thermal-underwear",
+    category: "clothing",
+    isEssential: true,
+    difficulty: "hard",
+    locationIds: ["ala-archa", "son-kul", "kel-suu", "alay"],
+    label: {
+      ru: "Комплект влагоотводящего термобелья",
+      kg: "Термоич кийим топтому",
+      en: "Thermal base layer set (top & bottoms)",
+    },
+    note: {
+      ru: "Критично для ночевок на высотах выше 2500м (Сон-Куль, Кель-Суу, Рацека)",
+      kg: "2500м бийиктиктеги конуп калуулар үчүн өтө маанилүү",
+      en: "Essential for overnight stays above 2,500m (Son-Kul, Kel-Suu, Ratsek)",
     },
   },
   {
     id: "chk-powerbank",
     category: "navigation",
     isEssential: true,
+    difficulty: "all",
     label: {
       ru: "Заряженный Powerbank (10000+ мАч)",
       kg: "Толук кубатталган Powerbank (10000+ мАч)",
       en: "Fully charged Powerbank (10,000+ mAh)",
     },
     note: {
-      ru: "На холоде батарея телефона садится быстрее",
+      ru: "На холоде батарея телефона садится в 2 раза быстрее",
       kg: "Суукта телефон бат өчүп калат",
-      en: "Cold temperatures drain batteries faster",
+      en: "Cold temperatures drain smartphone batteries rapidly",
     },
   },
   {
     id: "chk-offline-maps",
     category: "navigation",
     isEssential: true,
+    difficulty: "all",
     label: {
-      ru: "Офлайн-карты (Maps.me / Organic Maps) и GPX-трек",
+      ru: "Офлайн-карты (Organic Maps / OsmAnd) и GPX-трек",
       kg: "Оффлайн карталар жана GPX трек",
       en: "Downloaded offline maps & GPX track",
     },
     note: {
-      ru: "Скачайте карту Кыргызстана заранее в городе",
-      kg: "Кыргызстандын картасын алдын ала көчүрүңүз",
-      en: "Download regional maps while still in Wi-Fi zone",
+      ru: "Скачайте карту Кыргызстана и трек маршрута заранее в городе",
+      kg: "Кыргызстандын картасын жана трегин алдын ала көчүрүңүз",
+      en: "Download regional maps and trail tracks while in Wi-Fi coverage",
+    },
+  },
+  {
+    id: "chk-border-permit",
+    category: "navigation",
+    isEssential: true,
+    difficulty: "hard",
+    locationIds: ["kel-suu", "alay"],
+    label: {
+      ru: "Пограничный пропуск и оригинал паспорта",
+      kg: "Чек ара уруксат кагазы жана паспорт",
+      en: "Border zone permit & original passport",
+    },
+    note: {
+      ru: "Обязательно для въезда в погранзону Кель-Суу (Нарын) и Алайской долины",
+      kg: "Көл-Суу жана Алай чек ара аймактарына кирүү үчүн милдеттүү",
+      en: "Mandatory for border zones at Kel-Suu and southern Alay valley",
     },
   },
   {
     id: "chk-first-aid",
     category: "safety",
     isEssential: true,
+    difficulty: "all",
     label: {
       ru: "Индивидуальная аптечка и пластыри",
       kg: "Жеке аптечка жана жабыштыргычтар (пластырь)",
-      en: "Personal first-aid kit & blister plasters",
+      en: "Personal first-aid kit & blister care",
     },
     note: {
-      ru: "Обезболивающее, антигистаминное, бинт, крем от мозолей",
-      kg: "Ооруну басаңдатуучу, бинт, күндөн коргоочу крем",
-      en: "Painkillers, antihistamines, bandages, blister care",
+      ru: "Обезболивающее, антигистаминное, бинт, эластичный бинт, антисептик",
+      kg: "Ооруну басаңдатуучу, бинт, жабыштыргыч, антисептик",
+      en: "Painkillers, antihistamines, bandage, antiseptic, blister plasters",
+    },
+  },
+  {
+    id: "chk-headlamp",
+    category: "safety",
+    isEssential: true,
+    difficulty: "medium",
+    locationIds: ["ala-archa", "jety-oguz", "barskoon", "son-kul", "kel-suu", "alay"],
+    label: {
+      ru: "Налобный фонарик с запасными батарейками",
+      kg: "Башка тагылуучу фонарик жана кошумча батарея",
+      en: "LED headlamp with spare batteries",
+    },
+    note: {
+      ru: "В горах темнеет очень быстро, руки должны быть свободны",
+      kg: "Тоодо бат караңгы кирет, колдор бош болушу керек",
+      en: "Darkness falls quickly in mountain valleys, keep hands free",
     },
   },
   {
     id: "chk-sun-protection",
     category: "hygiene",
     isEssential: true,
+    difficulty: "all",
     label: {
-      ru: "Солнцезащитный крем SPF 50+ и очки с защитой UV400",
-      kg: "Күндөн коргоочу крем SPF 50+ жана көз айнек",
+      ru: "Солнцезащитный крем SPF 50+ и очки UV400",
+      kg: "Күндөн коргоочу крем SPF 50+ жана UV400 көз айнек",
       en: "Sunscreen SPF 50+ & UV400 sunglasses",
     },
     note: {
-      ru: "Высокогорное ультрафиолетовое излучение очень активно",
-      kg: "Тоодогу күн нурлары өтө күчтүү болот",
-      en: "High-altitude UV rays are extremely intense",
+      ru: "В горах ультрафиолетовое излучение усиливается на 10-12% каждые 1000м",
+      kg: "Тоодо күн нуру ар бир 1000 метрде күчөйт",
+      en: "High-altitude UV radiation increases significantly with elevation",
     },
   },
   {
     id: "chk-water-flask",
     category: "hygiene",
     isEssential: true,
+    difficulty: "all",
     label: {
       ru: "Многоразовая бутылка для воды (1.5 л) / термос",
       kg: "Суу үчүн бөтөлкө (1.5 л) же термос",
       en: "Reusable water bottle (1.5L) or vacuum flask",
     },
     note: {
-      ru: "Пейте регулярно даже при отсутствии сильной жажды",
-      kg: "Сууну үзгүлтүксүз ичип туруңуз",
-      en: "Stay hydrated consistently throughout the ascent",
+      ru: "Пейте воду регулярно каждые 20–30 минут для профилактики горной болезни",
+      kg: "Тоо оорусунун алдын алуу үчүн үзгүлтүксүз суу ичиңиз",
+      en: "Hydrate steadily every 20–30 minutes to prevent altitude sickness",
+    },
+  },
+  {
+    id: "chk-water-filter",
+    category: "hygiene",
+    isEssential: false,
+    difficulty: "hard",
+    locationIds: ["jety-oguz", "barskoon", "kel-suu", "son-kul", "alay"],
+    label: {
+      ru: "Компактный фильтр для воды / обеззараживающие таблетки",
+      kg: "Компакттуу суу фильтри же тазалоочу таблеткалар",
+      en: "Compact water filter / purification tablets",
+    },
+    note: {
+      ru: "Для безопасного набора воды из горных ручьев на многодневных треках",
+      kg: "Көп күндүк жүрүштөрдө тоо сууларын коопсуз ичүү үчүн",
+      en: "Essential for safely drinking from mountain streams on multi-day treks",
+    },
+  },
+  {
+    id: "chk-swimwear",
+    category: "clothing",
+    isEssential: false,
+    difficulty: "easy",
+    locationIds: ["alamedin", "chunkurchak", "jety-oguz", "sary-chelek"],
+    label: {
+      ru: "Купальник и быстросохнущее полотенце из микрофибры",
+      kg: "Сууга түшүүчү кийим жана бат кургаган сүлгү",
+      en: "Swimwear & quick-dry microfiber towel",
+    },
+    note: {
+      ru: "Для термальных источников (Теплые Ключи, Джеты-Огуз) и горных озер",
+      kg: "Ысык булактар жана көлдөр үчүн",
+      en: "For thermal springs (Teplye Klyuchi, Jety-Oguz) and alpine lakes",
     },
   },
 ];
+
+export const DIFFICULTY_LEVELS_GUIDE: DifficultyLevelGuide[] = [
+  {
+    id: "easy",
+    badge: {
+      ru: "Легкий уровень",
+      kg: "Жеңил деңгээл",
+      en: "Easy Trail",
+    },
+    title: {
+      ru: "Прогулочные и однодневные маршруты",
+      kg: "Сейилдөө жана 1 күндүк маршруттар",
+      en: "Walking & Day Nature Trips",
+    },
+    duration: {
+      ru: "1–4 часа (до 6 км)",
+      kg: "1–4 саат (6 км чейин)",
+      en: "1–4 hours (up to 6 km)",
+    },
+    elevation: {
+      ru: "Перепад высот: до 300 м",
+      kg: "Бийиктик айырмасы: 300 м чейин",
+      en: "Elevation gain: up to 300 m",
+    },
+    description: {
+      ru: "Оборудованные тропы с плавным набором высоты. Подходит новичкам, семьям с детьми и соло-путешественницам без специального горного опыта.",
+      kg: "Жакшы чыйырлар, кескин эмес бийиктик. Жаңы баштагандарга жана үй-бүлөлөргө ылайыктуу.",
+      en: "Well-marked gentle trails. Ideal for beginners, families, and travelers without previous mountain trekking experience.",
+    },
+    requiredGear: {
+      ru: [
+        "Удобные кроссовки с нескользкой подошвой",
+        "Ветровка / легкая кофта",
+        "Бутылка воды 1–1.5 л и перекус",
+        "Крем SPF 50+, кепка и солнцезащитные очки",
+      ],
+      kg: [
+        "Тайгаланбаган ыңгайлуу кроссовка",
+        "Жеңил куртка же жемпир",
+        "1–1.5 л суу жана жеңил тамак",
+        "SPF 50+ крем, баш кийим жана көз айнек",
+      ],
+      en: [
+        "Comfortable sneakers with traction soles",
+        "Windbreaker or lightweight fleece",
+        "1–1.5L drinking water & snacks",
+        "SPF 50+ sunscreen, cap & sunglasses",
+      ],
+    },
+    suitableFor: {
+      ru: "Чункурчак, Теплые Ключи (Аламедин), каньон «Сказка», водопад Ак-Сай (базовый уровень)",
+      kg: "Чүңкүрчак, Жылуу Булактар (Аламүдүн), «Жомок» каньону",
+      en: "Chunkurchak, Teplye Klyuchi (Alamedin), Skazka Canyon",
+    },
+  },
+  {
+    id: "medium",
+    badge: {
+      ru: "Средний уровень",
+      kg: "Орточо деңгээл",
+      en: "Moderate Trek",
+    },
+    title: {
+      ru: "Горный треккинг и панорамные подъемы",
+      kg: "Тоо треккинги жана панорамалык чыгуулар",
+      en: "Mountain Trekking & Viewpoint Climbs",
+    },
+    duration: {
+      ru: "4–8 часов (7–16 км)",
+      kg: "4–8 саат (7–16 км)",
+      en: "4–8 hours (7–16 km)",
+    },
+    elevation: {
+      ru: "Перепад высот: 350–850 м",
+      kg: "Бийиктик айырмасы: 350–850 м",
+      en: "Elevation gain: 350–850 m",
+    },
+    description: {
+      ru: "Каменистые участки, крутые подъемы, возможны броды через неглубокие ручьи. Требуется уверенная физическая форма и треккинговая обувь.",
+      kg: "Таштуу жерлер, бийик чыгуулар. Жакшы физикалык даярдык жана треккинг бут кийими талап кылынат.",
+      en: "Rocky trails, moderate ascents, and occasional shallow stream crossings. Requires solid physical fitness and proper trekking footwear.",
+    },
+    requiredGear: {
+      ru: [
+        "Разношенные треккинговые ботинки с поддержкой голеностопа",
+        "Телескопические треккинговые палки",
+        "Мембранная штормовая куртка и теплый флис",
+        "Заряженный пауэрбанк и налобный фонарь",
+        "Индивидуальная аптечка с пластырями",
+      ],
+      kg: [
+        "Бутту кармаган сыналган треккинг ботинкасы",
+        "Треккинг таяктары",
+        "Мембраналык куртка жана жылуу флис",
+        "Кубатталган пауэрбанк жана фонарик",
+        "Жеке аптечка",
+      ],
+      en: [
+        "Broken-in trekking boots with ankle support",
+        "Telescopic trekking poles",
+        "Waterproof membrane shell & warm fleece",
+        "Charged powerbank & LED headlamp",
+        "Personal first-aid kit with blister tape",
+      ],
+    },
+    suitableFor: {
+      ru: "Хижина Рацека (Ала-Арча), водопад Джеты-Огуз «Девичьи Косы», водопад Барскоон, озеро Сары-Челек",
+      kg: "Рацек үйү (Ала-Арча), Жети-Өгүз, Барскоон шаркыратмалары",
+      en: "Ratsek Hut (Ala-Archa), Jety-Oguz Girl's Braids, Barskoon Waterfalls",
+    },
+  },
+  {
+    id: "hard",
+    badge: {
+      ru: "Сложный уровень",
+      kg: "Татаал деңгээл",
+      en: "Hard Expedition",
+    },
+    title: {
+      ru: "Высокогорные переходы и многодневные маршруты",
+      kg: "Бийик тоолуу жана көп күндүк каттамдар",
+      en: "High-Altitude Passes & Multi-day Routes",
+    },
+    duration: {
+      ru: "1–3 дня (высота 3000–3800м)",
+      kg: "1–3 күн (3000–3800м бийиктик)",
+      en: "1–3 days (altitude 3,000–3,800m)",
+    },
+    elevation: {
+      ru: "Перепад высот: 900–1600 м",
+      kg: "Бийиктик айырмасы: 900–1600 м",
+      en: "Elevation gain: 900–1,600 m",
+    },
+    description: {
+      ru: "Высокогорье, осыпные склоны, резкие перепады температур и отсутствие сотовой связи. Настоятельно рекомендуется сопровождение сертифицированного гида.",
+      kg: "Бийик тоолор, байланыштын жоктугу, кескин аба ырайы. Сертификатталган гид менен баруу сунушталат.",
+      en: "High altitude, scree terrain, rapid weather shifts, and no cellular reception. Certified female or local guide is strongly recommended.",
+    },
+    requiredGear: {
+      ru: [
+        "Комплект теплого термобелья и пуховка",
+        "Спальный мешок с температурой комфорта от 0°C до -5°C",
+        "Фильтр для воды / таблетки обеззараживания",
+        "Пограничный пропуск и паспорт (для погранзон)",
+        "Офлайн навигация + запасной бумажный трек",
+      ],
+      kg: [
+        "Термоич кийим топтому жана жылуу пуховик",
+        "0°C чейинки жылуу уктоочу кап (спальник)",
+        "Суу фильтри же тазалоочу таблеткалар",
+        "Чек ара кагазы жана паспорт",
+        "Оффлайн навигация жана кагаз карта",
+      ],
+      en: [
+        "Thermal underwear set & insulated down jacket",
+        "Sleeping bag rated 0°C to -5°C comfort",
+        "Water filtration device / purification tablets",
+        "Border zone permit & ID passport",
+        "Offline GPS & printed backup map",
+      ],
+    },
+    suitableFor: {
+      ru: "Озеро Кель-Суу (Нарын), перевал Ала-Кёль, озеро Сон-Куль (пеший переход), высотные тропы Алая",
+      kg: "Көл-Суу (Нарын), Ала-Көл ашуусу, Соң-Көл жөө каттамы, Алай",
+      en: "Lake Kel-Suu (Naryn), Ala-Kul Pass, Lake Son-Kul trek, Alay trails",
+    },
+  },
+  {
+    id: "expert",
+    badge: {
+      ru: "Альпинизм / Эксперт",
+      kg: "Альпинизм / Эксперт",
+      en: "Alpine / Expert",
+    },
+    title: {
+      ru: "Ледниковые восхождения и категорийные перевалы",
+      kg: "Мөңгүлөргө чыгуу жана татаал ашуулар",
+      en: "Glacier Ascents & Technical Passes",
+    },
+    duration: {
+      ru: "2–5 дней (высота 3800–4800м+)",
+      kg: "2–5 күн (3800–4800м+ бийиктик)",
+      en: "2–5 days (altitude 3,800–4,800m+)",
+    },
+    elevation: {
+      ru: "Перепад высот: 1500+ м",
+      kg: "Бийиктик айырмасы: 1500+ м",
+      en: "Elevation gain: 1,500+ m",
+    },
+    description: {
+      ru: "Ледники, трещины, движение в связках и использование специального альпинистского снаряжения. Только в сопровождении гида KMGA/IFMGA.",
+      kg: "Мөңгүлөр, жаракалар, аркан менен байланып жүрүү. KMGA/IFMGA сертификаты бар гид менен гана мүмкүн.",
+      en: "Glaciers, crevasses, roped team movement, and specialized alpine gear. Only accessible with certified KMGA/IFMGA mountain guides.",
+    },
+    requiredGear: {
+      ru: [
+        "Каска, страховочная система и ледоруб",
+        "Кошки альпинистские и карабины",
+        "Высотные жесткие ботинки под кошки",
+        "Спутниковый SOS-трекер (Garmin inReach)",
+        "Расширенная высотная аптечка",
+      ],
+      kg: [
+        "Каска, коопсуздук куру жана муз чапкыч",
+        "Альпинисттик мыктар (кошки) жана карабиндер",
+        "Катуу атайын ботинкалар",
+        "Спутниктик SOS-трекер",
+        "Кеңейтилген бийик тоо аптечкасы",
+      ],
+      en: [
+        "Climbing helmet, harness, and ice axe",
+        "Mountaineering crampons & locking carabiners",
+        "Rigid crampon-compatible alpine boots",
+        "Satellite SOS communicator (Garmin inReach)",
+        "Comprehensive high-altitude medical kit",
+      ],
+    },
+    suitableFor: {
+      ru: "Пик Учитель (4540м), Пик Корона, ледник Аксай, ледниковые перевалы Центрального Тянь-Шаня",
+      kg: "Мугалим чокусу (4540м), Корона чокусу, Ак-Сай мөңгүсү",
+      en: "Peak Uchitel (4,540m), Peak Korona, Ak-Sai Glacier",
+    },
+  },
+];
+
+export const DEFAULT_PDF_RESOURCES: import("@/types/guidebook.types").PdfResourceItem[] = [
+  {
+    id: "pdf-travelers",
+    title: {
+      ru: "Путеводитель для женщин-путешественниц",
+      kg: "Саякатчы аялдар үчүн жол көрсөткүч",
+      en: "Guidebook for Solo & Female Travelers",
+    },
+    description: {
+      ru: "Полный справочник по безопасности, проверенным местам отдыха, подготовке к горам и культурным особенностям Кыргызстана.",
+      kg: "Кыргызстандагы коопсуздук, текшерилген эс алуу жайлары, тоого даярдык жана маданий өзгөчөлүктөр боюнча толук колдонмо.",
+      en: "Comprehensive manual covering safety, verified stays, mountain prep, and cultural insights across Kyrgyzstan.",
+    },
+    fileSize: "PDF • 2.4 MB",
+    badge: {
+      ru: "Для путешественниц",
+      kg: "Саякатчылар үчүн",
+      en: "For Travelers",
+    },
+    fileUrl: "https://drive.google.com/file/d/1DemoAiymPathTravelersGuide2026/view?usp=sharing",
+  },
+  {
+    id: "pdf-guides",
+    title: {
+      ru: "Пособие для женщин-гидов",
+      kg: "Аял-гиддер үчүн колдонмо",
+      en: "Handbook for Female Mountain Guides",
+    },
+    description: {
+      ru: "Стандарты ведения групп, протоколы первой помощи в высокогорье, этика общения и управление рисками на сложных треках.",
+      kg: "Топторду жетектөө стандарттары, бийик тоодогу алгачкы медициналык жардам протоколдору жана тобокелдиктерди башкаруу.",
+      en: "Group leadership standards, high-altitude first aid protocols, communication ethics, and mountain risk management.",
+    },
+    fileSize: "PDF • 3.1 MB",
+    badge: {
+      ru: "Для гидов",
+      kg: "Гиддер үчүн",
+      en: "For Mountain Guides",
+    },
+    fileUrl: "https://drive.google.com/file/d/1DemoAiymPathGuidesHandbook2026/view?usp=sharing",
+  },
+  {
+    id: "pdf-providers",
+    title: {
+      ru: "Пособие для поставщиков услуг",
+      kg: "Кызмат көрсөтүүчүлөр үчүн колдонмо",
+      en: "Manual for Tourism Service Providers",
+    },
+    description: {
+      ru: "Руководство для гостевых домов, отелей, CBT и водителей по внедрению стандартов гендерной инклюзивности и безопасности Aiym Path.",
+      kg: "Aiym Path гендердик инклюзивдүүлүк жана коопсуздук стандарттарын киргизүү боюнча конок үйлөр, мейманканалар жана айдоочулар үчүн колдонмо.",
+      en: "Guidelines for guesthouses, CBT hosts, and drivers on adopting Aiym Path gender-inclusive safety standards.",
+    },
+    fileSize: "PDF • 1.9 MB",
+    badge: {
+      ru: "Для бизнеса и CBT",
+      kg: "Бизнес жана CBT үчүн",
+      en: "For Guesthouses & CBT",
+    },
+    fileUrl: "https://drive.google.com/file/d/1DemoAiymPathProvidersManual2026/view?usp=sharing",
+  },
+];
+

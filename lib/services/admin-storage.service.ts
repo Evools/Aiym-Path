@@ -309,7 +309,7 @@ export const DEFAULT_LOCATIONS: AdminLocationItem[] = [
     image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
     coordinates: [42.6389, 74.6281],
     phone: "+996 700 000 001",
-    amenities: ["Охрана 24/7", "Wi-Fi", "Тёплые домики", "Женский персонал"],
+    amenities: ["Охрана 24/7", "Wi-Fi", "Тёплые домики", "Женский персонал", "Медпункт"],
   },
   {
     id: "loc-ala-archa-alp",
@@ -327,7 +327,79 @@ export const DEFAULT_LOCATIONS: AdminLocationItem[] = [
     image: "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=800&q=80",
     coordinates: [42.5644, 74.4823],
     phone: "+996 312 000 000",
-    amenities: ["Связь МЧС", "Парковка", "Инструкторы", "Медпункт"],
+    amenities: ["Связь МЧС", "Парковка", "Инструкторы", "Медпункт / SOS"],
+  },
+  {
+    id: "loc-son-kul-yurts",
+    title: {
+      ru: "Эко-юрточный лагерь «Сон-Көл Айым»",
+      kg: "«Соң-Көл Айым» эко-боз үй лагери",
+      en: "Son-Kul Aiym Eco-Yurt Camp",
+    },
+    description: {
+      ru: "Традиционный юрточный лагерь на берегу высокогорного озера Сон-Көл с женским персоналом и экологическим питанием.",
+      kg: "Соң-Көл жээгиндеги аялдар персоналы жана табигый тамак-ашы бар салттуу боз үй лагери.",
+      en: "Traditional yurt camp on the shores of alpine Lake Son-Kul with female host team and organic meals.",
+    },
+    type: "camp",
+    image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+    coordinates: [41.8333, 75.15],
+    phone: "+996 772 334 455",
+    amenities: ["Женский персонал", "Национальная кухня", "Тёплые юрты", "Верховая езда"],
+  },
+  {
+    id: "loc-karakol-hub",
+    title: {
+      ru: "Женский хаб безопасности «Каракол»",
+      kg: "«Каракол» аялдар коопсуздук хабы",
+      en: "Karakol Female Safety Hub & Info",
+    },
+    description: {
+      ru: "Информационный центр для соло-путешественниц: аренда спутниковых трекеров, консультации female-гидов и экстренная помощь.",
+      kg: "Жалгыз саякаттаган аялдар үчүн маалымат борбору: спутник трекерлери, гиддердин кеңештери жана шашылыш жардам.",
+      en: "Resource hub for solo female travelers: satellite tracker rental, female guide consultations, and emergency aid.",
+    },
+    type: "hub",
+    image: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=800&q=80",
+    coordinates: [42.4907, 78.3936],
+    phone: "+996 705 009 102",
+    amenities: ["Медпункт / SOS", "Wi-Fi", "Спутниковая связь", "Аренда трекеров"],
+  },
+  {
+    id: "loc-alamedin-springs",
+    title: {
+      ru: "Оздоровительный комплекс «Тёплые ключи Аламедин»",
+      kg: "«Аламүдүн жылуу суулары» ден соолук комплекси",
+      en: "Alamedin Hot Springs Resort",
+    },
+    description: {
+      ru: "Термальные радоновые источники, спа-процедуры, комфортабельные коттеджи и закрытая охраняемая территория.",
+      kg: "Термалдык радон булактары, спа процедуралары, ыңгайлуу коттедждер жана кайтарылган аймак.",
+      en: "Thermal mineral springs, spa treatments, comfortable chalets and private secure grounds.",
+    },
+    type: "hotel",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+    coordinates: [42.6167, 74.6833],
+    phone: "+996 555 123 789",
+    amenities: ["Охрана 24/7", "Бассейн с термальной водой", "Wi-Fi", "Кафе"],
+  },
+  {
+    id: "loc-arslanbob-eco",
+    title: {
+      ru: "Гостевой дом «Арсланбоб Айым»",
+      kg: "«Арсланбоб Айым» конок үйү",
+      en: "Arslanbob Aiym Eco-Guesthouse",
+    },
+    description: {
+      ru: "Уютный семейный эко-отель в реликтовом ореховом лесу, управляемый местным женским кооперативом.",
+      kg: "Жергиликтүү аялдар кооперативи жетектеген жаңгак токоюндагы жайлуу үй-бүлөлүк эко-конок үй.",
+      en: "Cozy family eco-stay in the ancient walnut forest run by a local women's cooperative.",
+    },
+    type: "camp",
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    coordinates: [41.3361, 72.9306],
+    phone: "+996 770 889 900",
+    amenities: ["Женский персонал", "Эко-продукты", "Экскурсии в лес", "Wi-Fi"],
   },
 ];
 
@@ -680,6 +752,112 @@ export const AdminStorageService = {
     }
   },
 
+  // --- EQUIPMENT CHECKLIST ---
+  async getChecklistItems(): Promise<import("@/types/guidebook.types").ChecklistItem[]> {
+    if (typeof window === "undefined") {
+      const { EQUIPMENT_CHECKLIST } = await import("@/data/guidebook.data");
+      return EQUIPMENT_CHECKLIST;
+    }
+    try {
+      const stored = localStorage.getItem("aiym_admin_checklist");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error("Failed to read checklist from localStorage:", e);
+    }
+    const { EQUIPMENT_CHECKLIST } = await import("@/data/guidebook.data");
+    return EQUIPMENT_CHECKLIST;
+  },
+
+  async saveChecklistItem(item: import("@/types/guidebook.types").ChecklistItem): Promise<boolean> {
+    try {
+      const list = await this.getChecklistItems();
+      const idx = list.findIndex((i) => i.id === item.id);
+      let updated: typeof list;
+      if (idx >= 0) {
+        updated = [...list];
+        updated[idx] = item;
+      } else {
+        updated = [item, ...list];
+      }
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_checklist", JSON.stringify(updated));
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to save checklist item:", err);
+      return false;
+    }
+  },
+
+  async deleteChecklistItem(id: string): Promise<boolean> {
+    try {
+      const list = await this.getChecklistItems();
+      const updated = list.filter((i) => i.id !== id);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_checklist", JSON.stringify(updated));
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to delete checklist item:", err);
+      return false;
+    }
+  },
+
+  // --- PDF OFFICIAL MANUALS & GUIDES (GOOGLE DRIVE) ---
+  async getPdfResources(): Promise<import("@/types/guidebook.types").PdfResourceItem[]> {
+    if (typeof window === "undefined") {
+      const { DEFAULT_PDF_RESOURCES } = await import("@/data/guidebook.data");
+      return DEFAULT_PDF_RESOURCES;
+    }
+    try {
+      const stored = localStorage.getItem("aiym_admin_pdf_resources");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error("Failed to read PDF resources from localStorage:", e);
+    }
+    const { DEFAULT_PDF_RESOURCES } = await import("@/data/guidebook.data");
+    return DEFAULT_PDF_RESOURCES;
+  },
+
+  async savePdfResource(item: import("@/types/guidebook.types").PdfResourceItem): Promise<boolean> {
+    try {
+      const list = await this.getPdfResources();
+      const idx = list.findIndex((i) => i.id === item.id);
+      let updated: typeof list;
+      if (idx >= 0) {
+        updated = [...list];
+        updated[idx] = item;
+      } else {
+        updated = [item, ...list];
+      }
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_pdf_resources", JSON.stringify(updated));
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to save PDF resource:", err);
+      return false;
+    }
+  },
+
+  async deletePdfResource(id: string): Promise<boolean> {
+    try {
+      const list = await this.getPdfResources();
+      const updated = list.filter((i) => i.id !== id);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("aiym_admin_pdf_resources", JSON.stringify(updated));
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to delete PDF resource:", err);
+      return false;
+    }
+  },
+
   // Reset to default seed data
   async resetAll(): Promise<boolean> {
     try {
@@ -692,3 +870,17 @@ export const AdminStorageService = {
     }
   },
 };
+
+export function getGoogleDriveDirectDownloadLink(url: string): string {
+  if (!url) return "";
+  const trimmed = url.trim();
+  const matchFile = trimmed.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (matchFile && matchFile[1]) {
+    return `https://drive.google.com/uc?export=download&id=${matchFile[1]}`;
+  }
+  const matchId = trimmed.match(/drive\.google\.com\/.*[?&]id=([a-zA-Z0-9_-]+)/);
+  if (matchId && matchId[1]) {
+    return `https://drive.google.com/uc?export=download&id=${matchId[1]}`;
+  }
+  return trimmed;
+}

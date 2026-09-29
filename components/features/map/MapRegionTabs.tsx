@@ -108,7 +108,7 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
           <button
             type="button"
             onClick={() => handleScroll("left")}
-            className="w-8 h-8 rounded-full bg-white border border-[#E1E1E1] shadow-md hover:border-[#07626A] text-[#0D0D0D] flex items-center justify-center pointer-events-auto transition-all cursor-pointer hover:scale-105"
+            className="w-8 h-8 rounded-full bg-white border border-[#E1E1E1] hover:border-[#07626A] text-[#0D0D0D] flex items-center justify-center pointer-events-auto transition-colors cursor-pointer"
             aria-label="Прокрутить влево"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -127,9 +127,9 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
           <button
             type="button"
             onClick={(e) => handleTabClick("all", e.currentTarget)}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 cursor-pointer shrink-0 flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
               selectedRegion === "all"
-                ? "bg-[#07626A] text-white shadow-xs"
+                ? "bg-[#07626A] text-white"
                 : "text-[#0D0D0D]/75 hover:text-[#07626A] hover:bg-white/60"
             }`}
           >
@@ -158,9 +158,9 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
                 key={reg.id}
                 type="button"
                 onClick={(e) => handleTabClick(reg.id, e.currentTarget)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
                   isSelected
-                    ? "bg-[#07626A] text-white shadow-xs"
+                    ? "bg-[#07626A] text-white"
                     : "text-[#0D0D0D]/75 hover:text-[#07626A] hover:bg-white/60"
                 }`}
               >
@@ -188,7 +188,7 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
           <button
             type="button"
             onClick={() => handleScroll("right")}
-            className="w-8 h-8 rounded-full bg-white border border-[#E1E1E1] shadow-md hover:border-[#07626A] text-[#0D0D0D] flex items-center justify-center pointer-events-auto transition-all cursor-pointer hover:scale-105"
+            className="w-8 h-8 rounded-full bg-white border border-[#E1E1E1] hover:border-[#07626A] text-[#0D0D0D] flex items-center justify-center pointer-events-auto transition-colors cursor-pointer"
             aria-label="Прокрутить вправо"
           >
             <ChevronRight className="w-4 h-4" />

@@ -78,7 +78,7 @@ export const AdminSidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-[#E1E1E1] flex flex-col justify-between shrink-0 min-h-screen">
+    <aside className="w-full md:w-64 bg-white border-r border-[#E1E1E1] flex flex-col justify-between shrink-0 h-auto md:h-full md:overflow-y-auto z-20">
       <div>
         {/* Admin Brand Header */}
         <div className="p-6 border-b border-[#E1E1E1]">
