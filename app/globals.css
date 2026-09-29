@@ -49,6 +49,19 @@ body {
   animation: buttonPulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Leaflet Custom Tooltip Styles */
 .leaflet-tooltip {
   background: #FFFFFF !important;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import {
   MapPin,
@@ -9,6 +9,8 @@ import {
   Tent,
   Radio,
   Sparkles,
+  Loader2,
+  CheckCircle2,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import {
@@ -18,11 +20,18 @@ import {
 } from "@/lib/services/admin-storage.service";
 import { LocationCard } from "./LocationCard";
 
+const INITIAL_VISIBLE_COUNT = 6;
+const LOAD_MORE_STEP = 6;
+
 export const LocationsSection: React.FC = () => {
   const { dict, language } = useLanguage();
   const [locations, setLocations] = useState<AdminLocationItem[]>(DEFAULT_LOCATIONS);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedType, setSelectedType] = useState<"all" | "hotel" | "camp" | "hub">("all");
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_VISIBLE_COUNT);
+  const [isExpanding, setIsExpanding] = useState<boolean>(false);
+
+  const observerTargetRef = useRef<HTMLDivElement | null>(null);
 
   const loadData = async () => {
     try {
@@ -45,6 +54,11 @@ export const LocationsSection: React.FC = () => {
       window.removeEventListener("focus", loadData);
     };
   }, []);
+
+  // Reset pagination when filter changes
+  useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE_COUNT);
+  }, [selectedType]);
 
   const typeTabs: {
     id: "all" | "hotel" | "camp" | "hub";
@@ -69,7 +83,7 @@ export const LocationsSection: React.FC = () => {
       },
       {
         id: "hub",
-        label: dict.locations?.typeHub || "Пункты отдыха & помощи",
+        label: dict.locations?.typeHub || "Пункты помощи",
         icon: <Radio className="w-3.5 h-3.5" />,
       },
     ],
@@ -80,6 +94,45 @@ export const LocationsSection: React.FC = () => {
     if (selectedType === "all") return locations;
     return locations.filter((loc) => loc.type === selectedType);
   }, [locations, selectedType]);
+
+  const visibleLocations = useMemo(() => {
+    return filteredLocations.slice(0, visibleCount);
+  }, [filteredLocations, visibleCount]);
+
+  const hasMore = visibleCount < filteredLocations.length;
+
+  // IntersectionObserver for smooth scroll-triggered lazy loading
+  useEffect(() => {
+    if (!hasMore || isLoading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first && first.isIntersecting && !isExpanding) {
+          setIsExpanding(true);
+          setTimeout(() => {
+            setVisibleCount((prev) => Math.min(prev + LOAD_MORE_STEP, filteredLocations.length));
+            setIsExpanding(false);
+          }, 160);
+        }
+      },
+      {
+        rootMargin: "250px 0px", // Preload slightly before the user reaches the end of list
+        threshold: 0.1,
+      }
+    );
+
+    const currentTarget = observerTargetRef.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasMore, isLoading, isExpanding, filteredLocations.length]);
 
   return (
     <section id="locations" className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-white border-t border-[#E1E1E1]">
@@ -158,21 +211,63 @@ export const LocationsSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Locations Grid */}
+        {/* Locations Grid with Progressive Staggered Entrance on Scroll */}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
-            {[1, 2, 3].map((n) => (
+            {[1, 2, 3, 4, 5, 6].map((n) => (
               <div
                 key={n}
-                className="h-[420px] rounded-[28px] bg-[#F0F2F2] animate-pulse border border-[#E1E1E1]"
+                className="h-[380px] rounded-2xl bg-[#F0F2F2] animate-pulse border border-[#E1E1E1]"
               />
             ))}
           </div>
         ) : filteredLocations.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
-            {filteredLocations.map((loc) => (
-              <LocationCard key={loc.id} location={loc} />
-            ))}
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
+              {visibleLocations.map((loc, index) => (
+                <div
+                  key={loc.id}
+                  className="animate-fade-in"
+                  style={{
+                    animationDelay: `${(index % 6) * 45}ms`,
+                  }}
+                >
+                  <LocationCard location={loc} />
+                </div>
+              ))}
+            </div>
+
+            {/* Scroll Observer Target & Smooth Loader */}
+            {hasMore ? (
+              <div
+                ref={observerTargetRef}
+                className="flex flex-col items-center justify-center py-6 min-h-[80px]"
+              >
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F0F2F2] border border-[#E1E1E1] text-xs font-bold text-[#07626A]">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#07626A]" />
+                  <span>
+                    {language === "kg"
+                      ? "Дагы локациялар жүктөлүүдө..."
+                      : language === "en"
+                      ? "Loading more locations..."
+                      : "Загрузка следующих локаций..."}
+                  </span>
+                </div>
+              </div>
+            ) : filteredLocations.length > INITIAL_VISIBLE_COUNT ? (
+              <div className="flex items-center justify-center pt-2">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#F0F2F2] text-[#07626A] text-xs font-semibold border border-[#E1E1E1]">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>
+                    {language === "kg"
+                      ? `Бардык ${filteredLocations.length} локация көрсөтүлдү`
+                      : language === "en"
+                      ? `All ${filteredLocations.length} locations displayed`
+                      : `Показаны все ${filteredLocations.length} локации`}
+                  </span>
+                </div>
+              </div>
+            ) : null}
           </div>
         ) : (
           <div className="text-center py-16 px-4 bg-[#F0F2F2] rounded-2xl border border-[#E1E1E1]">
