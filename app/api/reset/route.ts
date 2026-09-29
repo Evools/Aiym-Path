@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { assertAdmin } from "@/lib/auth/assert-admin";
 import { ROUTES_DATA } from "@/data/routes.data";
 import { GUIDEBOOK_ITEMS } from "@/data/guidebook.data";
 import { INITIAL_LOCATIONS } from "@/data/locations.data";
@@ -12,7 +13,12 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const auth = assertAdmin(req);
+  if (!auth.authorized) {
+    return auth.errorResponse!;
+  }
+
   try {
     // Delete existing records
     await prisma.routePOI.deleteMany({});

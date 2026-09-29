@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { AdminLocationItem } from "@/lib/services/admin-storage.service";
+import { assertAdmin } from "@/lib/auth/assert-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,11 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await assertAdmin(req);
+  if (!auth.authenticated) {
+    return auth.response;
+  }
+
   try {
     const { id } = await params;
     const body: AdminLocationItem = await req.json();
@@ -113,6 +119,11 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await assertAdmin(req);
+  if (!auth.authenticated) {
+    return auth.response;
+  }
+
   try {
     const { id } = await params;
     await prisma.location.delete({

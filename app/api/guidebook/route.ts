@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { GuidebookItem } from "@/types/guidebook.types";
+import { assertAdmin } from "@/lib/auth/assert-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await assertAdmin(req);
+  if (!auth.authenticated) {
+    return auth.response;
+  }
+
   try {
     const body: GuidebookItem = await req.json();
     const id = body.id || `gb-${Date.now()}`;

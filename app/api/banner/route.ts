@@ -80,7 +80,14 @@ export async function GET() {
   }
 }
 
+import { assertAdmin } from "@/lib/auth/assert-admin";
+
 export async function PUT(req: NextRequest) {
+  const auth = assertAdmin(req);
+  if (!auth.authorized) {
+    return auth.errorResponse!;
+  }
+
   try {
     const body: HeroBannerData = await req.json();
 
@@ -140,7 +147,12 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const auth = assertAdmin(req);
+  if (!auth.authorized) {
+    return auth.errorResponse!;
+  }
+
   try {
     if (prisma?.heroBanner) {
       await prisma.heroBanner.deleteMany({

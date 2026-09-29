@@ -49,7 +49,14 @@ export async function GET() {
   }
 }
 
+import { assertAdmin } from "@/lib/auth/assert-admin";
+
 export async function PUT(req: NextRequest) {
+  const auth = assertAdmin(req);
+  if (!auth.authorized) {
+    return auth.errorResponse!;
+  }
+
   try {
     const item: PdfResourceItem = await req.json();
 
@@ -105,6 +112,11 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  const auth = assertAdmin(req);
+  if (!auth.authorized) {
+    return auth.errorResponse!;
+  }
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");

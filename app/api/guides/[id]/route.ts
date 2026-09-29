@@ -68,10 +68,17 @@ export async function GET(
   }
 }
 
+import { assertAdmin } from "@/lib/auth/assert-admin";
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = assertAdmin(req);
+  if (!auth.authorized) {
+    return auth.errorResponse!;
+  }
+
   try {
     const { id } = await params;
     const body: AdminGuideItem = await req.json();
@@ -157,6 +164,11 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = assertAdmin(req);
+  if (!auth.authorized) {
+    return auth.errorResponse!;
+  }
+
   try {
     const { id } = await params;
     await prisma.guide.delete({

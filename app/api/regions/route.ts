@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { AdminRegionItem } from "@/lib/services/admin-storage.service";
+import { assertAdmin } from "@/lib/auth/assert-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,11 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await assertAdmin(req);
+  if (!auth.authenticated) {
+    return auth.response;
+  }
+
   try {
     const body: AdminRegionItem = await req.json();
 
