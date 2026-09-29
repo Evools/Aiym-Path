@@ -205,10 +205,10 @@ export default function AdminLocationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E1E1E1]">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0D0D0D] tracking-tight">
-            Базы отдыха & Хабы безопасности
+            Базы отдыха & Пункты помощи
           </h1>
           <p className="text-xs sm:text-sm text-[#0D0D0D]/65 mt-1">
-            Управление проверенными female-friendly отелями, лагерями и точками помощи с интерактивной картой.
+            Управление проверенными female-friendly отелями, лагерями и пунктами отдыха с интерактивной картой.
           </p>
         </div>
 
@@ -230,7 +230,7 @@ export default function AdminLocationsPage() {
           <Building2 className="w-10 h-10 text-[#07626A]/40 mx-auto mb-3" />
           <h3 className="text-base font-bold text-[#0D0D0D]">Локации не найдены</h3>
           <p className="text-xs text-[#0D0D0D]/60 mt-1 mb-4">
-            Добавьте проверенный отель, базу отдыха или хаб безопасности.
+            Добавьте проверенный отель, базу отдыха или пункт помощи.
           </p>
           <button
             type="button"
@@ -263,7 +263,7 @@ export default function AdminLocationsPage() {
                       ? "Отель / Резорт"
                       : loc.type === "camp"
                       ? "Лагерь / Юрты"
-                      : "Хаб безопасности"}
+                      : "Пункт помощи & отдыха"}
                   </div>
                 </div>
 
@@ -359,7 +359,7 @@ export default function AdminLocationsPage() {
             <div className="flex items-center justify-between p-6 sm:px-8 border-b border-[#E1E1E1] shrink-0 bg-white">
               <div>
                 <h3 className="text-lg font-bold text-[#0D0D0D]">
-                  {editingLoc ? "Редактирование локации" : "Новая база отдыха / Безопасный хаб"}
+                  {editingLoc ? "Редактирование локации" : "Новая база отдыха / Пункт помощи"}
                 </h3>
                 <p className="text-xs text-[#0D0D0D]/60 mt-0.5">
                   Заполните информацию по блокам и укажите точное местоположение на карте.
@@ -433,7 +433,7 @@ export default function AdminLocationsPage() {
                         options={[
                           { value: "hotel", label: "Отель / Резорт", sublabel: "Номера и шале" },
                           { value: "camp", label: "Лагерь / Юрты", sublabel: "Кемпинг и глэмпинг" },
-                          { value: "hub", label: "Хаб безопасности", sublabel: "Медпункт и укрытие" },
+                          { value: "hub", label: "Пункт помощи / Инфо-центр", sublabel: "Медпункт и инфо-зона" },
                         ]}
                       />
 

@@ -69,7 +69,7 @@ export const LocationsSection: React.FC = () => {
       },
       {
         id: "hub",
-        label: dict.locations?.typeHub || "Хабы безопасности",
+        label: dict.locations?.typeHub || "Пункты отдыха & помощи",
         icon: <Radio className="w-3.5 h-3.5" />,
       },
     ],
@@ -103,7 +103,7 @@ export const LocationsSection: React.FC = () => {
             {/* Subtitle */}
             <p className="text-[13.5px] sm:text-[15px] text-[#0D0D0D]/70 leading-relaxed">
               {dict.locations?.subtitle ||
-                "Исследуйте проверенные female-friendly базы отдыха, юрточные лагеря, отели и безопасные хабы по всей стране."}
+                "Исследуйте проверенные female-friendly базы отдыха, юрточные лагеря, отели и пункты отдыха по всей стране."}
             </p>
           </div>
 

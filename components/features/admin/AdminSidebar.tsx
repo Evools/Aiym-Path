@@ -58,7 +58,7 @@ export const AdminSidebar: React.FC = () => {
       exact: false,
     },
     {
-      name: "Базы отдыха и хабы",
+      name: "Базы отдыха и отели",
       href: "/ap-control/locations",
       icon: Building2,
       exact: false,

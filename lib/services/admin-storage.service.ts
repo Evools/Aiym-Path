@@ -396,14 +396,14 @@ export const DEFAULT_LOCATIONS: AdminLocationItem[] = [
   {
     id: "loc-karakol-hub",
     title: {
-      ru: "Женский хаб безопасности «Каракол»",
-      kg: "«Каракол» аялдар коопсуздук хабы",
-      en: "Karakol Female Safety Hub & Info",
+      ru: "Инфо-центр и пункт помощи «Каракол»",
+      kg: "«Каракол» маалымат жана жардам борбору",
+      en: "Karakol Info Center & Assistance Point",
     },
     description: {
-      ru: "Информационный центр для соло-путешественниц: аренда спутниковых трекеров, консультации female-гидов и экстренная помощь.",
-      kg: "Жалгыз саякаттаган аялдар үчүн маалымат борбору: спутник трекерлери, гиддердин кеңештери жана шашылыш жардам.",
-      en: "Resource hub for solo female travelers: satellite tracker rental, female guide consultations, and emergency aid.",
+      ru: "Информационный центр для путешественниц: аренда спутниковых трекеров, консультации гидов и экстренная помощь.",
+      kg: "Саякатчылар үчүн маалымат борбору: спутник трекерлери, гиддердин кеңештери жана шашылыш жардам.",
+      en: "Resource center for female travelers: satellite tracker rental, guide consultations, and emergency aid.",
     },
     type: "hub",
     image: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=800&q=80",

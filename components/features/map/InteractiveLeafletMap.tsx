@@ -118,9 +118,9 @@ const MAP_I18N = {
     en: "Back to trails",
   },
   basecampHubLabel: {
-    ru: "База отдыха / Хаб",
-    kg: "Эс алуу базасы / Хаб",
-    en: "Basecamp / Hub",
+    ru: "База отдыха / Пункт помощи",
+    kg: "Эс алуу базасы / Жардам пункту",
+    en: "Basecamp / Assistance Point",
   },
   chooseTrailFromBasecamp: {
     ru: "Выберите пеший маршрут от этой базы отдыха:",

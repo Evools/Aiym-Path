@@ -33,19 +33,19 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location }) => {
     switch (location.type) {
       case "hotel":
         return {
-          label: dict.locations?.typeHotel || "Отель / Резорт",
+          label: dict.locations?.typeHotel || "Отель",
           icon: <Building2 className="w-3.5 h-3.5" />,
           color: "bg-[#07626A] text-white",
         };
       case "camp":
         return {
-          label: dict.locations?.typeCamp || "Лагерь / Юрты",
+          label: dict.locations?.typeCamp || "Юрты / Лагерь",
           icon: <Tent className="w-3.5 h-3.5" />,
           color: "bg-[#07626A] text-white",
         };
       case "hub":
         return {
-          label: dict.locations?.typeHub || "Хаб безопасности",
+          label: dict.locations?.typeHub || "Пункт помощи",
           icon: <Radio className="w-3.5 h-3.5 text-amber-400" />,
           color: "bg-[#0D0D0D] text-white",
         };
@@ -79,28 +79,28 @@ export const LocationCard: React.FC<LocationCardProps> = ({ location }) => {
           />
 
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
 
           {/* Top Badges */}
-          <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2 z-10">
+          <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
             {/* Category / Type Badge */}
             <span
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold ${typeInfo.color}`}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap shrink-0 shadow-sm ${typeInfo.color}`}
             >
               {typeInfo.icon}
               <span>{typeInfo.label}</span>
             </span>
 
             {/* Verified Safety Standard Badge */}
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white text-[#07626A] border border-[#E1E1E1]">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white text-[#07626A] border border-[#E1E1E1] whitespace-nowrap shrink-0 shadow-sm">
               <ShieldCheck className="w-3.5 h-3.5 text-[#07626A]" />
-              <span>{dict.locations?.safetyVerified || "Стандарт безопасности"}</span>
+              <span>{dict.locations?.safetyVerified || "Проверено"}</span>
             </span>
           </div>
 
           {/* Bottom Overlay Title */}
           <div className="absolute bottom-3 left-4 right-4 z-10">
-            <h3 className="text-lg sm:text-xl font-extrabold text-white leading-snug line-clamp-1">
+            <h3 className="text-base sm:text-lg font-extrabold text-white leading-snug line-clamp-2">
               {title}
             </h3>
           </div>
