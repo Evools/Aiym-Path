@@ -406,6 +406,197 @@ async function main() {
     },
   });
 
+  // 8. Seed Hero Banner
+  console.log("Seeding Hero Banner...");
+  const { DEFAULT_HERO_BANNER } = await import("../types/banner.types");
+  await prisma.heroBanner.upsert({
+    where: { id: "main" },
+    update: {
+      badgeRu: DEFAULT_HERO_BANNER.badge?.ru || "Пилотный проект",
+      badgeKg: DEFAULT_HERO_BANNER.badge?.kg || "Пилоттук долбоор",
+      badgeEn: DEFAULT_HERO_BANNER.badge?.en || "Pilot Project",
+      titlePrefixRu: DEFAULT_HERO_BANNER.titlePrefix.ru,
+      titlePrefixKg: DEFAULT_HERO_BANNER.titlePrefix.kg,
+      titlePrefixEn: DEFAULT_HERO_BANNER.titlePrefix.en,
+      titleLine2Ru: DEFAULT_HERO_BANNER.titleLine2.ru,
+      titleLine2Kg: DEFAULT_HERO_BANNER.titleLine2.kg,
+      titleLine2En: DEFAULT_HERO_BANNER.titleLine2.en,
+      titleLine3Ru: DEFAULT_HERO_BANNER.titleLine3.ru,
+      titleLine3Kg: DEFAULT_HERO_BANNER.titleLine3.kg,
+      titleLine3En: DEFAULT_HERO_BANNER.titleLine3.en,
+      subtitleRu: DEFAULT_HERO_BANNER.subtitle.ru,
+      subtitleKg: DEFAULT_HERO_BANNER.subtitle.kg,
+      subtitleEn: DEFAULT_HERO_BANNER.subtitle.en,
+      ctaMapRu: DEFAULT_HERO_BANNER.ctaMap.ru,
+      ctaMapKg: DEFAULT_HERO_BANNER.ctaMap.kg,
+      ctaMapEn: DEFAULT_HERO_BANNER.ctaMap.en,
+      ctaGuidesRu: DEFAULT_HERO_BANNER.ctaGuides.ru,
+      ctaGuidesKg: DEFAULT_HERO_BANNER.ctaGuides.kg,
+      ctaGuidesEn: DEFAULT_HERO_BANNER.ctaGuides.en,
+      backgroundImage: DEFAULT_HERO_BANNER.backgroundImage,
+      ornamentImage: DEFAULT_HERO_BANNER.ornamentImage,
+      girlImage: DEFAULT_HERO_BANNER.girlImage,
+    },
+    create: {
+      id: "main",
+      badgeRu: DEFAULT_HERO_BANNER.badge?.ru || "Пилотный проект",
+      badgeKg: DEFAULT_HERO_BANNER.badge?.kg || "Пилоттук долбоор",
+      badgeEn: DEFAULT_HERO_BANNER.badge?.en || "Pilot Project",
+      titlePrefixRu: DEFAULT_HERO_BANNER.titlePrefix.ru,
+      titlePrefixKg: DEFAULT_HERO_BANNER.titlePrefix.kg,
+      titlePrefixEn: DEFAULT_HERO_BANNER.titlePrefix.en,
+      titleLine2Ru: DEFAULT_HERO_BANNER.titleLine2.ru,
+      titleLine2Kg: DEFAULT_HERO_BANNER.titleLine2.kg,
+      titleLine2En: DEFAULT_HERO_BANNER.titleLine2.en,
+      titleLine3Ru: DEFAULT_HERO_BANNER.titleLine3.ru,
+      titleLine3Kg: DEFAULT_HERO_BANNER.titleLine3.kg,
+      titleLine3En: DEFAULT_HERO_BANNER.titleLine3.en,
+      subtitleRu: DEFAULT_HERO_BANNER.subtitle.ru,
+      subtitleKg: DEFAULT_HERO_BANNER.subtitle.kg,
+      subtitleEn: DEFAULT_HERO_BANNER.subtitle.en,
+      ctaMapRu: DEFAULT_HERO_BANNER.ctaMap.ru,
+      ctaMapKg: DEFAULT_HERO_BANNER.ctaMap.kg,
+      ctaMapEn: DEFAULT_HERO_BANNER.ctaMap.en,
+      ctaGuidesRu: DEFAULT_HERO_BANNER.ctaGuides.ru,
+      ctaGuidesKg: DEFAULT_HERO_BANNER.ctaGuides.kg,
+      ctaGuidesEn: DEFAULT_HERO_BANNER.ctaGuides.en,
+      backgroundImage: DEFAULT_HERO_BANNER.backgroundImage,
+      ornamentImage: DEFAULT_HERO_BANNER.ornamentImage,
+      girlImage: DEFAULT_HERO_BANNER.girlImage,
+    },
+  });
+
+  // 9. Seed Difficulty Levels
+  console.log("Seeding Difficulty Levels...");
+  const { DIFFICULTY_LEVELS_GUIDE, DEFAULT_PDF_RESOURCES, EQUIPMENT_CHECKLIST } =
+    await import("../data/guidebook.data");
+
+  for (let i = 0; i < DIFFICULTY_LEVELS_GUIDE.length; i++) {
+    const diff = DIFFICULTY_LEVELS_GUIDE[i];
+    await prisma.difficultyLevel.upsert({
+      where: { id: diff.id },
+      update: {
+        badgeRu: diff.badge.ru,
+        badgeKg: diff.badge.kg,
+        badgeEn: diff.badge.en,
+        titleRu: diff.title.ru,
+        titleKg: diff.title.kg,
+        titleEn: diff.title.en,
+        durationRu: diff.duration.ru,
+        durationKg: diff.duration.kg,
+        durationEn: diff.duration.en,
+        elevationRu: diff.elevation.ru,
+        elevationKg: diff.elevation.kg,
+        elevationEn: diff.elevation.en,
+        descRu: diff.description.ru,
+        descKg: diff.description.kg,
+        descEn: diff.description.en,
+        suitableRu: diff.suitableFor.ru,
+        suitableKg: diff.suitableFor.kg,
+        suitableEn: diff.suitableFor.en,
+        requiredGearRu: diff.requiredGear?.ru || [],
+        requiredGearKg: diff.requiredGear?.kg || [],
+        requiredGearEn: diff.requiredGear?.en || [],
+        orderIndex: i,
+      },
+      create: {
+        id: diff.id,
+        badgeRu: diff.badge.ru,
+        badgeKg: diff.badge.kg,
+        badgeEn: diff.badge.en,
+        titleRu: diff.title.ru,
+        titleKg: diff.title.kg,
+        titleEn: diff.title.en,
+        durationRu: diff.duration.ru,
+        durationKg: diff.duration.kg,
+        durationEn: diff.duration.en,
+        elevationRu: diff.elevation.ru,
+        elevationKg: diff.elevation.kg,
+        elevationEn: diff.elevation.en,
+        descRu: diff.description.ru,
+        descKg: diff.description.kg,
+        descEn: diff.description.en,
+        suitableRu: diff.suitableFor.ru,
+        suitableKg: diff.suitableFor.kg,
+        suitableEn: diff.suitableFor.en,
+        requiredGearRu: diff.requiredGear?.ru || [],
+        requiredGearKg: diff.requiredGear?.kg || [],
+        requiredGearEn: diff.requiredGear?.en || [],
+        orderIndex: i,
+      },
+    });
+  }
+
+  // 10. Seed PDF Resources
+  console.log("Seeding PDF Resources...");
+  for (let i = 0; i < DEFAULT_PDF_RESOURCES.length; i++) {
+    const pdf = DEFAULT_PDF_RESOURCES[i];
+    await prisma.pdfResource.upsert({
+      where: { id: pdf.id },
+      update: {
+        titleRu: pdf.title.ru,
+        titleKg: pdf.title.kg,
+        titleEn: pdf.title.en,
+        descRu: pdf.description.ru,
+        descKg: pdf.description.kg,
+        descEn: pdf.description.en,
+        badgeRu: pdf.badge.ru,
+        badgeKg: pdf.badge.kg,
+        badgeEn: pdf.badge.en,
+        fileUrl: pdf.fileUrl,
+        fileSize: pdf.fileSize || "",
+        orderIndex: i,
+      },
+      create: {
+        id: pdf.id,
+        titleRu: pdf.title.ru,
+        titleKg: pdf.title.kg,
+        titleEn: pdf.title.en,
+        descRu: pdf.description.ru,
+        descKg: pdf.description.kg,
+        descEn: pdf.description.en,
+        badgeRu: pdf.badge.ru,
+        badgeKg: pdf.badge.kg,
+        badgeEn: pdf.badge.en,
+        fileUrl: pdf.fileUrl,
+        fileSize: pdf.fileSize || "",
+        orderIndex: i,
+      },
+    });
+  }
+
+  // 11. Seed Equipment Checklist
+  console.log("Seeding Equipment Checklist...");
+  for (let i = 0; i < EQUIPMENT_CHECKLIST.length; i++) {
+    const item = EQUIPMENT_CHECKLIST[i];
+    await prisma.equipmentChecklistItem.upsert({
+      where: { id: item.id },
+      update: {
+        labelRu: item.label.ru,
+        labelKg: item.label.kg,
+        labelEn: item.label.en,
+        noteRu: item.note?.ru || "",
+        noteKg: item.note?.kg || "",
+        noteEn: item.note?.en || "",
+        category: item.category,
+        isEssential: item.isEssential,
+        orderIndex: i,
+      },
+      create: {
+        id: item.id,
+        labelRu: item.label.ru,
+        labelKg: item.label.kg,
+        labelEn: item.label.en,
+        noteRu: item.note?.ru || "",
+        noteKg: item.note?.kg || "",
+        noteEn: item.note?.en || "",
+        category: item.category,
+        isEssential: item.isEssential,
+        orderIndex: i,
+      },
+    });
+  }
+
   console.log("✅ Seeding completed successfully!");
 }
 
