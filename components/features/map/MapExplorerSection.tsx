@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { RouteFilterRegion, RouteItem } from "@/types/route.types";
 import { AdminStorageService, AdminLocationItem } from "@/lib/services/admin-storage.service";
-import { MapRegionTabs } from "./MapRegionTabs";
+import { MapRegionTabs, isRouteInRegion } from "./MapRegionTabs";
 import { InteractiveMapWrapper } from "./InteractiveMapWrapper";
 import { MapLegend } from "./MapLegend";
 import { RoutesListSection } from "./RoutesListSection";
@@ -34,7 +34,7 @@ export const MapExplorerSection: React.FC = () => {
 
   const filteredRoutes = useMemo(() => {
     if (selectedRegion === "all") return routesData;
-    return routesData.filter((r) => r.region === selectedRegion);
+    return routesData.filter((r) => isRouteInRegion(r.region, selectedRegion));
   }, [routesData, selectedRegion]);
 
   const handleSelectRegion = (region: RouteFilterRegion) => {

@@ -333,6 +333,46 @@ export const DEFAULT_LOCATIONS: AdminLocationItem[] = [
 
 export const DEFAULT_REGIONS: AdminRegionItem[] = [
   {
+    id: "chuy",
+    label: {
+      ru: "Чуйская область",
+      kg: "Чүй облусу",
+      en: "Chuy Region",
+    },
+  },
+  {
+    id: "issyk-kul",
+    label: {
+      ru: "Иссык-Кульская область",
+      kg: "Ысык-Көл облусу",
+      en: "Issyk-Kul Region",
+    },
+  },
+  {
+    id: "naryn",
+    label: {
+      ru: "Нарынская область",
+      kg: "Нарын облусу",
+      en: "Naryn Region",
+    },
+  },
+  {
+    id: "osh",
+    label: {
+      ru: "Ошская область",
+      kg: "Ош облусу",
+      en: "Osh Region",
+    },
+  },
+  {
+    id: "jalal-abad",
+    label: {
+      ru: "Джалал-Абадская область",
+      kg: "Жалал-Абад облусу",
+      en: "Jalal-Abad Region",
+    },
+  },
+  {
     id: "ala-archa",
     label: {
       ru: "Ущелье Ала-Арча",

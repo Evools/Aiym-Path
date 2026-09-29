@@ -78,7 +78,7 @@ export const InnerPageBanner: React.FC<InnerPageBannerProps> = ({
 
         <div className="max-w-2xl">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 text-[#07626A] text-xs font-semibold uppercase mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0F2F2] border border-[#E1E1E1] text-[#07626A] text-xs font-semibold uppercase mb-4">
             {badgeIcon}
             <span>{badge}</span>
           </div>

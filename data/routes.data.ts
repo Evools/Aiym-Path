@@ -339,4 +339,262 @@ export const ROUTES_DATA: RouteItem[] = [
       },
     ],
   },
+  {
+    id: "route-jety-oguz",
+    assignedGuides: [
+      {
+        id: "guide-nargiza",
+        name: "Наргиза Касымова",
+        role: {
+          ru: "Инструктор по треккингу (WFA)",
+          kg: "Треккинг боюнча инструктор",
+          en: "Trekking Instructor"
+        },
+        image: "/images/guides/guide-3.jpg",
+        phone: "+996 555 443 322",
+        experienceYears: 5,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80",
+    region: "issyk-kul",
+    title: {
+      ru: "Тропа по ущелью Джеты-Огуз и поляне Кок-Жайык",
+      kg: "Жети-Өгүз капчыгайы жана Көк-Жайык чыйыры",
+      en: "Jety-Oguz Gorge & Kok-Jaiyk Valley Trail",
+    },
+    description: {
+      ru: "Легкий живописный маршрут от скал «Семь Быков» и «Разбитое Сердце» через реликтовый хвойный лес к цветочным лугам Кок-Жайык.",
+      kg: "«Жети-Өгүз» жана «Жарылган Жүрөк» аскаларынан башталып, карагай токою аркылуу Көк-Жайык жайлоосуна баруучу жеңил кооз чыйыр.",
+      en: "Gentle scenic walk starting from Seven Bulls rocks through ancient spruce forests to Kok-Jaiyk flower pastures.",
+    },
+    difficulty: "easy",
+    distanceKm: 7.5,
+    durationHours: 3.5,
+    hasFemaleGuide: true,
+    elevationGainMeters: 280,
+    centerCoordinates: [42.331, 78.238],
+    coordinates: [
+      [42.3345, 78.2412],
+      [42.3328, 78.2395],
+      [42.3301, 78.2372],
+      [42.3275, 78.2356],
+      [42.3248, 78.2341],
+      [42.3219, 78.2325],
+      [42.3188, 78.2309],
+      [42.3155, 78.2292],
+      [42.3121, 78.2274],
+      [42.3087, 78.2255]
+    ],
+    pois: [
+      {
+        id: "poi-jety-oguz-start",
+        name: {
+          ru: "Скалы Семь Быков (Старт)",
+          kg: "Жети-Өгүз аскалары",
+          en: "Seven Bulls Rocks (Trailhead)",
+        },
+        type: "viewpoint",
+        lat: 42.3345,
+        lng: 78.2412,
+      },
+      {
+        id: "poi-kok-jaiyk-camp",
+        name: {
+          ru: "Юрточный лагерь Кок-Жайык",
+          kg: "Көк-Жайык боз үй лагери",
+          en: "Kok-Jaiyk Yurt Camp",
+        },
+        type: "camp",
+        lat: 42.3087,
+        lng: 78.2255,
+      },
+    ],
+  },
+  {
+    id: "route-ala-kol",
+    assignedGuides: [
+      {
+        id: "guide-aisuluu",
+        name: "Айсулуу Жумабекова",
+        role: {
+          ru: "Лицензированный горный гид",
+          kg: "Лицензияланган тоо гиди",
+          en: "Certified Mountain Guide"
+        },
+        image: "/images/guides/guide-2.jpg",
+        phone: "+996 701 112 233",
+        experienceYears: 6,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
+    region: "issyk-kul",
+    title: {
+      ru: "Высокогорный переход к озеру Ала-Кёль (3560 м)",
+      kg: "Ала-Көл бийик тоолуу көлүнө ашуу (3560 м)",
+      en: "High-Altitude Pass to Ala-Kul Glacial Lake",
+    },
+    description: {
+      ru: "Захватывающий маршрут через перевал Ала-Кёль к небесно-бирюзовому ледниковому озеру с видами на пики Тянь-Шаня.",
+      kg: "Тянь-Шань чокуларынын көрүнүшү менен Ала-Көл ашуусу аркылуу бирюза мөңгү көлүнө баруучу таасирдүү чыйыр.",
+      en: "Challenging alpine traverse over Ala-Kul Pass (3860m) leading to the iconic turquoise glacial lake.",
+    },
+    difficulty: "hard",
+    distanceKm: 22.0,
+    durationHours: 8.5,
+    hasFemaleGuide: true,
+    elevationGainMeters: 1600,
+    centerCoordinates: [42.318, 78.532],
+    coordinates: [
+      [42.3485, 78.5023],
+      [42.3412, 78.5115],
+      [42.3340, 78.5201],
+      [42.3265, 78.5284],
+      [42.3190, 78.5368],
+      [42.3125, 78.5442],
+      [42.3060, 78.5510]
+    ],
+    pois: [
+      {
+        id: "poi-karakol-gorge-start",
+        name: {
+          ru: "Ущелье Каракол (Старт)",
+          kg: "Каракол капчыгайы",
+          en: "Karakol Valley Trailhead",
+        },
+        type: "service",
+        lat: 42.3485,
+        lng: 78.5023,
+      },
+      {
+        id: "poi-ala-kol-lake",
+        name: {
+          ru: "Озеро Ала-Кёль (3560 м)",
+          kg: "Ала-Көл көлү",
+          en: "Ala-Kul Lake",
+        },
+        type: "viewpoint",
+        lat: 42.3060,
+        lng: 78.5510,
+      },
+    ],
+  },
+  {
+    id: "route-son-kul",
+    assignedGuides: [
+      {
+        id: "guide-nargiza",
+        name: "Наргиза Касымова",
+        role: {
+          ru: "Инструктор по треккингу (WFA)",
+          kg: "Треккинг боюнча инструктор",
+          en: "Trekking Instructor"
+        },
+        image: "/images/guides/guide-3.jpg",
+        phone: "+996 555 443 322",
+        experienceYears: 5,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+    region: "naryn",
+    title: {
+      ru: "Кочевая тропа вокруг озера Сон-Куль (3016 м)",
+      kg: "Соң-Көл көлүнүн айланасындагы көчмөн чыйыры",
+      en: "Son-Kul Lake Pasture & Nomadic Trail",
+    },
+    description: {
+      ru: "Несложная высокогорная прогулка по бескрайним пастбищам Сон-Куля, знакомство с традиционным бытом в юрточных лагерях.",
+      kg: "Соң-Көлдүн жайлоолору аркылуу жеңил сейилдөө, боз үй лагерлеринде улуттук каада-салттар менен таанышуу.",
+      en: "Pleasant high-altitude hike across Son-Kul alpine jailoo pastures and authentic female-safe yurt camps.",
+    },
+    difficulty: "easy",
+    distanceKm: 8.0,
+    durationHours: 3.0,
+    hasFemaleGuide: true,
+    elevationGainMeters: 150,
+    centerCoordinates: [41.765, 75.142],
+    coordinates: [
+      [41.7820, 75.1210],
+      [41.7750, 75.1320],
+      [41.7680, 75.1430],
+      [41.7610, 75.1540],
+      [41.7540, 75.1650]
+    ],
+    pois: [
+      {
+        id: "poi-son-kul-camp",
+        name: {
+          ru: "Юрточный эко-лагерь Сон-Куль",
+          kg: "Соң-Көл боз үй эко-лагери",
+          en: "Son-Kul Eco Yurt Camp",
+        },
+        type: "camp",
+        lat: 41.7820,
+        lng: 75.1210,
+      },
+    ],
+  },
+  {
+    id: "route-sary-chelek",
+    assignedGuides: [
+      {
+        id: "guide-aisuluu",
+        name: "Айсулуу Жумабекова",
+        role: {
+          ru: "Лицензированный горный гид",
+          kg: "Лицензияланган тоо гиди",
+          en: "Certified Mountain Guide"
+        },
+        image: "/images/guides/guide-2.jpg",
+        phone: "+996 701 112 233",
+        experienceYears: 6,
+        languages: ["RU", "KG", "EN"],
+        isVerified: true
+      }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80",
+    region: "jalal-abad",
+    title: {
+      ru: "Тропа семи озёр биосферного заповедника Сары-Челек",
+      kg: "Сары-Челек коругунун жети көл чыйыры",
+      en: "Seven Lakes Trail in Sary-Chelek Biosphere Reserve",
+    },
+    description: {
+      ru: "Заповедный маршрут среди реликтовых ореховых рощ, яблоневых садов и кристально чистых горных озёр Чаткальского хребта.",
+      kg: "Жаңгак токойлору жана Чаткал тоолорунун тунук көлдөрү аркылуу өткөн корук чыйыры.",
+      en: "Enchanting trail wandering through walnut orchards and virgin forests linking the 7 mountain lakes of Sary-Chelek.",
+    },
+    difficulty: "medium",
+    distanceKm: 11.5,
+    durationHours: 5.0,
+    hasFemaleGuide: true,
+    elevationGainMeters: 440,
+    centerCoordinates: [41.872, 71.978],
+    coordinates: [
+      [41.8540, 71.9520],
+      [41.8620, 71.9610],
+      [41.8700, 71.9710],
+      [41.8780, 71.9820],
+      [41.8860, 71.9930]
+    ],
+    pois: [
+      {
+        id: "poi-sary-chelek-center",
+        name: {
+          ru: "Центральный кордон Сары-Челек",
+          kg: "Сары-Челек башкы кордону",
+          en: "Sary-Chelek Main Ranger Station",
+        },
+        type: "service",
+        lat: 41.8540,
+        lng: 71.9520,
+      },
+    ],
+  },
 ];
+

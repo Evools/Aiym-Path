@@ -29,10 +29,10 @@ export const Footer: React.FC = () => {
   };
 
   const navItems = [
-    { href: "/#about", label: dict.nav.about },
     { href: "/map", label: dict.nav.map },
     { href: "/tours", label: dict.nav.tours },
     { href: "/guide", label: dict.nav.guide },
+    { href: "/#about", label: dict.nav.about },
     { href: "/contacts", label: dict.nav.contacts },
   ];
 
@@ -63,7 +63,7 @@ export const Footer: React.FC = () => {
             </p>
 
             <div className="pt-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-50/80 border border-teal-100 rounded-full text-xs text-[#07626A]">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#F0F2F2] border border-[#E1E1E1] rounded-full text-xs text-[#07626A]">
                 <ShieldCheck className="w-4 h-4 text-[#07626A] shrink-0" />
                 <span className="font-medium">Safety & GESI Verified</span>
               </div>
@@ -112,7 +112,7 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li className="pt-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-teal-50 border border-teal-100 text-[#07626A] text-xs font-semibold">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#F0F2F2] border border-[#E1E1E1] text-[#07626A] text-xs font-semibold">
                   <span className="w-2 h-2 rounded-full bg-[#07626A] animate-pulse" />
                   <span>SOS 112 (МЧС КР)</span>
                 </div>
@@ -184,7 +184,7 @@ export const Footer: React.FC = () => {
 
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-xl bg-gray-50 hover:bg-teal-50 text-gray-400 hover:text-[#07626A] border border-gray-200/70 transition-all cursor-pointer"
+              className="p-2 rounded-xl bg-[#F0F2F2] hover:bg-[#EAF4F4] text-gray-500 hover:text-[#07626A] border border-[#E1E1E1] transition-all cursor-pointer"
               title="Наверх"
               aria-label="Scroll to top"
             >

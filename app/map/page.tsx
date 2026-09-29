@@ -5,6 +5,7 @@ import { Map } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { InnerPageBanner } from "@/components/ui/InnerPageBanner";
 import { MapExplorerSection } from "@/components/features/map/MapExplorerSection";
+import { LocationsSection } from "@/components/features/home/LocationsSection";
 
 export default function MapPage() {
   const { dict } = useLanguage();
@@ -23,6 +24,9 @@ export default function MapPage() {
 
       {/* Map Explorer with Tabs, OSM Map, Legend and Route Cards */}
       <MapExplorerSection />
+
+      {/* Regions and Locations with Filters */}
+      <LocationsSection />
     </div>
   );
 }

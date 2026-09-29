@@ -1,6 +1,18 @@
+export type LocationDifficulty = "easy" | "medium" | "hard";
+export type LocationRegion =
+  | "chuy"
+  | "issyk-kul"
+  | "naryn"
+  | "osh"
+  | "jalal-abad"
+  | "talas"
+  | "batken"
+  | string;
+
 export interface ProjectLocation {
   id: string;
-  key: "alaArcha" | "alamedin" | "chunkurchak";
+  key?: string;
+  region: LocationRegion;
   title: {
     ru: string;
     kg: string;
@@ -12,9 +24,10 @@ export interface ProjectLocation {
     en: string;
   };
   imageUrl: string;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: LocationDifficulty;
   distanceKm: number;
   elevationGainMeters: number;
-  hasFemaleGuide: boolean;
-  hasEmergencyPoints: boolean;
+  hasFemaleGuide?: boolean;
+  hasEmergencyPoints?: boolean;
 }
+

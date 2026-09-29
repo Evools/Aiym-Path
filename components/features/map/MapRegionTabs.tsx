@@ -9,6 +9,17 @@ import {
 } from "@/lib/services/admin-storage.service";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+export const isRouteInRegion = (routeRegion: string, targetRegionId: string): boolean => {
+  if (targetRegionId === "all") return true;
+  if (routeRegion === targetRegionId) return true;
+  if (targetRegionId === "chuy" && ["ala-archa", "alamedin", "chunkurchak", "chuy"].includes(routeRegion)) return true;
+  if (targetRegionId === "issyk-kul" && ["issyk-kul", "karakol", "jety-oguz", "barskoon"].includes(routeRegion)) return true;
+  if (targetRegionId === "naryn" && ["naryn", "son-kul", "kel-suu"].includes(routeRegion)) return true;
+  if (targetRegionId === "osh" && ["osh", "alay"].includes(routeRegion)) return true;
+  if (targetRegionId === "jalal-abad" && ["jalal-abad", "sary-chelek", "arslanbob"].includes(routeRegion)) return true;
+  return false;
+};
+
 interface MapRegionTabsProps {
   selectedRegion: RouteFilterRegion;
   onSelectRegion: (region: RouteFilterRegion) => void;
@@ -39,11 +50,11 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
     };
   }, []);
 
-  // Filter only regions that actually have routes
+  // Filter only regions that actually have routes or are main oblasts
   const activeRegions = useMemo(() => {
     if (!routes || routes.length === 0) return allRegions;
     return allRegions.filter((reg) =>
-      routes.some((route) => route.region === reg.id)
+      routes.some((route) => isRouteInRegion(route.region, reg.id))
     );
   }, [allRegions, routes]);
 
@@ -140,7 +151,7 @@ export const MapRegionTabs: React.FC<MapRegionTabsProps> = ({
           {activeRegions.map((reg) => {
             const isSelected = selectedRegion === reg.id;
             const title = reg.label[language] || reg.label.ru;
-            const regionRoutesCount = routes.filter((r) => r.region === reg.id).length;
+            const regionRoutesCount = routes.filter((r) => isRouteInRegion(r.region, reg.id)).length;
 
             return (
               <button

@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 import { RouteItem, RouteRegion, RouteFilterRegion, AssignedGuide } from "@/types/route.types";
 import { AdminLocationItem } from "@/lib/services/admin-storage.service";
 import { useLanguage } from "@/context/LanguageContext";
+import { isRouteInRegion } from "./MapRegionTabs";
 import {
   Footprints,
   MapPin,
@@ -381,12 +382,12 @@ export const InteractiveLeafletMap: React.FC<InteractiveLeafletMapProps> = ({
     const visibleBasecamps =
       selectedRegion === "all"
         ? allBasecamps
-        : allBasecamps.filter((b) => b.region === selectedRegion);
+        : allBasecamps.filter((b) => isRouteInRegion(b.region, selectedRegion));
 
     const routesInRegion =
       selectedRegion === "all"
         ? routes
-        : routes.filter((r) => r.region === selectedRegion);
+        : routes.filter((r) => isRouteInRegion(r.region, selectedRegion));
 
     const selectionChanged =
       prevSelectionRef.current.region !== selectedRegion ||

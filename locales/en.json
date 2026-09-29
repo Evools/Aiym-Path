@@ -1,10 +1,10 @@
 {
   "nav": {
     "home": "Home",
-    "about": "About Us",
-    "guide": "Guidebook",
     "map": "Map",
     "tours": "Guides",
+    "guide": "Guidebook",
+    "about": "About Project",
     "contacts": "Contacts",
     "admin": "Admin"
   },
@@ -14,7 +14,7 @@
     "titleLine2": "TRAVEL WITHOUT",
     "titleLine3": "BOUNDARIES",
     "subtitle": "We create a safe, accessible, and inspiring environment for women traveling across the Kyrgyz Republic.",
-    "ctaAbout": "Learn More About Project",
+    "ctaAbout": "About Project",
     "ctaContact": "Contact Us",
     "ctaMap": "Map (Locations)",
     "ctaGuides": "Guides"
@@ -22,12 +22,11 @@
   "homeMap": {
     "badge": "Route Mapping",
     "title": "INTERACTIVE ROUTE MAP",
-    "subtitle": "Explore verified female-friendly trekking trails, elevation profiles, safe rest areas, and local guide contacts.",
-    "openFullMap": "Open Full Map Experience",
-    "viewDetails": "All routes on full map"
+    "subtitle": "Explore verified female-friendly trekking trails, elevation profiles, safe rest areas, and local guide contacts across Kyrgyzstan.",
+    "openFullMap": "Open Full Map Experience"
   },
   "about": {
-    "badge": "About Us",
+    "badge": "About Project",
     "title": "WHY AIYM PATH WAS CREATED",
     "description": "A pilot project funded through the internal Competitive Fund for Gender Equality and Social Inclusion (GESI) of the Aga Khan Foundation (AKF). GESI is one of AKF's key priorities, and this initiative was developed to empower women and build safe, equitable tourism communities in Kyrgyzstan.",
     "cards": {
@@ -79,10 +78,18 @@
     ]
   },
   "locations": {
-    "badge": "Pilot Phase",
-    "title": "PROJECT TERRITORY",
-    "subtitle": "At the start, the team focuses on routes and services within one to two hours from Bishkek.",
+    "badge": "Kyrgyzstan Locations",
+    "title": "REGIONS & LOCATIONS",
+    "subtitle": "Explore verified female-friendly locations, gorges, and scenic destinations across the country.",
     "viewOnMap": "View on map",
+    "filterAllRegions": "All Regions",
+    "filterAllDifficulties": "All Levels",
+    "difficultyEasy": "Easy",
+    "difficultyMedium": "Medium",
+    "difficultyHard": "Hard",
+    "km": "km",
+    "meters": "m",
+    "elevation": "Gain",
     "items": {
       "alaArcha": {
         "title": "Ala-Archa Gorge",

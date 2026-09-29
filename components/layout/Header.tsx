@@ -27,10 +27,10 @@ export const Header: React.FC = () => {
   }
 
   const navLinks = [
-    { href: "/#about", label: dict.nav.about },
     { href: "/map", label: dict.nav.map },
     { href: "/tours", label: dict.nav.tours },
     { href: "/guide", label: dict.nav.guide },
+    { href: "/#about", label: dict.nav.about },
     { href: "/contacts", label: dict.nav.contacts },
   ];
 
